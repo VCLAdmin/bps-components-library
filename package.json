@@ -1,0 +1,19 @@
+{
+  "name": "bps-components-lib",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^9.0.7",
+    "@angular/core": "^9.0.7",
+    "tslib": "^1.10.0"
+  },
+  "main": "bundles/bps-components-lib.umd.js",
+  "module": "fesm5/bps-components-lib.js",
+  "es2015": "fesm2015/bps-components-lib.js",
+  "esm5": "esm5/bps-components-lib.js",
+  "esm2015": "esm2015/bps-components-lib.js",
+  "fesm5": "fesm5/bps-components-lib.js",
+  "fesm2015": "fesm2015/bps-components-lib.js",
+  "typings": "bps-components-lib.d.ts",
+  "metadata": "bps-components-lib.metadata.json",
+  "sideEffects": false
+}
