@@ -1665,7 +1665,7 @@ var BpsSelectComponent = /** @class */ (function () {
                 '[class.ant-select-open]': 'open',
                 '(click)': 'toggleDropDown()'
             },
-            styles: [".ant-select-dropdown{background-color:#363636;font-size:11px;border-radius:0 0 10px 10px;margin-top:0;box-shadow:none}", "\n      .ant-select-dropdown {\n        top: 100%;\n        left: 0;\n        position: relative;\n        width: 100%;\n        margin-top: 4px;\n        margin-bottom: 4px;\n      }\n    "]
+            styles: [".ant-select-dropdown{background-color:#363636;font-size:11px;border-radius:0 0 10px 10px;margin-top:0!important;box-shadow:none}", "\n      .ant-select-dropdown {\n        top: 100%;\n        left: 0;\n        position: relative;\n        width: 100%;\n        margin-top: 4px;\n        margin-bottom: 4px;\n      }\n    "]
         }),
         __param(5, Host()), __param(5, Optional())
     ], BpsSelectComponent);

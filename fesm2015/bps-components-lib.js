@@ -1479,7 +1479,7 @@ BpsSelectComponent = BpsSelectComponent_1 = __decorate([
             '[class.ant-select-open]': 'open',
             '(click)': 'toggleDropDown()'
         },
-        styles: [".ant-select-dropdown{background-color:#363636;font-size:11px;border-radius:0 0 10px 10px;margin-top:0;box-shadow:none}", `
+        styles: [".ant-select-dropdown{background-color:#363636;font-size:11px;border-radius:0 0 10px 10px;margin-top:0!important;box-shadow:none}", `
       .ant-select-dropdown {
         top: 100%;
         left: 0;
