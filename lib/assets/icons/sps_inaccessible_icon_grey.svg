@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15">
+    <defs>
+        <style>
+            .prefix__cls-1{fill:none;stroke:#707070;stroke-width:2px}
+        </style>
+    </defs>
+    <g id="prefix__sps_inaccessible_icon_grey" transform="translate(-967 -547)">
+        <g id="prefix__Group_3411" data-name="Group 3411" transform="translate(-18 -3)">
+            <g id="prefix__Ellipse_445" class="prefix__cls-1" data-name="Ellipse 445" transform="translate(985 550)">
+                <circle cx="7.5" cy="7.5" r="7.5" style="stroke:none"/>
+                <circle cx="7.5" cy="7.5" r="6.5" style="fill:none"/>
+            </g>
+            <path id="prefix__Path_1235" d="M8637.066-1543.933l9.055-9.055" class="prefix__cls-1" data-name="Path 1235" transform="translate(-7649 2106)"/>
+        </g>
+    </g>
+</svg>

@@ -5,5 +5,6 @@ export declare class BpsInputDirective {
     disabled: boolean;
     centered: boolean;
     opened: boolean;
+    bpsDisabled: boolean;
     constructor(renderer: Renderer2, elementRef: ElementRef);
 }

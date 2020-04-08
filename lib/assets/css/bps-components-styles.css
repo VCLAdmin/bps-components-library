@@ -13,7 +13,7 @@
   padding: 2px 10px 4px 10px !important;
 }
 
-.ant-input:hover {
+.ant-input:not(.bps-input-opened):hover {
   border-color: #00a2d1 !important;
 }
 
@@ -21,20 +21,37 @@
   box-shadow: 0 0 8px 0 #00a2d1 !important;
 }
 
-.ant-input-disabled:hover {
+.ant-input:focus-within {
+  box-shadow: none !important;
+}
+
+.ant-input-disabled:not(.bps-custom-disabled):hover {
   opacity: 1 !important;
   border-color: #363636 !important;
 }
 
+.ant-input-disabled:hover {
+  cursor: url("~/assets/bps-icons/sps_inaccessible_icon_grey.svg"), auto !important;
+}
+
 .bps-input-centered {
   text-align: center !important;
+  border: 1px solid #00a2d1 !important;
 }
 
-.ant-input-disabled {
-  color: #666666 !important;
+.bps-input-centered:focus {
+  border: none !important;
 }
 
-.ant-input-disabled.bps-input-centered {
+.bps-input-centered:focus-within {
+  border: 1px solid #00a2d1 !important;
+}
+
+.bps-input-centered:hover{
+  cursor: url("~/assets/bps-icons/sps_inaccessible_icon_grey.svg"), auto !important;
+}
+
+.ant-input-disabled.bps-input-centered:not(.bps-custom-disabled) {
   border-color: #666666 !important;
 }
 
@@ -47,12 +64,23 @@
   padding-left: 0 !important;
   padding-bottom: 6px !important;
   position: relative;
+  color: #999999 !important;
 }
 
 .ant-input.bps-input-opened:focus {
   box-shadow: none !important;
   border-bottom: double 3px #00a2d1 !important;
   transition: border 0s;
+  color: #ffffff !important;
+}
+
+.ant-input.bps-input-opened:focus-within {
+  border-bottom: 1px solid #00a2d1 !important;
+  color: #ffffff !important;
+}
+
+.ant-input-disabled:not(.bps-custom-disabled) {
+  color: #666666 !important;
 }
 
 .has-error .ant-select-selection {
@@ -120,12 +148,16 @@
 .ant-select-disabled:hover .ant-select-selection {
   background: #363636 !important;
   color: #666666 !important;
+  cursor: url("~/assets/bps-icons/sps_inaccessible_icon_grey.svg"), auto !important;
 }
 
 .ant-select-dropdown-menu-item-disabled,
 .ant-select-disabled .ant-select-arrow,
-.ant-select-dropdown-menu-item-disabled:hover{
+.ant-select-dropdown-menu-item-disabled:hover,
+.ant-select-disabled .ant-select-arrow path{
   color: #666666 !important;
+  stroke: #666666 !important;
+  cursor: url("~/assets/bps-icons/sps_inaccessible_icon_grey.svg"), auto !important;
 }
 
 .ant-select-open .ant-select-selection{
