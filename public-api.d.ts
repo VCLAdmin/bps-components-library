@@ -21,3 +21,5 @@ export * from './lib/components/bps-form/bps-form-item.component';
 export * from './lib/components/bps-form/bps-form-label.component';
 export * from './lib/components/bps-form/bps-form-split.component';
 export * from './lib/components/bps-form/bps-form-text.component';
+export * from './lib/components/bps-button/bps-button.component';
+export * from './lib/components/bps-button/bps-button-group.component';

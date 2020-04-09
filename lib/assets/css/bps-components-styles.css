@@ -30,10 +30,6 @@
   border-color: #363636 !important;
 }
 
-.ant-input-disabled:hover {
-  cursor: url("~/assets/bps-icons/sps_inaccessible_icon_grey.svg"), auto !important;
-}
-
 .bps-input-centered {
   text-align: center !important;
   border: 1px solid #00a2d1 !important;
@@ -48,7 +44,7 @@
 }
 
 .bps-input-centered:hover{
-  cursor: url("~/assets/bps-icons/sps_inaccessible_icon_grey.svg"), auto !important;
+  cursor: not-allowed !important;
 }
 
 .ant-input-disabled.bps-input-centered:not(.bps-custom-disabled) {
@@ -148,7 +144,6 @@
 .ant-select-disabled:hover .ant-select-selection {
   background: #363636 !important;
   color: #666666 !important;
-  cursor: url("~/assets/bps-icons/sps_inaccessible_icon_grey.svg"), auto !important;
 }
 
 .ant-select-dropdown-menu-item-disabled,
@@ -157,7 +152,6 @@
 .ant-select-disabled .ant-select-arrow path{
   color: #666666 !important;
   stroke: #666666 !important;
-  cursor: url("~/assets/bps-icons/sps_inaccessible_icon_grey.svg"), auto !important;
 }
 
 .ant-select-open .ant-select-selection{

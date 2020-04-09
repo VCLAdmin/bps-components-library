@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('ng-zorro-antd'), require('@angular/common'), require('@angular/cdk/overlay'), require('ng-zorro-antd/core'), require('ng-zorro-antd/icon'), require('ng-zorro-antd/empty'), require('@angular/forms'), require('@angular/cdk/platform'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/keycodes'), require('ng-zorro-antd/grid'), require('@angular/cdk/layout')) :
-    typeof define === 'function' && define.amd ? define('bps-components-lib', ['exports', '@angular/core', 'ng-zorro-antd', '@angular/common', '@angular/cdk/overlay', 'ng-zorro-antd/core', 'ng-zorro-antd/icon', 'ng-zorro-antd/empty', '@angular/forms', '@angular/cdk/platform', 'rxjs', 'rxjs/operators', '@angular/cdk/keycodes', 'ng-zorro-antd/grid', '@angular/cdk/layout'], factory) :
-    (global = global || self, factory(global['bps-components-lib'] = {}, global.ng.core, global.ngZorroAntd, global.ng.common, global.ng.cdk.overlay, global.core$1, global.icon, global.empty, global.ng.forms, global.ng.cdk.platform, global.rxjs, global.rxjs.operators, global.ng.cdk.keycodes, global.grid, global.ng.cdk.layout));
-}(this, (function (exports, core, ngZorroAntd, common, overlay, core$1, icon, empty, forms, platform, rxjs, operators, keycodes, grid, layout) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('ng-zorro-antd'), require('@angular/common'), require('@angular/cdk/overlay'), require('ng-zorro-antd/core'), require('ng-zorro-antd/icon'), require('ng-zorro-antd/empty'), require('@angular/forms'), require('@angular/cdk/observers'), require('@angular/cdk/platform'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/keycodes'), require('ng-zorro-antd/grid'), require('@angular/cdk/layout'), require('@angular/platform-browser/animations')) :
+    typeof define === 'function' && define.amd ? define('bps-components-lib', ['exports', '@angular/core', 'ng-zorro-antd', '@angular/common', '@angular/cdk/overlay', 'ng-zorro-antd/core', 'ng-zorro-antd/icon', 'ng-zorro-antd/empty', '@angular/forms', '@angular/cdk/observers', '@angular/cdk/platform', 'rxjs', 'rxjs/operators', '@angular/cdk/keycodes', 'ng-zorro-antd/grid', '@angular/cdk/layout', '@angular/platform-browser/animations'], factory) :
+    (global = global || self, factory(global['bps-components-lib'] = {}, global.ng.core, global.ngZorroAntd, global.ng.common, global.ng.cdk.overlay, global.core$1, global.icon, global.empty, global.ng.forms, global.ng.cdk.observers, global.ng.cdk.platform, global.rxjs, global.rxjs.operators, global.ng.cdk.keycodes, global.grid, global.ng.cdk.layout, global.ng.platformBrowser.animations));
+}(this, (function (exports, core, ngZorroAntd, common, overlay, core$1, icon, empty, forms, observers, platform, rxjs, operators, keycodes, grid, layout, animations) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -2428,6 +2428,243 @@
         return BpsFormTextComponent;
     }());
 
+    var NZ_CONFIG_COMPONENT_NAME$1 = 'button';
+    var BpsButtonComponent = /** @class */ (function () {
+        function BpsButtonComponent(elementRef, cdr, renderer, contentObserver, nzUpdateHostClassService, ngZone, nzConfigService, waveConfig, animationType) {
+            var _this = this;
+            this.elementRef = elementRef;
+            this.cdr = cdr;
+            this.renderer = renderer;
+            this.contentObserver = contentObserver;
+            this.nzUpdateHostClassService = nzUpdateHostClassService;
+            this.ngZone = ngZone;
+            this.nzConfigService = nzConfigService;
+            this.waveConfig = waveConfig;
+            this.animationType = animationType;
+            this.nzWave = new core$1.NzWaveDirective(this.ngZone, this.elementRef, this.waveConfig, this.animationType);
+            this.bpsBlock = false;
+            this.bpsGhost = false;
+            this.bpsSearch = false;
+            this.bpsLoading = false;
+            this.bpsType = 'default';
+            this.bpsShape = null;
+            this.el = this.elementRef.nativeElement;
+            this.isInDropdown = false;
+            this.iconOnly = false;
+            this.destroy$ = new rxjs.Subject();
+            this.renderer.addClass(elementRef.nativeElement, 'ant-btn');
+            this.nzConfigService
+                .getConfigChangeEventForComponent(NZ_CONFIG_COMPONENT_NAME$1)
+                .pipe(operators.takeUntil(this.destroy$))
+                .subscribe(function () {
+                _this.setClassMap();
+                _this.cdr.markForCheck();
+            });
+        }
+        /** temp solution since no method add classMap to host https://github.com/angular/angular/issues/7289 */
+        BpsButtonComponent.prototype.setClassMap = function () {
+            var _a;
+            var prefixCls = 'ant-btn';
+            var sizeMap = { large: 'lg', small: 'sm' };
+            this.nzUpdateHostClassService.updateHostClass(this.el, (_a = {},
+                _a[prefixCls + "-" + this.bpsType] = this.bpsType,
+                _a[prefixCls + "-" + this.bpsShape] = this.bpsShape,
+                _a[prefixCls + "-" + sizeMap[this.bpsSize]] = sizeMap[this.bpsSize],
+                _a[prefixCls + "-loading"] = this.bpsLoading,
+                _a[prefixCls + "-icon-only"] = this.iconOnly && !this.bpsSearch && !this.isInDropdown,
+                _a[prefixCls + "-background-ghost"] = this.bpsGhost,
+                _a[prefixCls + "-block"] = this.bpsBlock,
+                _a["ant-input-search-button"] = this.bpsSearch,
+                _a));
+        };
+        BpsButtonComponent.prototype.updateIconDisplay = function (value) {
+            if (this.iconElement) {
+                this.renderer.setStyle(this.iconElement, 'display', value ? 'none' : 'inline-block');
+            }
+        };
+        BpsButtonComponent.prototype.checkContent = function () {
+            var hasIcon = this.listOfIconElement && this.listOfIconElement.length;
+            if (hasIcon) {
+                this.moveIcon();
+            }
+            this.renderer.removeStyle(this.contentElement.nativeElement, 'display');
+            /** https://github.com/angular/angular/issues/12530 **/
+            if (core$1.isEmpty(this.contentElement.nativeElement)) {
+                this.renderer.setStyle(this.contentElement.nativeElement, 'display', 'none');
+                this.iconOnly = !!hasIcon;
+            }
+            else {
+                this.renderer.removeStyle(this.contentElement.nativeElement, 'display');
+                this.iconOnly = false;
+            }
+            this.setClassMap();
+            this.updateIconDisplay(this.bpsLoading);
+            if (!this.cdr.destroyed) {
+                this.cdr.detectChanges();
+            }
+        };
+        BpsButtonComponent.prototype.moveIcon = function () {
+            if (this.listOfIconElement && this.listOfIconElement.length) {
+                var firstChildElement = core$1.findFirstNotEmptyNode(this.contentElement.nativeElement);
+                var lastChildElement = core$1.findLastNotEmptyNode(this.contentElement.nativeElement);
+                if (firstChildElement && firstChildElement === this.listOfIconElement.first.nativeElement) {
+                    this.renderer.insertBefore(this.el, firstChildElement, this.contentElement.nativeElement);
+                    this.iconElement = firstChildElement;
+                }
+                else if (lastChildElement && lastChildElement === this.listOfIconElement.last.nativeElement) {
+                    this.renderer.appendChild(this.el, lastChildElement);
+                }
+            }
+        };
+        BpsButtonComponent.prototype.ngAfterContentInit = function () {
+            var _this = this;
+            this.contentObserver
+                .observe(this.contentElement)
+                .pipe(operators.startWith(true), operators.takeUntil(this.destroy$))
+                .subscribe(function () {
+                // https://github.com/NG-ZORRO/ng-zorro-antd/issues/3079
+                Promise.resolve().then(function () { return _this.checkContent(); });
+            });
+        };
+        BpsButtonComponent.prototype.ngOnInit = function () {
+            this.setClassMap();
+            this.nzWave.ngOnInit();
+        };
+        BpsButtonComponent.prototype.ngOnDestroy = function () {
+            this.destroy$.next();
+            this.destroy$.complete();
+            this.nzWave.ngOnDestroy();
+        };
+        BpsButtonComponent.prototype.ngOnChanges = function (changes) {
+            if (changes.bpsBlock ||
+                changes.bpsGhost ||
+                changes.bpsSearch ||
+                changes.bpsType ||
+                changes.bpsShape ||
+                changes.bpsSize ||
+                changes.bpsLoading) {
+                this.setClassMap();
+            }
+            if (changes.bpsLoading) {
+                this.updateIconDisplay(this.bpsLoading);
+            }
+            if (changes.bpsType && changes.bpsType.currentValue === 'link') {
+                this.nzWave.disable();
+            }
+            else {
+                this.nzWave.enable();
+            }
+        };
+        BpsButtonComponent.ctorParameters = function () { return [
+            { type: core.ElementRef },
+            { type: core.ChangeDetectorRef },
+            { type: core.Renderer2 },
+            { type: observers.ContentObserver },
+            { type: core$1.NzUpdateHostClassService },
+            { type: core.NgZone },
+            { type: core$1.NzConfigService },
+            { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [core$1.NZ_WAVE_GLOBAL_CONFIG,] }] },
+            { type: String, decorators: [{ type: core.Optional }, { type: core.Inject, args: [animations.ANIMATION_MODULE_TYPE,] }] }
+        ]; };
+        __decorate([
+            core.ViewChild('contentElement', { static: true })
+        ], BpsButtonComponent.prototype, "contentElement", void 0);
+        __decorate([
+            core.ContentChildren(icon.NzIconDirective, { read: core.ElementRef })
+        ], BpsButtonComponent.prototype, "listOfIconElement", void 0);
+        __decorate([
+            core.HostBinding('attr.nz-wave')
+        ], BpsButtonComponent.prototype, "nzWave", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsButtonComponent.prototype, "bpsBlock", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsButtonComponent.prototype, "bpsGhost", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsButtonComponent.prototype, "bpsSearch", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsButtonComponent.prototype, "bpsLoading", void 0);
+        __decorate([
+            core.Input()
+        ], BpsButtonComponent.prototype, "bpsType", void 0);
+        __decorate([
+            core.Input()
+        ], BpsButtonComponent.prototype, "bpsShape", void 0);
+        __decorate([
+            core.Input(), core$1.WithConfig(NZ_CONFIG_COMPONENT_NAME$1, 'default')
+        ], BpsButtonComponent.prototype, "bpsSize", void 0);
+        BpsButtonComponent = __decorate([
+            core.Component({
+                selector: '[bps-button]',
+                exportAs: 'bpsButton',
+                providers: [core$1.NzUpdateHostClassService],
+                preserveWhitespaces: false,
+                changeDetection: core.ChangeDetectionStrategy.OnPush,
+                encapsulation: core.ViewEncapsulation.None,
+                template: "<i nz-icon nzType=\"loading\" *ngIf=\"bpsLoading\"></i>\n<span class=\"bps-custom-content\" #contentElement><ng-content></ng-content></span>\n",
+                styles: [".ant-btn-variation-1{height:40px!important;border-radius:8px!important;border:2px solid #00a2d1!important;background-color:transparent!important;font-size:12px!important;font-weight:500!important;font-stretch:normal!important;font-style:normal!important;line-height:.58!important;letter-spacing:normal!important;text-align:center!important;color:#00a2d1!important}.ant-btn-variation-1[disabled],.ant-btn-variation-2[disabled],.ant-btn-variation-2[disabled]:hover{border-color:#474747!important;color:#474747!important}.ant-btn-variation-1.active,.ant-btn-variation-1:active{border-color:#445c67!important;color:#445c67!important}.ant-btn-variation-1:focus{box-shadow:0 0 12px 0 #00a2d1!important;color:#00a2d1!important;border:2px solid #00a2d1!important}.ant-btn-variation-2{height:40px!important;border-radius:8px!important;border:2px solid #474747!important;background-color:#363636!important;font-size:12px!important;font-weight:500!important;font-stretch:normal!important;font-style:normal!important;line-height:.58!important;letter-spacing:normal!important;text-align:center!important;color:#fff!important}.ant-btn-variation-2[disabled]{background-color:transparent!important}.ant-btn-variation-2:hover{border-color:#00a2d1!important;color:#fff!important}.ant-btn-variation-2.active,.ant-btn-variation-2:active{border-color:#445c67!important;color:#fff!important}.ant-btn-variation-2:focus{box-shadow:0 0 12px 0 #00a2d1!important;color:#fff!important;border-color:#474747!important}.ant-btn-variation-3,.ant-btn-variation-4,.ant-btn-variation-5{height:30px!important;border-radius:8px!important;background-color:#00a2d1!important;color:#fff!important;font-size:10px!important;font-weight:700!important;border:none!important;font-stretch:normal!important;font-style:normal!important;line-height:1.2;letter-spacing:.3px!important;text-align:center!important}.ant-btn-variation-4{height:28px!important;font-size:11px!important;font-weight:400!important;font-stretch:normal!important;font-style:normal!important;line-height:1.36!important;letter-spacing:normal!important}.ant-btn-variation-5{height:22px!important;border-radius:11px!important;font-size:11px!important;font-weight:400!important;font-stretch:normal!important;font-style:normal!important;line-height:1.36!important;letter-spacing:normal!important;text-align:center!important}.ant-btn-variation-6,.ant-btn-variation-7,.ant-btn-variation-8{height:22px!important;font-size:11px!important;font-weight:400!important;font-stretch:normal!important;font-style:normal!important;line-height:1.36!important;letter-spacing:normal!important;text-align:center!important;color:#fff!important;border-radius:11px!important;background-color:#363636!important;border:none!important}.ant-btn-variation-9,.ant-btn-variation-9:hover{height:22px!important;font-size:11px!important;font-weight:400!important;font-stretch:normal!important;font-style:normal!important;line-height:1.36!important;letter-spacing:normal!important;text-align:center!important;color:#fff!important;border-radius:8px!important;background-color:#253d47!important;border:none!important}.ant-btn-variation-3[disabled],.ant-btn-variation-3[disabled]:hover,.ant-btn-variation-4[disabled],.ant-btn-variation-4[disabled]:hover,.ant-btn-variation-5[disabled],.ant-btn-variation-5[disabled]:hover,.ant-btn-variation-6[disabled],.ant-btn-variation-6[disabled]:hover,.ant-btn-variation-7[disabled],.ant-btn-variation-7[disabled]:hover,.ant-btn-variation-8[disabled],.ant-btn-variation-8[disabled]:hover,.ant-btn-variation-9[disabled],.ant-btn-variation-9[disabled]:hover{background-color:#363636!important;border:none!important;color:#666!important}.ant-btn-variation-3:hover,.ant-btn-variation-4:hover,.ant-btn-variation-5:hover,.ant-btn-variation-7:hover,.ant-btn-variation-8:hover{background-color:#445c67!important;color:#fff!important}.ant-btn-variation-6:hover{background-color:#bc0000!important;color:#fff!important}.ant-btn-variation-3.active,.ant-btn-variation-3:active,.ant-btn-variation-4.active,.ant-btn-variation-4:active,.ant-btn-variation-5.active,.ant-btn-variation-5:active{background-color:#445c67!important;color:#fff!important}.ant-btn-variation-9.active,.ant-btn-variation-9:active{background-color:#00a2d1!important;color:#fff!important}.ant-btn-variation-7.active,.ant-btn-variation-7:active{background-color:#00a2d1!important}.ant-btn-variation-6.active,.ant-btn-variation-6:active{background-color:maroon!important;color:#fff!important}.ant-btn-variation-8.active,.ant-btn-variation-8:active{background-color:#253d47!important;color:#999!important}.ant-btn-variation-3:focus,.ant-btn-variation-4:focus,.ant-btn-variation-5:focus{box-shadow:0 0 12px 0 #00a2d1!important;background-color:#00a2d1!important;color:#fff!important}.ant-btn-variation-6:focus,.ant-btn-variation-7:focus,.ant-btn-variation-8:focus{box-shadow:0 0 12px 0 #00a2d1!important;background-color:#363636!important;color:#fff!important}.ant-btn-variation-9:focus{box-shadow:0 0 12px 0 #00a2d1!important;background-color:#253d47!important;color:#fff!important}.ant-btn-variation-10,.ant-btn-variation-10:hover,.ant-btn-variation-11,.ant-btn-variation-11:hover,.ant-btn-variation-13,.ant-btn-variation-13:hover{width:30px!important;height:30px!important;border-radius:8px!important;background-color:#363636!important;border:none!important;padding:0!important;color:#fff!important}.ant-btn-variation-13,.ant-btn-variation-13:hover{border-radius:4px!important;width:22px!important;height:22px!important}.ant-btn-variation-13:hover{background-color:#445c67!important}.ant-btn-variation-11,.ant-btn-variation-11:hover{background-color:#253d47!important}.ant-btn-variation-10[disabled],.ant-btn-variation-10[disabled]:hover,.ant-btn-variation-11[disabled],.ant-btn-variation-11[disabled]:hover,.ant-btn-variation-13[disabled],.ant-btn-variation-13[disabled]:hover,.ant-btn-variation-14[disabled],.ant-btn-variation-14[disabled]:hover,.ant-btn-variation-15[disabled],.ant-btn-variation-15[disabled]:hover,.ant-btn-variation-16[disabled],.ant-btn-variation-16[disabled]:hover,.ant-btn-variation-20[disabled],.ant-btn-variation-20[disabled]:hover{background-color:#363636!important;border:none!important;color:#666!important}.ant-btn-variation-10[disabled] svg,.ant-btn-variation-10[disabled]:hover svg,.ant-btn-variation-11[disabled] svg,.ant-btn-variation-11[disabled]:hover svg,.ant-btn-variation-13[disabled] svg,.ant-btn-variation-13[disabled]:hover svg,.ant-btn-variation-14[disabled] svg,.ant-btn-variation-14[disabled]:hover svg,.ant-btn-variation-15[disabled] svg,.ant-btn-variation-15[disabled]:hover svg,.ant-btn-variation-16[disabled] svg,.ant-btn-variation-16[disabled]:hover svg{opacity:.2!important}.ant-btn-variation-10.active,.ant-btn-variation-10:active,.ant-btn-variation-11.active,.ant-btn-variation-11:active,.ant-btn-variation-13.active,.ant-btn-variation-13:active{background-color:#00a2d1!important;color:#fff!important}.ant-btn-variation-11:focus{box-shadow:0 0 8px 0 #00a2d1!important;background-color:#253d47!important;color:#fff!important}.bps-custom-content{display:table!important;margin:0 auto!important}.bps-custom-content svg{display:table-cell!important;vertical-align:middle!important}.ant-btn-variation-12,.ant-btn-variation-12:hover{height:40px;width:40px;background-color:#253d47!important;border-radius:12px!important;border:2px solid #00a2d1!important;background-clip:content-box!important;padding:5px!important;color:#fff!important}.ant-btn-variation-12:hover{background-color:#445c67!important}.ant-btn-variation-12[disabled],.ant-btn-variation-12[disabled]:hover{background-color:#363636!important;border-color:#666!important;color:#666!important}.ant-btn-variation-12[disabled] svg,.ant-btn-variation-12[disabled]:hover svg{opacity:.2!important}.ant-btn-variation-12.active,.ant-btn-variation-12:active{background-color:#00a2d1!important}.ant-btn-variation-12:focus{box-shadow:0 0 8px 0 #00a2d1!important;background-color:#253d47!important}.ant-btn-variation-14,.ant-btn-variation-15,.ant-btn-variation-16{width:30px!important;height:30px!important;background-color:#00a2d1!important;border-radius:100px!important;border:none!important;color:#fff!important;padding:0!important}.ant-btn-variation-14:hover{color:#fff!important;background-color:#445c67!important;border:none!important}.ant-btn-variation-15{background-color:#363636!important}.ant-btn-variation-15:hover{color:#fff!important;background-color:#bc0000!important;border:none!important}.ant-btn-variation-16{background-color:#363636!important}.ant-btn-variation-16:hover{background-color:#474747!important}.ant-btn-variation-14.active,.ant-btn-variation-14:active{background-color:#253d47!important;color:#fff!important}.ant-btn-variation-16.active,.ant-btn-variation-16:active{background-color:#363636!important;color:#fff!important}.ant-btn-variation-15.active,.ant-btn-variation-15:active{background-color:maroon!important;color:#fff!important}.ant-btn-variation-14:focus{box-shadow:0 0 8px 0 #00a2d1!important;background-color:#00a2d1!important}.ant-btn-variation-10:focus,.ant-btn-variation-13:focus,.ant-btn-variation-15:focus,.ant-btn-variation-16:focus{box-shadow:0 0 8px 0 #00a2d1!important;background-color:#363636!important;color:#fff!important}.ant-btn-variation-17,.ant-btn-variation-17:hover{height:32px!important;width:32px!important;font-size:17px!important;font-weight:500!important;font-stretch:normal!important;font-style:normal!important;line-height:.71!important;letter-spacing:normal!important;text-align:center!important;color:#fff!important;border:2px solid #fff!important;background-color:#888!important;padding:0!important;border-radius:100px!important}.ant-btn-variation-17:hover{background-color:#666!important;color:#fff!important}.ant-btn-variation-17.active,.ant-btn-variation-17:active{background-color:#00a2d1!important;color:#fff!important}.ant-btn-variation-17:focus{box-shadow:0 0 8px 0 #00a2d1!important;background-color:#888!important}.ant-btn-variation-17[disabled],.ant-btn-variation-17[disabled]:hover{border:2px solid #666!important;background-color:#888!important;color:#666!important}.ant-btn-variation-18,.ant-btn-variation-18:hover,.ant-btn-variation-19,.ant-btn-variation-19:hover{background-color:#262626!important;height:30px!important;width:30px!important;padding:0!important;border:none!important;border-radius:100px!important}.ant-btn-variation-19,.ant-btn-variation-19:hover{height:20px!important;width:20px!important;border-radius:4px!important}.ant-btn-variation-18:hover{background-color:#363636!important;color:#fff!important}.ant-btn-variation-18.active,.ant-btn-variation-18:active{background-color:#474747!important;color:#fff!important}.ant-btn-variation-18:focus,.ant-btn-variation-19:focus{box-shadow:0 0 8px 0 #00a2d1!important;background-color:#262626!important}.ant-btn-variation-18[disabled],.ant-btn-variation-18[disabled]:hover,.ant-btn-variation-19[disabled],.ant-btn-variation-19[disabled]:hover{border:none!important;background-color:#262626!important;color:#666!important}.ant-btn-variation-18[disabled] svg,.ant-btn-variation-18[disabled]:hover svg,.ant-btn-variation-19[disabled] svg,.ant-btn-variation-19[disabled]:hover svg,.ant-btn-variation-20[disabled] svg,.ant-btn-variation-20[disabled]:hover svg{opacity:.2!important}.ant-btn-variation-20,.ant-btn-variation-20:hover{width:25px!important;height:30px!important;background-color:#363636!important;border:none!important;border-radius:100px 0 0 100px!important;color:#fff!important}.ant-btn-variation-20:hover{background-color:#474747!important;color:#fff!important}.ant-btn-variation-20.active,.ant-btn-variation-20:active{background-color:#363636!important;color:#fff!important}.ant-btn-variation-20:focus{background-color:#363636!important;box-shadow:0 0 8px 0 #00a2d1!important;border:none!important}"]
+            }),
+            __param(7, core.Optional()), __param(7, core.Inject(core$1.NZ_WAVE_GLOBAL_CONFIG)),
+            __param(8, core.Optional()), __param(8, core.Inject(animations.ANIMATION_MODULE_TYPE))
+        ], BpsButtonComponent);
+        return BpsButtonComponent;
+    }());
+
+    var BpsButtonGroupComponent = /** @class */ (function () {
+        function BpsButtonGroupComponent(nzUpdateHostClassService, elementRef) {
+            this.nzUpdateHostClassService = nzUpdateHostClassService;
+            this.elementRef = elementRef;
+            this.isInDropdown = false;
+        }
+        Object.defineProperty(BpsButtonGroupComponent.prototype, "bpsSize", {
+            get: function () {
+                return this._size;
+            },
+            set: function (value) {
+                this._size = value;
+                this.setClassMap();
+            },
+            enumerable: true,
+            configurable: true
+        });
+        BpsButtonGroupComponent.prototype.setClassMap = function () {
+            var _a;
+            var prefixCls = 'ant-btn-group';
+            var classMap = (_a = {},
+                _a[prefixCls] = true,
+                _a["ant-dropdown-button"] = this.isInDropdown,
+                _a[prefixCls + "-lg"] = this.bpsSize === 'large',
+                _a[prefixCls + "-sm"] = this.bpsSize === 'small',
+                _a);
+            this.nzUpdateHostClassService.updateHostClass(this.elementRef.nativeElement, classMap);
+        };
+        BpsButtonGroupComponent.prototype.ngOnInit = function () {
+            this.setClassMap();
+        };
+        BpsButtonGroupComponent.ctorParameters = function () { return [
+            { type: core$1.NzUpdateHostClassService },
+            { type: core.ElementRef }
+        ]; };
+        __decorate([
+            core.Input()
+        ], BpsButtonGroupComponent.prototype, "bpsSize", null);
+        BpsButtonGroupComponent = __decorate([
+            core.Component({
+                selector: 'bps-button-group',
+                exportAs: 'bpsButtonGroup',
+                changeDetection: core.ChangeDetectionStrategy.OnPush,
+                encapsulation: core.ViewEncapsulation.None,
+                preserveWhitespaces: false,
+                providers: [core$1.NzUpdateHostClassService],
+                template: "<ng-content></ng-content>\n"
+            })
+        ], BpsButtonGroupComponent);
+        return BpsButtonGroupComponent;
+    }());
+
     var ɵ0 = ngZorroAntd.en_US;
     var BpsComponentsLibModule = /** @class */ (function () {
         function BpsComponentsLibModule() {
@@ -2455,7 +2692,9 @@
                     BpsFormItemComponent,
                     BpsFormLabelComponent,
                     BpsFormSplitComponent,
-                    BpsFormTextComponent
+                    BpsFormTextComponent,
+                    BpsButtonComponent,
+                    BpsButtonGroupComponent
                 ],
                 imports: [
                     ngZorroAntd.NgZorroAntdModule,
@@ -2466,7 +2705,9 @@
                     ngZorroAntd.NzNoAnimationModule,
                     ngZorroAntd.NzOverlayModule,
                     empty.NzEmptyModule,
-                    forms.FormsModule
+                    forms.FormsModule,
+                    observers.ObserversModule,
+                    core$1.NzWaveModule
                 ],
                 exports: [
                     BpsComponentsLibComponent,
@@ -2490,7 +2731,9 @@
                     BpsFormItemComponent,
                     BpsFormLabelComponent,
                     BpsFormSplitComponent,
-                    BpsFormTextComponent
+                    BpsFormTextComponent,
+                    BpsButtonComponent,
+                    BpsButtonGroupComponent
                 ],
                 providers: [
                     { provide: ngZorroAntd.NZ_I18N, useValue: ɵ0 }
@@ -2501,6 +2744,8 @@
     }());
 
     exports.BpsAutosizeDirective = BpsAutosizeDirective;
+    exports.BpsButtonComponent = BpsButtonComponent;
+    exports.BpsButtonGroupComponent = BpsButtonGroupComponent;
     exports.BpsComponentsLibComponent = BpsComponentsLibComponent;
     exports.BpsComponentsLibModule = BpsComponentsLibModule;
     exports.BpsComponentsLibService = BpsComponentsLibService;
