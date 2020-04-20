@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="25" height="30" viewBox="0 0 25 30">
+    <defs>
+        <style>
+            .prefix__cls-1,.prefix__cls-2,.prefix__cls-4{fill:none}.prefix__cls-1,.prefix__cls-2{stroke:#fff}.prefix__cls-2{stroke-width:1.5px}.prefix__cls-3{stroke:none}
+        </style>
+    </defs>
+    <g id="prefix__sps_rectangle_icon_tiltturn_white" transform="translate(-765 -455)">
+        <g id="prefix__Rectangle_1324" class="prefix__cls-1" data-name="Rectangle 1324">
+            <path d="M0 0H25V30H0z" class="prefix__cls-3" transform="translate(765 455)"/>
+            <path d="M0.5 0.5H24.5V29.5H0.5z" class="prefix__cls-4" transform="translate(765 455)"/>
+        </g>
+        <g id="prefix__Rectangle_1325" class="prefix__cls-1" data-name="Rectangle 1325">
+            <path d="M0 0H21V26H0z" class="prefix__cls-3" transform="translate(767 457)"/>
+            <path d="M0.5 0.5H20.5V25.5H0.5z" class="prefix__cls-4" transform="translate(767 457)"/>
+        </g>
+        <path id="prefix__Path_921" d="M831.175-19628.764L812.621-19641l18.555-12.312" class="prefix__cls-2" data-name="Path 921" transform="translate(-44 20111)"/>
+        <path id="prefix__Path_925" d="M1751.787-19537.582l9.182-23.031 9.193 23.031" class="prefix__cls-2" data-name="Path 925" transform="translate(-983.477 20019.744)"/>
+    </g>
+</svg>

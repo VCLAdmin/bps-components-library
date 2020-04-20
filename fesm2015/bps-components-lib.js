@@ -1,9 +1,9 @@
 import { __decorate, __param } from 'tslib';
-import { ɵɵdefineInjectable, Injectable, Component, Renderer2, ElementRef, Input, Directive, NgZone, ContentChildren, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, TemplateRef, Pipe, ChangeDetectorRef, EventEmitter, ViewChildren, Output, Host, Optional, forwardRef, ContentChild, Inject, HostBinding, NgModule } from '@angular/core';
+import { ɵɵdefineInjectable, Injectable, Component, Renderer2, ElementRef, Input, Directive, NgZone, ContentChildren, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, TemplateRef, Pipe, ChangeDetectorRef, EventEmitter, ViewChildren, Output, Host, Optional, forwardRef, ContentChild, Inject, HostBinding, HostListener, NgModule } from '@angular/core';
 import { en_US, NgZorroAntdModule, NzNoAnimationModule, NzOverlayModule, NZ_I18N } from 'ng-zorro-antd';
 import { CommonModule } from '@angular/common';
 import { CdkOverlayOrigin, CdkConnectedOverlay, OverlayModule } from '@angular/cdk/overlay';
-import { InputBoolean, NzDomEventService, isNotNil, isNil, NzNoAnimationDirective, zoomMotion, toBoolean, slideMotion, warnDeprecation, helpMotion, NzUpdateHostClassService, NzConfigService, WithConfig, NzWaveDirective, isEmpty, findFirstNotEmptyNode, findLastNotEmptyNode, NZ_WAVE_GLOBAL_CONFIG, NzAddOnModule, NzWaveModule } from 'ng-zorro-antd/core';
+import { InputBoolean, NzDomEventService, isNotNil, isNil, NzNoAnimationDirective, zoomMotion, toBoolean, slideMotion, warnDeprecation, helpMotion, NzUpdateHostClassService, NzConfigService, WithConfig, NzWaveDirective, isEmpty, findFirstNotEmptyNode, findLastNotEmptyNode, NZ_WAVE_GLOBAL_CONFIG, collapseMotion, NzAddOnModule, NzWaveModule } from 'ng-zorro-antd/core';
 import { NzIconDirective, NzIconModule } from 'ng-zorro-antd/icon';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NG_VALUE_ACCESSOR, FormControl, NgModel, FormControlName, FormControlDirective, NgControl, FormsModule } from '@angular/forms';
@@ -11,10 +11,11 @@ import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
 import { Platform } from '@angular/cdk/platform';
 import { Subject, BehaviorSubject, ReplaySubject, combineLatest, merge, fromEvent, EMPTY, Subscription } from 'rxjs';
 import { takeUntil, finalize, distinctUntilChanged, map, filter, skip, share, tap, pairwise, startWith, flatMap } from 'rxjs/operators';
-import { TAB, SPACE, BACKSPACE, ENTER, DOWN_ARROW, UP_ARROW } from '@angular/cdk/keycodes';
+import { TAB, SPACE, BACKSPACE, ENTER, DOWN_ARROW, UP_ARROW, LEFT_ARROW, RIGHT_ARROW } from '@angular/cdk/keycodes';
 import { NzRowDirective, NzColDirective } from 'ng-zorro-antd/grid';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { ANIMATION_MODULE_TYPE } from '@angular/platform-browser/animations';
+import { FocusMonitor } from '@angular/cdk/a11y';
 
 let BpsComponentsLibService = class BpsComponentsLibService {
     constructor() {
@@ -2242,6 +2243,822 @@ BpsButtonGroupComponent = __decorate([
     })
 ], BpsButtonGroupComponent);
 
+var BpsSwitchComponent_1;
+const NZ_CONFIG_COMPONENT_NAME$2 = 'switch';
+let BpsSwitchComponent = BpsSwitchComponent_1 = class BpsSwitchComponent {
+    constructor(nzConfigService, cdr, focusMonitor) {
+        this.nzConfigService = nzConfigService;
+        this.cdr = cdr;
+        this.focusMonitor = focusMonitor;
+        this.checked = false;
+        this.onChange = () => null;
+        this.onTouched = () => null;
+        this.bpsLoading = false;
+        this.bpsDisabled = false;
+        this.bpsControl = false;
+    }
+    hostClick(e) {
+        e.preventDefault();
+        if (!this.bpsDisabled && !this.bpsLoading && !this.bpsControl) {
+            this.updateValue(!this.checked);
+        }
+    }
+    updateValue(value) {
+        if (this.checked !== value) {
+            this.checked = value;
+            this.onChange(this.checked);
+        }
+    }
+    onKeyDown(e) {
+        if (!this.bpsControl && !this.bpsDisabled && !this.bpsLoading) {
+            if (e.keyCode === LEFT_ARROW) {
+                this.updateValue(false);
+                e.preventDefault();
+            }
+            else if (e.keyCode === RIGHT_ARROW) {
+                this.updateValue(true);
+                e.preventDefault();
+            }
+            else if (e.keyCode === SPACE || e.keyCode === ENTER) {
+                this.updateValue(!this.checked);
+                e.preventDefault();
+            }
+        }
+    }
+    focus() {
+        this.focusMonitor.focusVia(this.switchElement.nativeElement, 'keyboard');
+    }
+    blur() {
+        this.switchElement.nativeElement.blur();
+    }
+    ngAfterViewInit() {
+        this.focusMonitor.monitor(this.switchElement.nativeElement, true).subscribe(focusOrigin => {
+            if (!focusOrigin) {
+                // When a focused element becomes disabled, the browser *immediately* fires a blur event.
+                // Angular does not expect events to be raised during change detection, so any state change
+                // (such as a form control's 'ng-touched') will cause a changed-after-checked error.
+                // See https://github.com/angular/angular/issues/17793. To work around this, we defer
+                // telling the form control it has been touched until the next tick.
+                Promise.resolve().then(() => this.onTouched());
+            }
+        });
+    }
+    ngOnDestroy() {
+        this.focusMonitor.stopMonitoring(this.switchElement.nativeElement);
+    }
+    writeValue(value) {
+        this.checked = value;
+        this.cdr.markForCheck();
+    }
+    registerOnChange(fn) {
+        this.onChange = fn;
+    }
+    registerOnTouched(fn) {
+        this.onTouched = fn;
+    }
+    setDisabledState(isDisabled) {
+        this.bpsDisabled = isDisabled;
+        this.cdr.markForCheck();
+    }
+};
+BpsSwitchComponent.ctorParameters = () => [
+    { type: NzConfigService },
+    { type: ChangeDetectorRef },
+    { type: FocusMonitor }
+];
+__decorate([
+    ViewChild('switchElement', { static: true })
+], BpsSwitchComponent.prototype, "switchElement", void 0);
+__decorate([
+    Input(), InputBoolean()
+], BpsSwitchComponent.prototype, "bpsLoading", void 0);
+__decorate([
+    Input(), InputBoolean()
+], BpsSwitchComponent.prototype, "bpsDisabled", void 0);
+__decorate([
+    Input(), InputBoolean()
+], BpsSwitchComponent.prototype, "bpsControl", void 0);
+__decorate([
+    Input()
+], BpsSwitchComponent.prototype, "bpsCheckedChildren", void 0);
+__decorate([
+    Input()
+], BpsSwitchComponent.prototype, "bpsUnCheckedChildren", void 0);
+__decorate([
+    Input(), WithConfig(NZ_CONFIG_COMPONENT_NAME$2, 'default')
+], BpsSwitchComponent.prototype, "bpsSize", void 0);
+BpsSwitchComponent = BpsSwitchComponent_1 = __decorate([
+    Component({
+        selector: 'bps-switch',
+        exportAs: 'bpsSwitch',
+        preserveWhitespaces: false,
+        template: "<button type=\"button\" #switchElement\r\n  nz-wave\r\n  class=\"ant-switch\"\r\n  [disabled]=\"bpsDisabled\"\r\n  [class.ant-switch-checked]=\"checked\"\r\n  [class.ant-switch-loading]=\"bpsLoading\"\r\n  [class.ant-switch-disabled]=\"bpsDisabled\"\r\n  [class.ant-switch-small]=\"bpsSize === 'small'\"\r\n  [nzWaveExtraNode]=\"true\"\r\n  (keydown)=\"onKeyDown($event)\">\r\n  <i *ngIf=\"bpsLoading\" nz-icon nzType=\"loading\" class=\"ant-switch-loading-icon\"></i>\r\n  <span class=\"ant-switch-inner\">\r\n    <span>\r\n      <ng-container *ngIf=\"checked\">\r\n        <ng-container *nzStringTemplateOutlet=\"bpsCheckedChildren\">{{ bpsCheckedChildren }}</ng-container>\r\n      </ng-container>\r\n      <ng-container *ngIf=\"!checked\">\r\n        <ng-container *nzStringTemplateOutlet=\"bpsUnCheckedChildren\">{{ bpsUnCheckedChildren }}</ng-container>\r\n      </ng-container>\r\n    </span>\r\n  </span>\r\n</button>\r\n",
+        changeDetection: ChangeDetectionStrategy.OnPush,
+        encapsulation: ViewEncapsulation.None,
+        providers: [
+            {
+                provide: NG_VALUE_ACCESSOR,
+                useExisting: forwardRef(() => BpsSwitchComponent_1),
+                multi: true
+            }
+        ],
+        host: {
+            '(click)': 'hostClick($event)'
+        },
+        styles: [".ant-switch::after{background-color:#999!important;width:16px!important;height:16px!important;top:-3px;left:-1px!important}.ant-switch{min-width:30px!important;height:12px!important;border-radius:100px!important;border:1px solid #666!important;background-color:#363636!important}.ant-switch-checked::after{left:100%!important;margin-left:1px!important;transform:translateX(-100%);border:1px solid #00a2d1!important;background-color:#00a2d1!important}.ant-switch-checked{border:1px solid #00a2d1!important}.ant-switch-disabled::after{background-color:#474747!important;border:1px solid #474747!important}.ant-switch-disabled{border:1px solid #474747!important}", `
+      bps-switch {
+        display: inline-block;
+      }
+    `]
+    })
+], BpsSwitchComponent);
+
+var BpsCheckboxGroupComponent_1;
+let BpsCheckboxGroupComponent = BpsCheckboxGroupComponent_1 = class BpsCheckboxGroupComponent {
+    constructor(elementRef, focusMonitor, cdr, renderer) {
+        this.elementRef = elementRef;
+        this.focusMonitor = focusMonitor;
+        this.cdr = cdr;
+        // tslint:disable-next-line:no-any
+        this.onChange = () => null;
+        // tslint:disable-next-line:no-any
+        this.onTouched = () => null;
+        this.options = [];
+        this.bpsDisabled = false;
+        renderer.addClass(elementRef.nativeElement, 'ant-checkbox-group');
+    }
+    onOptionChange() {
+        this.onChange(this.options);
+    }
+    trackByOption(_index, option) {
+        return option.value;
+    }
+    ngOnInit() {
+        this.focusMonitor.monitor(this.elementRef, true).subscribe(focusOrigin => {
+            if (!focusOrigin) {
+                Promise.resolve().then(() => this.onTouched());
+            }
+        });
+    }
+    ngOnDestroy() {
+        this.focusMonitor.stopMonitoring(this.elementRef);
+    }
+    writeValue(value) {
+        this.options = value;
+        this.cdr.markForCheck();
+    }
+    registerOnChange(fn) {
+        this.onChange = fn;
+    }
+    registerOnTouched(fn) {
+        this.onTouched = fn;
+    }
+    setDisabledState(isDisabled) {
+        this.bpsDisabled = isDisabled;
+        this.cdr.markForCheck();
+    }
+};
+BpsCheckboxGroupComponent.ctorParameters = () => [
+    { type: ElementRef },
+    { type: FocusMonitor },
+    { type: ChangeDetectorRef },
+    { type: Renderer2 }
+];
+__decorate([
+    Input(), InputBoolean()
+], BpsCheckboxGroupComponent.prototype, "bpsDisabled", void 0);
+BpsCheckboxGroupComponent = BpsCheckboxGroupComponent_1 = __decorate([
+    Component({
+        selector: 'bps-checkbox-group',
+        exportAs: 'bpsCheckboxGroup',
+        preserveWhitespaces: false,
+        encapsulation: ViewEncapsulation.None,
+        template: "<label bps-checkbox\n       class=\"ant-checkbox-group-item\"\n       *ngFor=\"let option of options; trackBy:trackByOption\"\n       [bpsDisabled]=\"option.disabled || bpsDisabled\"\n       [(bpsChecked)]=\"option.checked\"\n       (bpsCheckedChange)=\"onOptionChange()\">\n  <span>{{ option.label }}</span>\n</label>\n",
+        providers: [
+            {
+                provide: NG_VALUE_ACCESSOR,
+                useExisting: forwardRef(() => BpsCheckboxGroupComponent_1),
+                multi: true
+            }
+        ]
+    })
+], BpsCheckboxGroupComponent);
+
+let BpsCheckboxWrapperComponent = class BpsCheckboxWrapperComponent {
+    constructor(renderer, elementRef) {
+        this.bpsOnChange = new EventEmitter();
+        this.checkboxList = [];
+        renderer.addClass(elementRef.nativeElement, 'ant-checkbox-group');
+    }
+    addCheckbox(value) {
+        this.checkboxList.push(value);
+    }
+    removeCheckbox(value) {
+        this.checkboxList.splice(this.checkboxList.indexOf(value), 1);
+    }
+    outputValue() {
+        const checkedList = this.checkboxList.filter(item => item.bpsChecked);
+        return checkedList.map(item => item.bpsValue);
+    }
+    onChange() {
+        this.bpsOnChange.emit(this.outputValue());
+    }
+};
+BpsCheckboxWrapperComponent.ctorParameters = () => [
+    { type: Renderer2 },
+    { type: ElementRef }
+];
+__decorate([
+    Output()
+], BpsCheckboxWrapperComponent.prototype, "bpsOnChange", void 0);
+BpsCheckboxWrapperComponent = __decorate([
+    Component({
+        selector: 'bps-checkbox-wrapper',
+        exportAs: 'bpsCheckboxWrapper',
+        preserveWhitespaces: false,
+        changeDetection: ChangeDetectionStrategy.OnPush,
+        encapsulation: ViewEncapsulation.None,
+        template: "<ng-content></ng-content>"
+    })
+], BpsCheckboxWrapperComponent);
+
+var BpsCheckboxComponent_1;
+let BpsCheckboxComponent = BpsCheckboxComponent_1 = class BpsCheckboxComponent {
+    constructor(elementRef, renderer, bpsCheckboxWrapperComponent, cdr, focusMonitor) {
+        this.elementRef = elementRef;
+        this.renderer = renderer;
+        this.bpsCheckboxWrapperComponent = bpsCheckboxWrapperComponent;
+        this.cdr = cdr;
+        this.focusMonitor = focusMonitor;
+        // tslint:disable-next-line:no-any
+        this.onChange = () => null;
+        // tslint:disable-next-line:no-any
+        this.onTouched = () => null;
+        this.bpsCheckedChange = new EventEmitter();
+        this.bpsAutoFocus = false;
+        this.bpsDisabled = false;
+        this.bpsIndeterminate = false;
+        this.bpsChecked = false;
+        this.bpsType = 'variation2';
+        renderer.addClass(elementRef.nativeElement, 'ant-checkbox-wrapper');
+    }
+    hostClick(e) {
+        e.preventDefault();
+        this.focus();
+        this.innerCheckedChange(!this.bpsChecked);
+    }
+    innerCheckedChange(checked) {
+        if (!this.bpsDisabled) {
+            this.bpsChecked = checked;
+            this.onChange(this.bpsChecked);
+            this.bpsCheckedChange.emit(this.bpsChecked);
+            if (this.bpsCheckboxWrapperComponent) {
+                this.bpsCheckboxWrapperComponent.onChange();
+            }
+        }
+    }
+    updateAutoFocus() {
+        if (this.inputElement && this.bpsAutoFocus) {
+            this.renderer.setAttribute(this.inputElement.nativeElement, 'autofocus', 'autofocus');
+        }
+        else {
+            this.renderer.removeAttribute(this.inputElement.nativeElement, 'autofocus');
+        }
+    }
+    writeValue(value) {
+        this.bpsChecked = value;
+        this.cdr.markForCheck();
+    }
+    registerOnChange(fn) {
+        this.onChange = fn;
+    }
+    registerOnTouched(fn) {
+        this.onTouched = fn;
+    }
+    setDisabledState(isDisabled) {
+        this.bpsDisabled = isDisabled;
+        this.cdr.markForCheck();
+    }
+    focus() {
+        this.focusMonitor.focusVia(this.inputElement, 'keyboard');
+    }
+    blur() {
+        this.inputElement.nativeElement.blur();
+    }
+    checkContent() {
+        if (isEmpty(this.contentElement.nativeElement)) {
+            this.renderer.setStyle(this.contentElement.nativeElement, 'display', 'none');
+        }
+        else {
+            this.renderer.removeStyle(this.contentElement.nativeElement, 'display');
+        }
+    }
+    ngOnInit() {
+        this.focusMonitor.monitor(this.elementRef, true).subscribe(focusOrigin => {
+            if (!focusOrigin) {
+                Promise.resolve().then(() => this.onTouched());
+            }
+        });
+        if (this.bpsCheckboxWrapperComponent) {
+            this.bpsCheckboxWrapperComponent.addCheckbox(this);
+        }
+    }
+    ngOnChanges(changes) {
+        if (changes.bpsAutoFocus) {
+            this.updateAutoFocus();
+        }
+    }
+    ngAfterViewInit() {
+        this.updateAutoFocus();
+        this.checkContent();
+    }
+    ngOnDestroy() {
+        this.focusMonitor.stopMonitoring(this.elementRef);
+        if (this.bpsCheckboxWrapperComponent) {
+            this.bpsCheckboxWrapperComponent.removeCheckbox(this);
+        }
+    }
+};
+BpsCheckboxComponent.ctorParameters = () => [
+    { type: ElementRef },
+    { type: Renderer2 },
+    { type: BpsCheckboxWrapperComponent, decorators: [{ type: Optional }] },
+    { type: ChangeDetectorRef },
+    { type: FocusMonitor }
+];
+__decorate([
+    ViewChild('inputElement', { static: true })
+], BpsCheckboxComponent.prototype, "inputElement", void 0);
+__decorate([
+    ViewChild('contentElement', { static: false })
+], BpsCheckboxComponent.prototype, "contentElement", void 0);
+__decorate([
+    Output()
+], BpsCheckboxComponent.prototype, "bpsCheckedChange", void 0);
+__decorate([
+    Input()
+], BpsCheckboxComponent.prototype, "bpsValue", void 0);
+__decorate([
+    Input(), InputBoolean()
+], BpsCheckboxComponent.prototype, "bpsAutoFocus", void 0);
+__decorate([
+    Input(), InputBoolean()
+], BpsCheckboxComponent.prototype, "bpsDisabled", void 0);
+__decorate([
+    Input(), InputBoolean()
+], BpsCheckboxComponent.prototype, "bpsIndeterminate", void 0);
+__decorate([
+    Input(), InputBoolean()
+], BpsCheckboxComponent.prototype, "bpsChecked", void 0);
+__decorate([
+    Input()
+], BpsCheckboxComponent.prototype, "bpsType", void 0);
+BpsCheckboxComponent = BpsCheckboxComponent_1 = __decorate([
+    Component({
+        selector: '[bps-checkbox]',
+        exportAs: 'bpsCheckbox',
+        preserveWhitespaces: false,
+        changeDetection: ChangeDetectionStrategy.OnPush,
+        encapsulation: ViewEncapsulation.None,
+        template: "<ng-template #content><ng-content></ng-content></ng-template>\n\n<span class=\"ant-checkbox\"\n  [class.ant-checkbox-checked]=\"bpsChecked && !bpsIndeterminate\"\n  [class.ant-checkbox-disabled]=\"bpsDisabled\"\n  [class.bps-checkbox-variation1]=\"bpsType === 'variation1'\"\n  [class.ant-checkbox-indeterminate]=\"bpsIndeterminate\">\n  <input #inputElement [checked]=\"bpsChecked\" [ngModel]=\"bpsChecked\" [disabled]=\"bpsDisabled\" (ngModelChange)=\"innerCheckedChange($event)\" (click)=\"$event.stopPropagation();\" type=\"checkbox\" class=\"ant-checkbox-input\">\n  <span class=\"ant-checkbox-inner\">\r\n    <ng-container *ngIf=\"bpsType === 'variation1'\">\r\n      <ng-container *ngTemplateOutlet=\"content\"></ng-container>\r\n    </ng-container>\r\n  </span>\n</span>\n<span #contentElement (cdkObserveContent)=\"checkContent()\">\n  <ng-container *ngIf=\"bpsType === 'variation2'\">\r\n    <ng-container *ngTemplateOutlet=\"content\"></ng-container>\r\n  </ng-container>\n</span>\n",
+        providers: [
+            {
+                provide: NG_VALUE_ACCESSOR,
+                useExisting: forwardRef(() => BpsCheckboxComponent_1),
+                multi: true
+            }
+        ],
+        host: {
+            '(click)': 'hostClick($event)'
+        },
+        styles: [".ant-checkbox-inner{width:15px!important;height:15px!important;border-radius:3px!important;background-color:#363636!important;border:1px solid #707070!important}.ant-checkbox-inner::after{top:48%!important;left:22%!important}.ant-checkbox{border-radius:3px!important;font-size:12px!important;width:15px!important;height:15px!important}.ant-checkbox:hover .ant-checkbox-inner{border:1px solid #445c67!important}.ant-checkbox-checked .ant-checkbox-inner::after{border-color:#00a2d1!important}.ant-checkbox-checked::after{border:none!important}.ant-checkbox-wrapper.cdk-focused .ant-checkbox-inner{box-shadow:0 0 8px 0 #00a2d1!important;border:1px solid #707070!important}.bps-checkbox-variation1,.bps-checkbox-variation1 .ant-checkbox-inner,.bps-checkbox-variation1:hover{width:65px!important;height:40px!important;border-radius:8px!important}.bps-checkbox-variation1 .ant-checkbox-inner{border:1px solid #666;display:table!important}.bps-checkbox-variation1:not(.ant-checkbox-disabled):hover .ant-checkbox-inner{border:2px solid #00a2d1!important;transition:.1s!important}.bps-checkbox-variation1 .ant-checkbox-inner svg{display:table-cell!important;vertical-align:middle!important;text-align:center!important;margin:0 auto!important;height:100%!important}.ant-checkbox-checked.bps-checkbox-variation1 .ant-checkbox-inner::after{content:unset!important}.ant-checkbox-checked.bps-checkbox-variation1 .ant-checkbox-inner{border:2px solid #00a2d1!important}.ant-checkbox.ant-checkbox-disabled .ant-checkbox-inner,.ant-checkbox.ant-checkbox-disabled .ant-checkbox-inner::after,.ant-checkbox.ant-checkbox-disabled:hover .ant-checkbox-inner{border-color:#474747!important;box-shadow:none!important}.bps-checkbox-variation1.ant-checkbox-disabled .ant-checkbox-inner svg{opacity:.4!important}"]
+    }),
+    __param(2, Optional())
+], BpsCheckboxComponent);
+
+var BpsRadioComponent_1;
+let BpsRadioComponent = BpsRadioComponent_1 = class BpsRadioComponent {
+    /* tslint:disable-next-line:no-any */
+    constructor(elementRef, renderer, cdr, focusMonitor) {
+        this.elementRef = elementRef;
+        this.renderer = renderer;
+        this.cdr = cdr;
+        this.focusMonitor = focusMonitor;
+        this.select$ = new Subject();
+        this.touched$ = new Subject();
+        this.checked = false;
+        this.isNgModel = false;
+        this.onChange = () => null;
+        this.onTouched = () => null;
+        this.bpsDisabled = false;
+        this.bpsAutoFocus = false;
+        this.bpsRadioButtonType = 'variation1';
+        this.renderer.addClass(elementRef.nativeElement, 'ant-radio-wrapper');
+    }
+    updateAutoFocus() {
+        if (this.inputElement) {
+            if (this.bpsAutoFocus) {
+                this.renderer.setAttribute(this.inputElement.nativeElement, 'autofocus', 'autofocus');
+            }
+            else {
+                this.renderer.removeAttribute(this.inputElement.nativeElement, 'autofocus');
+            }
+        }
+    }
+    onClick(event) {
+        // Prevent label click triggered twice.
+        event.stopPropagation();
+        event.preventDefault();
+        if (!this.bpsDisabled && !this.checked) {
+            this.select$.next(this);
+            if (this.isNgModel) {
+                this.checked = true;
+                this.onChange(true);
+            }
+        }
+    }
+    focus() {
+        this.focusMonitor.focusVia(this.inputElement, 'keyboard');
+    }
+    blur() {
+        this.inputElement.nativeElement.blur();
+    }
+    markForCheck() {
+        this.cdr.markForCheck();
+    }
+    setDisabledState(isDisabled) {
+        this.bpsDisabled = isDisabled;
+        this.cdr.markForCheck();
+    }
+    writeValue(value) {
+        this.checked = value;
+        this.cdr.markForCheck();
+    }
+    registerOnChange(fn) {
+        this.isNgModel = true;
+        this.onChange = fn;
+    }
+    registerOnTouched(fn) {
+        this.onTouched = fn;
+    }
+    ngAfterViewInit() {
+        this.focusMonitor.monitor(this.elementRef, true).subscribe(focusOrigin => {
+            if (!focusOrigin) {
+                Promise.resolve().then(() => this.onTouched());
+                this.touched$.next();
+            }
+        });
+        this.updateAutoFocus();
+        this.renderer.addClass(this.elementRef.nativeElement, `bps-radio-button-${this.bpsRadioButtonType}`);
+    }
+    ngOnChanges(changes) {
+        if (changes.bpsAutoFocus) {
+            this.updateAutoFocus();
+        }
+    }
+    ngOnDestroy() {
+        this.focusMonitor.stopMonitoring(this.elementRef);
+    }
+};
+BpsRadioComponent.ctorParameters = () => [
+    { type: ElementRef },
+    { type: Renderer2 },
+    { type: ChangeDetectorRef },
+    { type: FocusMonitor }
+];
+__decorate([
+    ViewChild('inputElement', { static: false })
+], BpsRadioComponent.prototype, "inputElement", void 0);
+__decorate([
+    Input()
+], BpsRadioComponent.prototype, "bpsValue", void 0);
+__decorate([
+    Input(), InputBoolean()
+], BpsRadioComponent.prototype, "bpsDisabled", void 0);
+__decorate([
+    Input(), InputBoolean()
+], BpsRadioComponent.prototype, "bpsAutoFocus", void 0);
+__decorate([
+    Input()
+], BpsRadioComponent.prototype, "bpsRadioButtonType", void 0);
+__decorate([
+    HostListener('click', ['$event'])
+], BpsRadioComponent.prototype, "onClick", null);
+BpsRadioComponent = BpsRadioComponent_1 = __decorate([
+    Component({
+        selector: '[bps-radio]',
+        exportAs: 'bpsRadio',
+        preserveWhitespaces: false,
+        template: "<span class=\"ant-radio\" [class.ant-radio-checked]=\"checked\" [class.ant-radio-disabled]=\"bpsDisabled\">\n  <input #inputElement type=\"radio\" class=\"ant-radio-input\" [disabled]=\"bpsDisabled\" [checked]=\"checked\" [attr.name]=\"name\">\n  <span class=\"ant-radio-inner\"></span>\n</span>\n<span><ng-content></ng-content></span>\n",
+        encapsulation: ViewEncapsulation.None,
+        changeDetection: ChangeDetectionStrategy.OnPush,
+        providers: [
+            {
+                provide: NG_VALUE_ACCESSOR,
+                useExisting: forwardRef(() => BpsRadioComponent_1),
+                multi: true
+            }
+        ],
+        host: {
+            '[class.ant-radio-wrapper-checked]': 'checked',
+            '[class.ant-radio-wrapper-disabled]': 'bpsDisabled'
+        }
+    })
+], BpsRadioComponent);
+
+var BpsRadioGroupComponent_1;
+let BpsRadioGroupComponent = BpsRadioGroupComponent_1 = class BpsRadioGroupComponent {
+    constructor(cdr, renderer, elementRef) {
+        this.cdr = cdr;
+        this.destroy$ = new Subject();
+        this.onChange = () => null;
+        this.onTouched = () => null;
+        this.bpsButtonStyle = 'outline';
+        this.bpsSize = 'default';
+        renderer.addClass(elementRef.nativeElement, 'ant-radio-group');
+    }
+    updateChildrenStatus() {
+        if (this.radios) {
+            Promise.resolve().then(() => {
+                this.radios.forEach(radio => {
+                    radio.checked = radio.bpsValue === this.value;
+                    if (isNotNil(this.bpsDisabled)) {
+                        radio.bpsDisabled = this.bpsDisabled;
+                    }
+                    if (this.bpsName) {
+                        radio.name = this.bpsName;
+                    }
+                    radio.markForCheck();
+                });
+            });
+        }
+    }
+    ngAfterContentInit() {
+        this.radios.changes
+            .pipe(startWith(null), takeUntil(this.destroy$))
+            .subscribe(() => {
+            this.updateChildrenStatus();
+            if (this.selectSubscription) {
+                this.selectSubscription.unsubscribe();
+            }
+            this.selectSubscription = merge(...this.radios.map(radio => radio.select$))
+                .pipe(takeUntil(this.destroy$))
+                .subscribe(radio => {
+                if (this.value !== radio.bpsValue) {
+                    this.value = radio.bpsValue;
+                    this.updateChildrenStatus();
+                    this.onChange(this.value);
+                }
+            });
+            if (this.touchedSubscription) {
+                this.touchedSubscription.unsubscribe();
+            }
+            this.touchedSubscription = merge(...this.radios.map(radio => radio.touched$))
+                .pipe(takeUntil(this.destroy$))
+                .subscribe(() => {
+                Promise.resolve().then(() => this.onTouched());
+            });
+        });
+    }
+    ngOnChanges(changes) {
+        if (changes.bpsDisabled || changes.bpsName) {
+            this.updateChildrenStatus();
+        }
+    }
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+    /* tslint:disable-next-line:no-any */
+    writeValue(value) {
+        this.value = value;
+        this.updateChildrenStatus();
+        this.cdr.markForCheck();
+    }
+    registerOnChange(fn) {
+        this.onChange = fn;
+    }
+    registerOnTouched(fn) {
+        this.onTouched = fn;
+    }
+    setDisabledState(isDisabled) {
+        this.bpsDisabled = isDisabled;
+        this.cdr.markForCheck();
+    }
+};
+BpsRadioGroupComponent.ctorParameters = () => [
+    { type: ChangeDetectorRef },
+    { type: Renderer2 },
+    { type: ElementRef }
+];
+__decorate([
+    ContentChildren(forwardRef(() => BpsRadioComponent), { descendants: true })
+], BpsRadioGroupComponent.prototype, "radios", void 0);
+__decorate([
+    Input(), InputBoolean()
+], BpsRadioGroupComponent.prototype, "bpsDisabled", void 0);
+__decorate([
+    Input()
+], BpsRadioGroupComponent.prototype, "bpsButtonStyle", void 0);
+__decorate([
+    Input()
+], BpsRadioGroupComponent.prototype, "bpsSize", void 0);
+__decorate([
+    Input()
+], BpsRadioGroupComponent.prototype, "bpsName", void 0);
+BpsRadioGroupComponent = BpsRadioGroupComponent_1 = __decorate([
+    Component({
+        selector: 'bps-radio-group',
+        exportAs: 'bpsRadioGroup',
+        preserveWhitespaces: false,
+        template: "<ng-content></ng-content>",
+        encapsulation: ViewEncapsulation.None,
+        changeDetection: ChangeDetectionStrategy.OnPush,
+        providers: [
+            {
+                provide: NG_VALUE_ACCESSOR,
+                useExisting: forwardRef(() => BpsRadioGroupComponent_1),
+                multi: true
+            }
+        ],
+        host: {
+            '[class.ant-radio-group-large]': `bpsSize === 'large'`,
+            '[class.ant-radio-group-small]': `bpsSize === 'small'`,
+            '[class.ant-radio-group-solid]': `bpsButtonStyle === 'solid'`
+        }
+    })
+], BpsRadioGroupComponent);
+
+var BpsRadioButtonComponent_1;
+let BpsRadioButtonComponent = BpsRadioButtonComponent_1 = class BpsRadioButtonComponent extends BpsRadioComponent {
+    /* tslint:disable-next-line:no-any */
+    constructor(elementRef, renderer, cdr, focusMonitor) {
+        super(elementRef, renderer, cdr, focusMonitor);
+        renderer.removeClass(elementRef.nativeElement, 'ant-radio-wrapper');
+        renderer.addClass(elementRef.nativeElement, 'ant-radio-button-wrapper');
+    }
+};
+BpsRadioButtonComponent.ctorParameters = () => [
+    { type: ElementRef },
+    { type: Renderer2 },
+    { type: ChangeDetectorRef },
+    { type: FocusMonitor }
+];
+BpsRadioButtonComponent = BpsRadioButtonComponent_1 = __decorate([
+    Component({
+        selector: '[bps-radio-button]',
+        exportAs: 'bpsRadioButton',
+        providers: [
+            {
+                provide: NG_VALUE_ACCESSOR,
+                useExisting: forwardRef(() => BpsRadioComponent),
+                multi: true
+            },
+            {
+                provide: BpsRadioComponent,
+                useExisting: forwardRef(() => BpsRadioButtonComponent_1)
+            }
+        ],
+        encapsulation: ViewEncapsulation.None,
+        changeDetection: ChangeDetectionStrategy.OnPush,
+        preserveWhitespaces: false,
+        template: "<span class=\"ant-radio-button\" [class.ant-radio-button-checked]=\"checked\" [class.ant-radio-button-disabled]=\"bpsDisabled\">\n  <input type=\"radio\" #inputElement class=\"ant-radio-button-input\" [disabled]=\"bpsDisabled\" [checked]=\"checked\" [attr.name]=\"name\">\n  <span class=\"ant-radio-button-inner\"></span>\n</span>\n<span class=\"bps-custom-content-radio\"><ng-content></ng-content></span>\n",
+        host: {
+            '[class.ant-radio-button-wrapper-checked]': 'checked',
+            '[class.ant-radio-button-wrapper-disabled]': 'bpsDisabled'
+        },
+        styles: [".ant-radio-button-wrapper{margin-right:10px!important;height:40px!important;border-radius:8px!important;border:1px solid #666!important;padding:0!important;line-height:38px!important;background-color:transparent!important;color:#999!important;text-align:center!important}.bps-radio-button-variation2,.bps-radio-button-variation6,.bps-radio-button-variation7{font-size:11px!important;font-stretch:normal!important;font-style:normal!important;letter-spacing:normal!important;text-align:center!important;color:#999!important}.bps-radio-button-variation6,.bps-radio-button-variation7{font-size:12px!important;border-radius:8px!important;border:1px solid #666!important;margin-right:15px!important}.bps-radio-button-variation7{padding:0 15px!important;margin-bottom:15px!important}.bps-radio-button-variation3,.bps-radio-button-variation5{font-size:11px!important;font-stretch:normal!important;font-style:normal!important;letter-spacing:normal!important;text-align:center!important;color:#fff!important;border-radius:4px!important;background-color:#363636!important;border:1px solid #363636!important}.bps-radio-button-variation5{text-align:unset!important;padding:0 15px!important;margin-bottom:5px!important;margin-right:0!important;display:block!important}.bps-radio-button-variation5 .bps-custom-content-radio,.bps-radio-button-variation7 .bps-custom-content-radio{margin:0!important;width:100%!important}.bps-radio-button-variation5 .bps-custom-content-radio span{position:relative!important;float:left!important}.bps-radio-button-variation5 .bps-custom-content-radio svg{float:right!important}.bps-radio-button-variation7 .bps-custom-content-radio{text-align:center!important}.bps-radio-button-variation7 .bps-custom-content-radio svg{float:left!important}.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled),.ant-radio-button-wrapper:not(.ant-radio-button-wrapper-disabled):hover{border:2px solid #7bc053!important;color:#7bc053!important;line-height:36px!important;box-shadow:none!important}.bps-radio-button-variation6:not(.ant-radio-button-wrapper-disabled):hover,.bps-radio-button-variation7:not(.ant-radio-button-wrapper-disabled):hover{border:2px solid #445c67!important;color:#999!important}.ant-radio-button-wrapper-checked.bps-radio-button-variation6:not(.ant-radio-button-wrapper-disabled),.ant-radio-button-wrapper-checked.bps-radio-button-variation7:not(.ant-radio-button-wrapper-disabled){border:2px solid #00a2d1!important;color:#00a2d1!important}.bps-radio-button-variation3:not(.ant-radio-button-wrapper-disabled):hover,.bps-radio-button-variation5:not(.ant-radio-button-wrapper-disabled):hover{border:1px solid #445c67!important;color:#fff!important;box-shadow:none!important;line-height:38px!important}.bps-radio-button-variation3.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled),.bps-radio-button-variation5.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled){border:1px solid #00a2d1!important;color:#fff!important;box-shadow:none!important;line-height:38px!important}.ant-radio-button-wrapper:not(:first-child)::before{content:unset!important}.ant-radio-button-wrapper:not(.ant-radio-button-wrapper-disabled):focus{box-shadow:0 0 8px 0 #00a2d1!important;border:1px solid #666!important;background-color:#262626!important;outline:0!important;color:#999!important}.bps-custom-content-radio{display:table;margin:0 auto;height:100%}.bps-custom-content-radio svg{display:table-cell;vertical-align:middle;height:100%}.bps-radio-button-variation10{width:40px!important;border-radius:100px!important;border:none!important;line-height:unset!important}.ant-radio-button-wrapper-checked.bps-radio-button-variation10:not(.ant-radio-button-wrapper-disabled),.bps-radio-button-variation10:not(.ant-radio-button-wrapper-disabled):hover{border:none!important;line-height:unset!important}.bps-radio-button-variation10:not(.ant-radio-button-wrapper-disabled):focus{box-shadow:0 0 8px 0 #00a2d1!important;border:none!important}.ant-radio-button-wrapper-disabled{border:1px solid #474747!important;color:#474747!important}.bps-radio-button-variation10.ant-radio-button-wrapper-disabled{border:none!important}.ant-radio-button-wrapper-disabled svg{opacity:.2!important}.bps-radio-button-variation3:not(.ant-radio-button-wrapper-disabled):focus,.bps-radio-button-variation5:not(.ant-radio-button-wrapper-disabled):focus{box-shadow:0 0 8px 0 #00a2d1!important;border:none!important;background-color:#363636!important;color:#fff!important}.bps-radio-button-variation3.ant-radio-button-wrapper-disabled,.bps-radio-button-variation5.ant-radio-button-wrapper-disabled{color:#666!important;border:none!important;background-color:#363636!important}.bps-radio-button-variation8a span.ant-radio+*,.bps-radio-button-variation8b span.ant-radio+*,.bps-radio-button-variation8c span.ant-radio+*,.bps-radio-button-variation8d span.ant-radio+*,.bps-radio-button-variation8e span.ant-radio+*,.bps-radio-button-variation9 span.ant-radio+*{padding-right:10px!important;padding-left:0!important}.bps-radio-button-variation8a.ant-radio-wrapper,.bps-radio-button-variation8b.ant-radio-wrapper,.bps-radio-button-variation8c.ant-radio-wrapper,.bps-radio-button-variation8d.ant-radio-wrapper,.bps-radio-button-variation8e.ant-radio-wrapper,.bps-radio-button-variation9.ant-radio-wrapper{margin:0!important}.bps-radio-button-variation8a .ant-radio-inner,.bps-radio-button-variation8b .ant-radio-inner,.bps-radio-button-variation8c .ant-radio-inner,.bps-radio-button-variation8d .ant-radio-inner,.bps-radio-button-variation8e .ant-radio-inner,.bps-radio-button-variation9 .ant-radio-inner{background-color:#262626!important;border-color:#778d98!important}.bps-radio-button-variation8a .ant-radio-inner{border-color:#005068!important}.bps-radio-button-variation8b .ant-radio-inner{border-color:#00a2d1!important}.bps-radio-button-variation8c .ant-radio-inner{border-color:#005681!important}.bps-radio-button-variation8d .ant-radio-inner{border-color:#06809f!important}.bps-radio-button-variation8e .ant-radio-inner{border-color:#445c67!important}.bps-radio-button-variation8a .ant-radio-inner::after,.bps-radio-button-variation8b .ant-radio-inner::after,.bps-radio-button-variation8c .ant-radio-inner::after,.bps-radio-button-variation8d .ant-radio-inner::after,.bps-radio-button-variation8e .ant-radio-inner::after,.bps-radio-button-variation9 .ant-radio-inner::after{background-color:#778d98!important;opacity:1!important;transform:scale(1)!important}.bps-radio-button-variation8a .ant-radio-inner::after{background-color:#005068!important}.bps-radio-button-variation8b .ant-radio-inner::after{background-color:#00a2d1!important}.bps-radio-button-variation8c .ant-radio-inner::after{background-color:#005681!important}.bps-radio-button-variation8d .ant-radio-inner::after{background-color:#06809f!important}.bps-radio-button-variation8e .ant-radio-inner::after{background-color:#445c67!important}.bps-radio-button-variation8a .ant-radio::after,.bps-radio-button-variation8b .ant-radio::after,.bps-radio-button-variation8c .ant-radio::after,.bps-radio-button-variation8d .ant-radio::after,.bps-radio-button-variation8e .ant-radio::after,.bps-radio-button-variation9 .ant-radio::after{position:absolute!important;top:0!important;left:0!important;width:100%!important;height:100%!important;border:1px solid #778d98!important;border-radius:50%!important;-webkit-animation:.36s ease-in-out both antRadioEffect!important;animation:.36s ease-in-out both antRadioEffect!important;content:' '!important}.bps-radio-button-variation8a .ant-radio-checked .ant-radio-inner,.bps-radio-button-variation8b .ant-radio-checked .ant-radio-inner,.bps-radio-button-variation8c .ant-radio-checked .ant-radio-inner,.bps-radio-button-variation8d .ant-radio-checked .ant-radio-inner,.bps-radio-button-variation8e .ant-radio-checked .ant-radio-inner,.bps-radio-button-variation9 .ant-radio-checked .ant-radio-inner{border-color:#f18700!important}.bps-radio-button-variation8a .ant-radio-input:focus+.ant-radio-inner,.bps-radio-button-variation8b .ant-radio-input:focus+.ant-radio-inner,.bps-radio-button-variation8c .ant-radio-input:focus+.ant-radio-inner,.bps-radio-button-variation8d .ant-radio-input:focus+.ant-radio-inner,.bps-radio-button-variation8e .ant-radio-input:focus+.ant-radio-inner,.bps-radio-button-variation9 .ant-radio-input:focus+.ant-radio-inner{box-shadow:0 0 8px 0 #00a2d1!important;border:1px solid #778d98!important}.bps-radio-button-variation8a .ant-radio-disabled .ant-radio-inner::after,.bps-radio-button-variation8b .ant-radio-disabled .ant-radio-inner::after,.bps-radio-button-variation8c .ant-radio-disabled .ant-radio-inner::after,.bps-radio-button-variation8d .ant-radio-disabled .ant-radio-inner::after,.bps-radio-button-variation8e .ant-radio-disabled .ant-radio-inner::after,.bps-radio-button-variation9 .ant-radio-disabled .ant-radio-inner::after{opacity:0!important}.bps-radio-button-variation8a .ant-radio-disabled .ant-radio-inner,.bps-radio-button-variation8b .ant-radio-disabled .ant-radio-inner,.bps-radio-button-variation8c .ant-radio-disabled .ant-radio-inner,.bps-radio-button-variation8d .ant-radio-disabled .ant-radio-inner,.bps-radio-button-variation8e .ant-radio-disabled .ant-radio-inner,.bps-radio-button-variation9 .ant-radio-disabled .ant-radio-inner{background-color:#363636!important;border:none!important}"]
+    })
+], BpsRadioButtonComponent);
+
+const NZ_CONFIG_COMPONENT_NAME$3 = 'collapse';
+let BpsCollapseComponent = class BpsCollapseComponent {
+    constructor(nzConfigService) {
+        this.nzConfigService = nzConfigService;
+        this.listOfNzCollapsePanelComponent = [];
+    }
+    addPanel(value) {
+        this.listOfNzCollapsePanelComponent.push(value);
+    }
+    removePanel(value) {
+        this.listOfNzCollapsePanelComponent.splice(this.listOfNzCollapsePanelComponent.indexOf(value), 1);
+    }
+    click(collapse) {
+        if (this.bpsAccordion && !collapse.bpsActive) {
+            this.listOfNzCollapsePanelComponent
+                .filter(item => item !== collapse)
+                .forEach(item => {
+                if (item.bpsActive) {
+                    item.bpsActive = false;
+                    item.bpsActiveChange.emit(item.bpsActive);
+                    item.markForCheck();
+                }
+            });
+        }
+        collapse.bpsActive = !collapse.bpsActive;
+        collapse.bpsActiveChange.emit(collapse.bpsActive);
+    }
+};
+BpsCollapseComponent.ctorParameters = () => [
+    { type: NzConfigService }
+];
+__decorate([
+    Input(), WithConfig(NZ_CONFIG_COMPONENT_NAME$3, false), InputBoolean()
+], BpsCollapseComponent.prototype, "bpsAccordion", void 0);
+__decorate([
+    Input(), WithConfig(NZ_CONFIG_COMPONENT_NAME$3, true), InputBoolean()
+], BpsCollapseComponent.prototype, "bpsBordered", void 0);
+BpsCollapseComponent = __decorate([
+    Component({
+        selector: 'bps-collapse',
+        exportAs: 'bpsCollapse',
+        template: "<div class=\"ant-collapse\" [class.ant-collapse-borderless]=\"!bpsBordered\">\n  <ng-content></ng-content>\n</div>\n",
+        changeDetection: ChangeDetectionStrategy.OnPush,
+        encapsulation: ViewEncapsulation.None,
+        styles: [`
+      bps-collapse {
+        display: block;
+      }
+    `]
+    })
+], BpsCollapseComponent);
+
+const NZ_CONFIG_COMPONENT_NAME$4 = 'collapsePanel';
+let BpsCollapsePanelComponent = class BpsCollapsePanelComponent {
+    constructor(nzConfigService, cdr, bpsCollapseComponent, elementRef, renderer) {
+        this.nzConfigService = nzConfigService;
+        this.cdr = cdr;
+        this.bpsCollapseComponent = bpsCollapseComponent;
+        this.bpsActive = false;
+        this.bpsDisabled = false;
+        this.bpsActiveChange = new EventEmitter();
+        renderer.addClass(elementRef.nativeElement, 'ant-collapse-item');
+    }
+    clickHeader() {
+        if (!this.bpsDisabled) {
+            this.bpsCollapseComponent.click(this);
+        }
+    }
+    markForCheck() {
+        this.cdr.markForCheck();
+    }
+    ngOnInit() {
+        this.bpsCollapseComponent.addPanel(this);
+    }
+    ngOnDestroy() {
+        this.bpsCollapseComponent.removePanel(this);
+    }
+};
+BpsCollapsePanelComponent.ctorParameters = () => [
+    { type: NzConfigService },
+    { type: ChangeDetectorRef },
+    { type: BpsCollapseComponent, decorators: [{ type: Host }] },
+    { type: ElementRef },
+    { type: Renderer2 }
+];
+__decorate([
+    Input(), InputBoolean()
+], BpsCollapsePanelComponent.prototype, "bpsActive", void 0);
+__decorate([
+    Input(), InputBoolean()
+], BpsCollapsePanelComponent.prototype, "bpsDisabled", void 0);
+__decorate([
+    Input(), WithConfig(NZ_CONFIG_COMPONENT_NAME$4, true), InputBoolean()
+], BpsCollapsePanelComponent.prototype, "bpsShowArrow", void 0);
+__decorate([
+    Input()
+], BpsCollapsePanelComponent.prototype, "bpsExtra", void 0);
+__decorate([
+    Input()
+], BpsCollapsePanelComponent.prototype, "bpsHeader", void 0);
+__decorate([
+    Input()
+], BpsCollapsePanelComponent.prototype, "bpsExpandedIcon", void 0);
+__decorate([
+    Output()
+], BpsCollapsePanelComponent.prototype, "bpsActiveChange", void 0);
+BpsCollapsePanelComponent = __decorate([
+    Component({
+        selector: 'bps-collapse-panel',
+        exportAs: 'bpsCollapsePanel',
+        template: "<div role=\"tab\" [attr.aria-expanded]=\"bpsActive\" class=\"ant-collapse-header\" (click)=\"clickHeader()\">\n  <ng-container *ngIf=\"bpsShowArrow\">\n    <ng-container *nzStringTemplateOutlet=\"bpsExpandedIcon\">\n      <i nz-icon [nzType]=\"bpsExpandedIcon || 'right'\" class=\"ant-collapse-arrow\" [nzRotate]=\"bpsActive ? 90 : 0\"></i>\n    </ng-container>\n  </ng-container>\n  <ng-container *nzStringTemplateOutlet=\"bpsHeader\">{{ bpsHeader }}</ng-container>\n  <div class=\"ant-collapse-extra\" *ngIf=\"bpsExtra\">\n    <ng-container *nzStringTemplateOutlet=\"bpsExtra\">{{ bpsExtra }}</ng-container>\n  </div>\n</div>\n<div class=\"ant-collapse-content\"\n  [class.ant-collapse-content-active]=\"bpsActive\"\n  [@collapseMotion]=\"bpsActive ? 'expanded' : 'hidden' \">\n  <div class=\"ant-collapse-content-box\">\n    <ng-content></ng-content>\n  </div>\n</div>\n",
+        changeDetection: ChangeDetectionStrategy.OnPush,
+        encapsulation: ViewEncapsulation.None,
+        animations: [collapseMotion],
+        host: {
+            '[class.ant-collapse-no-arrow]': '!bpsShowArrow',
+            '[class.ant-collapse-item-active]': 'bpsActive',
+            '[class.ant-collapse-item-disabled]': 'bpsDisabled'
+        },
+        styles: [`
+      bps-collapse-panel {
+        display: block;
+      }
+    `]
+    }),
+    __param(2, Host())
+], BpsCollapsePanelComponent);
+
 const ɵ0 = en_US;
 let BpsComponentsLibModule = class BpsComponentsLibModule {
 };
@@ -2270,7 +3087,16 @@ BpsComponentsLibModule = __decorate([
             BpsFormSplitComponent,
             BpsFormTextComponent,
             BpsButtonComponent,
-            BpsButtonGroupComponent
+            BpsButtonGroupComponent,
+            BpsSwitchComponent,
+            BpsCheckboxGroupComponent,
+            BpsCheckboxWrapperComponent,
+            BpsCheckboxComponent,
+            BpsRadioComponent,
+            BpsRadioGroupComponent,
+            BpsRadioButtonComponent,
+            BpsCollapseComponent,
+            BpsCollapsePanelComponent
         ],
         imports: [
             NgZorroAntdModule,
@@ -2309,7 +3135,16 @@ BpsComponentsLibModule = __decorate([
             BpsFormSplitComponent,
             BpsFormTextComponent,
             BpsButtonComponent,
-            BpsButtonGroupComponent
+            BpsButtonGroupComponent,
+            BpsSwitchComponent,
+            BpsCheckboxGroupComponent,
+            BpsCheckboxWrapperComponent,
+            BpsCheckboxComponent,
+            BpsRadioComponent,
+            BpsRadioGroupComponent,
+            BpsRadioButtonComponent,
+            BpsCollapseComponent,
+            BpsCollapsePanelComponent
         ],
         providers: [
             { provide: NZ_I18N, useValue: ɵ0 }
@@ -2325,5 +3160,5 @@ BpsComponentsLibModule = __decorate([
  * Generated bundle index. Do not edit.
  */
 
-export { BpsAutosizeDirective, BpsButtonComponent, BpsButtonGroupComponent, BpsComponentsLibComponent, BpsComponentsLibModule, BpsComponentsLibService, BpsFilterGroupOptionPipe, BpsFilterOptionPipe, BpsFormControlComponent, BpsFormDirective, BpsFormExplainComponent, BpsFormExtraComponent, BpsFormItemComponent, BpsFormLabelComponent, BpsFormSplitComponent, BpsFormTextComponent, BpsInputDirective, BpsInputGroupComponent, BpsOptionComponent, BpsOptionContainerComponent, BpsOptionGroupComponent, BpsOptionLiComponent, BpsSelectComponent, BpsSelectService, BpsSelectTopControlComponent, BpsSelectUnselectableDirective, defaultFilterOption, isAutoSizeType, ɵ0 };
+export { BpsAutosizeDirective, BpsButtonComponent, BpsButtonGroupComponent, BpsCheckboxComponent, BpsCheckboxGroupComponent, BpsCheckboxWrapperComponent, BpsCollapseComponent, BpsCollapsePanelComponent, BpsComponentsLibComponent, BpsComponentsLibModule, BpsComponentsLibService, BpsFilterGroupOptionPipe, BpsFilterOptionPipe, BpsFormControlComponent, BpsFormDirective, BpsFormExplainComponent, BpsFormExtraComponent, BpsFormItemComponent, BpsFormLabelComponent, BpsFormSplitComponent, BpsFormTextComponent, BpsInputDirective, BpsInputGroupComponent, BpsOptionComponent, BpsOptionContainerComponent, BpsOptionGroupComponent, BpsOptionLiComponent, BpsRadioButtonComponent, BpsRadioComponent, BpsRadioGroupComponent, BpsSelectComponent, BpsSelectService, BpsSelectTopControlComponent, BpsSelectUnselectableDirective, BpsSwitchComponent, defaultFilterOption, isAutoSizeType, ɵ0 };
 //# sourceMappingURL=bps-components-lib.js.map

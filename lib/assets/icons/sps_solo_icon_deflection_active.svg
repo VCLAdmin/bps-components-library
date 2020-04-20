@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20.707" height="11.707" viewBox="0 0 20.707 11.707">
+    <defs>
+        <linearGradient id="prefix__linear-gradient" x1=".5" x2=".5" y1="1.059" gradientUnits="objectBoundingBox">
+            <stop offset="0" stop-color="#00a2d1"/>
+            <stop offset="1" stop-color="gray" stop-opacity="0"/>
+        </linearGradient>
+    </defs>
+    <g id="prefix__sps_solo_icon_deflection_active" transform="translate(13098.312 8539)">
+        <g id="prefix__Group_2102" data-name="Group 2102" transform="translate(-679 102)">
+            <path id="prefix__Path_735" d="M-11753-8640l10 10 10-10" data-name="Path 735" transform="translate(-665.958)" style="stroke:#707070;fill:none"/>
+            <path id="prefix__Path_736" d="M-11778-8640h20.689" data-name="Path 736" transform="translate(-641.303)" style="stroke-width:2px;stroke:#bfbfbf;fill:none"/>
+        </g>
+        <g id="prefix__Group_2103" data-name="Group 2103" transform="translate(-775 102)">
+            <path id="prefix__Path_774" d="M-11753-8640l10 10 10-10" data-name="Path 774" transform="translate(-569.958)"/>
+            <path id="prefix__Path_775" d="M-11778-8640h20.689" data-name="Path 775" transform="translate(-545.303)" style="stroke:#f18700;stroke-width:2px;fill:none"/>
+        </g>
+    </g>
+</svg>

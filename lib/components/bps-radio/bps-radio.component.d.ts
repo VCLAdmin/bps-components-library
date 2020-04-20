@@ -1,0 +1,36 @@
+import { FocusMonitor } from '@angular/cdk/a11y';
+import { AfterViewInit, ChangeDetectorRef, ElementRef, OnChanges, OnDestroy, Renderer2, SimpleChanges } from '@angular/core';
+import { ControlValueAccessor } from '@angular/forms';
+import { Subject } from 'rxjs';
+export declare type BpsRadioButtonType = 'variation1' | 'variation2' | 'variation3' | 'variation5' | 'variation6' | 'variation7' | 'variation8a' | 'variation8b' | 'variation8c' | 'variation8d' | 'variation8e' | 'variation9';
+export declare class BpsRadioComponent implements ControlValueAccessor, AfterViewInit, OnChanges, OnDestroy {
+    private elementRef;
+    private renderer;
+    private cdr;
+    private focusMonitor;
+    select$: Subject<BpsRadioComponent>;
+    touched$: Subject<void>;
+    checked: boolean;
+    name: string;
+    isNgModel: boolean;
+    onChange: (_: boolean) => void;
+    onTouched: () => void;
+    inputElement: ElementRef;
+    bpsValue: any;
+    bpsDisabled: boolean;
+    bpsAutoFocus: boolean;
+    bpsRadioButtonType: BpsRadioButtonType;
+    updateAutoFocus(): void;
+    onClick(event: MouseEvent): void;
+    focus(): void;
+    blur(): void;
+    markForCheck(): void;
+    constructor(elementRef: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef, focusMonitor: FocusMonitor);
+    setDisabledState(isDisabled: boolean): void;
+    writeValue(value: boolean): void;
+    registerOnChange(fn: (_: boolean) => {}): void;
+    registerOnTouched(fn: () => {}): void;
+    ngAfterViewInit(): void;
+    ngOnChanges(changes: SimpleChanges): void;
+    ngOnDestroy(): void;
+}
