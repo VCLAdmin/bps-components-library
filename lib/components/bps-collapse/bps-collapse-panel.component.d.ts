@@ -7,6 +7,7 @@ export declare class BpsCollapsePanelComponent implements OnInit, OnDestroy {
     private bpsCollapseComponent;
     bpsActive: boolean;
     bpsDisabled: boolean;
+    bpsValid: any;
     bpsShowArrow: boolean;
     bpsExtra: string | TemplateRef<void>;
     bpsHeader: string | TemplateRef<void>;
