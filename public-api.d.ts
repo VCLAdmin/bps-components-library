@@ -32,3 +32,7 @@ export * from './lib/components/bps-radio/bps-radio-group.component';
 export * from './lib/components/bps-radio/bps-radio.component';
 export * from './lib/components/bps-collapse/bps-collapse-panel.component';
 export * from './lib/components/bps-collapse/bps-collapse.component';
+export * from './lib/components/bps-popover/bps-popover.component';
+export * from './lib/components/bps-popover/bps-popover.directive';
+export * from './lib/components/bps-tooltip/bps-tooltip.component';
+export * from './lib/components/bps-tooltip/bps-tooltip.directive';

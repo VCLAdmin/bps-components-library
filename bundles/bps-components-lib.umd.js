@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('ng-zorro-antd'), require('@angular/common'), require('@angular/cdk/overlay'), require('ng-zorro-antd/core'), require('ng-zorro-antd/icon'), require('ng-zorro-antd/empty'), require('@angular/forms'), require('@angular/cdk/observers'), require('@angular/cdk/platform'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/keycodes'), require('ng-zorro-antd/grid'), require('@angular/cdk/layout'), require('@angular/platform-browser/animations'), require('@angular/cdk/a11y')) :
-    typeof define === 'function' && define.amd ? define('bps-components-lib', ['exports', '@angular/core', 'ng-zorro-antd', '@angular/common', '@angular/cdk/overlay', 'ng-zorro-antd/core', 'ng-zorro-antd/icon', 'ng-zorro-antd/empty', '@angular/forms', '@angular/cdk/observers', '@angular/cdk/platform', 'rxjs', 'rxjs/operators', '@angular/cdk/keycodes', 'ng-zorro-antd/grid', '@angular/cdk/layout', '@angular/platform-browser/animations', '@angular/cdk/a11y'], factory) :
-    (global = global || self, factory(global['bps-components-lib'] = {}, global.ng.core, global.ngZorroAntd, global.ng.common, global.ng.cdk.overlay, global.core$1, global.icon, global.empty, global.ng.forms, global.ng.cdk.observers, global.ng.cdk.platform, global.rxjs, global.rxjs.operators, global.ng.cdk.keycodes, global.grid, global.ng.cdk.layout, global.ng.platformBrowser.animations, global.ng.cdk.a11y));
-}(this, (function (exports, core, ngZorroAntd, common, overlay, core$1, icon, empty, forms, observers, platform, rxjs, operators, keycodes, grid, layout, animations, a11y) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('ng-zorro-antd'), require('@angular/common'), require('@angular/cdk/overlay'), require('ng-zorro-antd/core'), require('ng-zorro-antd/icon'), require('ng-zorro-antd/empty'), require('@angular/forms'), require('@angular/cdk/observers'), require('@angular/cdk/platform'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/keycodes'), require('ng-zorro-antd/grid'), require('@angular/cdk/layout'), require('@angular/platform-browser/animations'), require('@angular/cdk/a11y'), require('ng-zorro-antd/tooltip')) :
+    typeof define === 'function' && define.amd ? define('bps-components-lib', ['exports', '@angular/core', 'ng-zorro-antd', '@angular/common', '@angular/cdk/overlay', 'ng-zorro-antd/core', 'ng-zorro-antd/icon', 'ng-zorro-antd/empty', '@angular/forms', '@angular/cdk/observers', '@angular/cdk/platform', 'rxjs', 'rxjs/operators', '@angular/cdk/keycodes', 'ng-zorro-antd/grid', '@angular/cdk/layout', '@angular/platform-browser/animations', '@angular/cdk/a11y', 'ng-zorro-antd/tooltip'], factory) :
+    (global = global || self, factory(global['bps-components-lib'] = {}, global.ng.core, global.ngZorroAntd, global.ng.common, global.ng.cdk.overlay, global.core$1, global.icon, global.empty, global.ng.forms, global.ng.cdk.observers, global.ng.cdk.platform, global.rxjs, global.rxjs.operators, global.ng.cdk.keycodes, global.grid, global.ng.cdk.layout, global.ng.platformBrowser.animations, global.ng.cdk.a11y, global.tooltip));
+}(this, (function (exports, core, ngZorroAntd, common, overlay, core$1, icon, empty, forms, observers, platform, rxjs, operators, keycodes, grid, layout, animations, a11y, tooltip) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -3494,6 +3494,505 @@
         return BpsCollapsePanelComponent;
     }());
 
+    var BpsPopoverComponent = /** @class */ (function (_super) {
+        __extends(BpsPopoverComponent, _super);
+        function BpsPopoverComponent(cdr, noAnimation) {
+            var _this = _super.call(this, cdr, noAnimation) || this;
+            _this.noAnimation = noAnimation;
+            _this._prefix = 'ant-popover-placement';
+            _this.bpsPopoverType = 'variation_1';
+            return _this;
+        }
+        BpsPopoverComponent_1 = BpsPopoverComponent;
+        var BpsPopoverComponent_1;
+        BpsPopoverComponent.ctorParameters = function () { return [
+            { type: core.ChangeDetectorRef },
+            { type: core$1.NzNoAnimationDirective, decorators: [{ type: core.Host }, { type: core.Optional }] }
+        ]; };
+        __decorate([
+            core.Input()
+        ], BpsPopoverComponent.prototype, "bpsPopoverType", void 0);
+        __decorate([
+            core.Input()
+        ], BpsPopoverComponent.prototype, "bpsTitle", void 0);
+        __decorate([
+            core.ContentChild('neverUsedTemplate', { static: true })
+        ], BpsPopoverComponent.prototype, "bpsTitleTemplate", void 0);
+        __decorate([
+            core.Input()
+        ], BpsPopoverComponent.prototype, "bpsContent", void 0);
+        __decorate([
+            core.ContentChild('nzTemplate', { static: true })
+        ], BpsPopoverComponent.prototype, "bpsContentTemplate", void 0);
+        BpsPopoverComponent = BpsPopoverComponent_1 = __decorate([
+            core.Component({
+                selector: 'bps-popover',
+                exportAs: 'bpsPopoverComponent',
+                animations: [core$1.zoomBigMotion],
+                template: "<ng-content></ng-content>\n<ng-template\n  #overlay=\"cdkConnectedOverlay\"\n  cdkConnectedOverlay\n  nzConnectedOverlay\n  [cdkConnectedOverlayOrigin]=\"origin\"\n  [cdkConnectedOverlayHasBackdrop]=\"_hasBackdrop\"\n  (backdropClick)=\"hide()\"\n  (detach)=\"hide()\"\n  (positionChange)=\"onPositionChange($event)\"\n  [cdkConnectedOverlayPositions]=\"_positions\"\n  [cdkConnectedOverlayOpen]=\"_visible\">\n  <div class=\"ant-popover\"\n    [ngClass]=\"_classMap\"\n    [ngStyle]=\"nzOverlayStyle\"\n    [@.disabled]=\"noAnimation?.nzNoAnimation\"\n    [nzNoAnimation]=\"noAnimation?.nzNoAnimation\"\n    [@zoomBigMotion]=\"'active'\">\n    <div class=\"ant-popover-content\">\n      <div class=\"ant-popover-arrow bps-popover-arrow-{{bpsPopoverType}}\"></div>\n      <div class=\"ant-popover-inner bps-popover-inner-{{bpsPopoverType}}\" role=\"tooltip\">\n        <div>\n          <div class=\"ant-popover-title\" *ngIf=\"title\">\n            <ng-container *nzStringTemplateOutlet=\"title\">{{ title }}</ng-container>\n          </div>\n          <div class=\"ant-popover-inner-content bps-popover-inner-content-{{bpsPopoverType}}\">\n            <ng-container *nzStringTemplateOutlet=\"content\">{{ content }}</ng-container>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</ng-template>\n",
+                changeDetection: core.ChangeDetectionStrategy.OnPush,
+                encapsulation: core.ViewEncapsulation.None,
+                providers: [
+                    {
+                        provide: tooltip.NzTooltipBaseComponentLegacy,
+                        useExisting: BpsPopoverComponent_1
+                    }
+                ],
+                preserveWhitespaces: false,
+                styles: ["\n      .ant-popover {\n        position: relative;\n      }\n    ", ".ant-popover-placement-right .ant-popover-arrow{border-left:1px solid #00a2d1!important;border-bottom:1px solid #00a2d1!important;background-color:#262626!important;border-right-color:#262626!important;border-top-color:#262626!important}.ant-popover-placement-left .ant-popover-arrow{border-right:1px solid #00a2d1!important;border-top:1px solid #00a2d1!important;background-color:#262626!important;border-left-color:#262626!important;border-bottom-color:#262626!important}.ant-popover-placement-top .ant-popover-arrow{border-right:1px solid #00a2d1!important;border-bottom:1px solid #00a2d1!important;background-color:#262626!important;border-top-color:#262626!important;border-left-color:#262626!important}.ant-popover-placement-bottom .ant-popover-arrow{border-left:1px solid #00a2d1!important;border-top:1px solid #00a2d1!important;background-color:#262626!important;border-bottom-color:#262626!important;border-right-color:#262626!important}.ant-popover-arrow{border-style:unset!important}.ant-popover-inner{box-shadow:0 3px 12px 0 rgba(0,0,0,.9)!important;border:1px solid #00a2d1!important;background-color:#262626!important;border-radius:8px!important}.ant-popover-inner-content{font-size:11px!important;font-weight:400!important;font-stretch:normal!important;font-style:normal!important;line-height:1.36!important;letter-spacing:normal!important;text-align:left!important;color:#fff;padding:15px!important}.bps-popover-inner-content-variation_1{max-width:325px;width:325px;height:415px;max-height:415px}.bps-popover-content-title{font-size:13px;font-weight:500;font-stretch:normal;font-style:normal;line-height:1.31;letter-spacing:normal;text-align:left;color:#00a2d1;margin-bottom:10px}.bps-popover-content-subtitle{font-size:11px;font-weight:400;font-stretch:normal;font-style:normal;line-height:1.36;letter-spacing:normal;text-align:left;color:#fff;margin-bottom:15px}.bps-popover-inner-content-variation_2{max-width:595px;width:595px;height:415px;max-height:415px}.bps-popover-inner-content-variation_3{max-width:325px;width:325px;height:315px;max-height:315px}.bps-popover-inner-content-variation_4{max-width:215px;width:215px;height:170px;max-height:170px}.bps-popover-inner-content-variation_5{max-width:230px;width:230px;height:160px;max-height:160px}.bps-popover-inner-content-variation_6{max-width:245px;width:245px;height:55px;max-height:55px}.bps-popover-inner-content-variation_7a,.bps-popover-inner-content-variation_7b{max-width:455px;width:455px;height:75px;max-height:75px}.bps-popover-inner-variation_7a{border:1px solid #7bc053!important}.ant-popover-placement-right .ant-popover-arrow.bps-popover-arrow-variation_7a{border-left:1px solid #7bc053!important;border-bottom:1px solid #7bc053!important;background-color:#262626!important;border-right-color:#262626!important;border-top-color:#262626!important}.ant-popover-placement-left .ant-popover-arrow.bps-popover-arrow-variation_7a{border-right:1px solid #7bc053!important;border-top:1px solid #7bc053!important;background-color:#262626!important;border-left-color:#262626!important;border-bottom-color:#262626!important}.ant-popover-placement-top .ant-popover-arrow.bps-popover-arrow-variation_7a{border-right:1px solid #7bc053!important;border-bottom:1px solid #7bc053!important;background-color:#262626!important;border-top-color:#262626!important;border-left-color:#262626!important}.ant-popover-placement-bottom .ant-popover-arrow.bps-popover-arrow-variation_7a{border-left:1px solid #7bc053!important;border-top:1px solid #7bc053!important;background-color:#262626!important;border-bottom-color:#262626!important;border-right-color:#262626!important}.bps-popover-custom-content-icon{width:45px;position:relative;float:left;top:50%;transform:translateY(-50%);padding-left:8px}.bps-popover-custom-content{width:370px;position:relative;float:right;top:50%;transform:translateY(-50%);padding-right:10px}"]
+            }),
+            __param(1, core.Host()), __param(1, core.Optional())
+        ], BpsPopoverComponent);
+        return BpsPopoverComponent;
+    }(tooltip.NzToolTipComponent));
+
+    var NzTooltipBaseDirective = /** @class */ (function () {
+        function NzTooltipBaseDirective(elementRef, hostView, resolver, renderer, 
+        /**
+         * @deprecated 9.0.0. This will always be `null`.
+         */
+        _tooltip, noAnimation) {
+            this.elementRef = elementRef;
+            this.hostView = hostView;
+            this.resolver = resolver;
+            this.renderer = renderer;
+            this._tooltip = _tooltip;
+            this.noAnimation = noAnimation;
+            /**
+             * @deprecated 9.0.0. This is deprecated and going to be removed in 9.0.0.
+             * Please use a more specific API. Like `nzTooltipTrigger`.
+             */
+            this.nzTrigger = 'hover';
+            /**
+             * @deprecated 9.0.0. This is deprecated and going to be removed in 9.0.0.
+             * Please use a more specific API. Like `nzTooltipPlacement`.
+             */
+            this.nzPlacement = 'top';
+            this.needProxyProperties = [
+                'nzOverlayClassName',
+                'nzOverlayStyle',
+                'nzMouseEnterDelay',
+                'nzMouseLeaveDelay',
+                'nzVisible',
+                'noAnimation'
+            ];
+            this.nzVisibleChange = new core.EventEmitter();
+            this.isTooltipComponentVisible = false;
+            /**
+             * @deprecated 9.0.0. Tooltips would always be dynamic in 9.0.0.
+             */
+            this.isDynamicTooltip = false;
+            this.triggerUnlisteners = [];
+            this.$destroy = new rxjs.Subject();
+        }
+        Object.defineProperty(NzTooltipBaseDirective.prototype, "title", {
+            /**
+             * This true title that would be used in other parts on this component.
+             */
+            get: function () {
+                return this.specificTitle || this.directiveNameTitle || this.nzTitle;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(NzTooltipBaseDirective.prototype, "content", {
+            get: function () {
+                return this.specificContent || this.directiveNameContent || this.nzContent;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(NzTooltipBaseDirective.prototype, "placement", {
+            get: function () {
+                return this.specificPlacement || this.nzPlacement;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(NzTooltipBaseDirective.prototype, "type", {
+            get: function () {
+                return this.popoverType;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(NzTooltipBaseDirective.prototype, "trigger", {
+            get: function () {
+                return this.specificTrigger || this.nzTrigger;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        NzTooltipBaseDirective.prototype.ngOnChanges = function (changes) {
+            var nzTrigger = changes.nzTrigger, specificTrigger = changes.specificTrigger;
+            var trigger = specificTrigger || nzTrigger;
+            if (trigger && !trigger.isFirstChange()) {
+                this.registerTriggers();
+            }
+            if (this.tooltip && this.isDynamicTooltip) {
+                this.updateChangedProperties(changes);
+            }
+            // TODO: enable these warning in 9.0.0.
+            // if (changes.nzTitle) {
+            //   warnDeprecation(
+            //     `'nzTitle' of 'nz-tooltip' is deprecated and will be removed in 10.0.0. Please use 'nzTooltipTitle' instead. The same with 'nz-popover' and 'nz-popconfirm'.`
+            //   );
+            // }
+            // if (changes.nzContent) {
+            //   warnDeprecation(
+            //     `'nzContent' of 'nz-popover' is deprecated and will be removed in 10.0.0. Please use 'nzPopoverContent' instead.`
+            //   );
+            // }
+            // if (changes.nzPlacement) {
+            //   warnDeprecation(
+            //     `'nzPlacement' of 'nz-tooltip' is deprecated and will be removed in 10.0.0. Please use 'nzTooltipContent' instead. The same with 'nz-popover' and 'nz-popconfirm'.`
+            //   );
+            // }
+            // if (changes.nzTrigger) {
+            //   warnDeprecation(
+            //     `'nzTrigger' of 'nz-tooltip' is deprecated and will be removed in 10.0.0. Please use 'nzTooltipTrigger' instead. The same with 'nz-popover' and 'nz-popconfirm'.`
+            //   );
+            // }
+        };
+        NzTooltipBaseDirective.prototype.ngOnInit = function () {
+            var _this = this;
+            if (!this._tooltip) {
+                this.createDynamicTooltipComponent();
+            }
+            else {
+                core$1.warnDeprecation("'<nz-tooltip></nz-tooltip>', '<nz-popover></nz-popover>' and '<nz-popconfirm></nz-popconfirm>' is deprecated and will be removed in 9.0.0. Refer: https://ng.ant.design/components/tooltip/zh .");
+                this.tooltip = this._tooltip;
+                this.tooltip.setOverlayOrigin(this);
+            }
+            this.tooltip.nzVisibleChange
+                .pipe(operators.distinctUntilChanged(), operators.takeUntil(this.$destroy))
+                .subscribe(function (visible) {
+                _this.isTooltipComponentVisible = visible;
+                _this.nzVisibleChange.emit(visible);
+            });
+        };
+        NzTooltipBaseDirective.prototype.ngAfterViewInit = function () {
+            this.registerTriggers();
+        };
+        NzTooltipBaseDirective.prototype.ngOnDestroy = function () {
+            this.$destroy.next();
+            this.$destroy.complete();
+            // Clear toggling timer. Issue #3875 #4317 #4386
+            this.clearTogglingTimer();
+            this.removeTriggerListeners();
+            if (this.tooltipRef) {
+                this.tooltipRef.destroy();
+            }
+        };
+        NzTooltipBaseDirective.prototype.show = function () {
+            this.tooltip.show();
+        };
+        NzTooltipBaseDirective.prototype.hide = function () {
+            this.tooltip.hide();
+        };
+        /**
+         * Force the component to update its position.
+         */
+        NzTooltipBaseDirective.prototype.updatePosition = function () {
+            if (this.tooltip && this.isDynamicTooltip) {
+                this.tooltip.updatePosition();
+            }
+        };
+        /**
+         * Create a dynamic tooltip component. This method can be override.
+         */
+        NzTooltipBaseDirective.prototype.createDynamicTooltipComponent = function () {
+            this.isDynamicTooltip = true;
+            this.tooltipRef = this.hostView.createComponent(this.componentFactory);
+            this.tooltip = this.tooltipRef.instance;
+            this.renderer.removeChild(this.renderer.parentNode(this.elementRef.nativeElement), this.tooltipRef.location.nativeElement); // Remove the component's DOM because it should be in the overlay container.
+            // If the tooltip component is dynamically created, we should set its origin before updating properties to
+            // the component.
+            this.tooltip.setOverlayOrigin(this);
+            // Update all properties to the component.
+            this.updateChangedProperties(this.needProxyProperties);
+        };
+        NzTooltipBaseDirective.prototype.registerTriggers = function () {
+            var _this = this;
+            // When the method gets invoked, all properties has been synced to the dynamic component.
+            // After removing the old API, we can just check the directive's own `nzTrigger`.
+            var el = this.elementRef.nativeElement;
+            var trigger = this.isDynamicTooltip ? this.trigger : this.tooltip.nzTrigger;
+            this.removeTriggerListeners();
+            if (trigger === 'hover') {
+                var overlayElement_1;
+                this.triggerUnlisteners.push(this.renderer.listen(el, 'mouseenter', function () {
+                    _this.delayEnterLeave(true, true, _this.tooltip.nzMouseEnterDelay);
+                }));
+                this.triggerUnlisteners.push(this.renderer.listen(el, 'mouseleave', function () {
+                    _this.delayEnterLeave(true, false, _this.tooltip.nzMouseLeaveDelay);
+                    if (_this.tooltip.overlay.overlayRef && !overlayElement_1) {
+                        overlayElement_1 = _this.tooltip.overlay.overlayRef.overlayElement;
+                        _this.triggerUnlisteners.push(_this.renderer.listen(overlayElement_1, 'mouseenter', function () {
+                            _this.delayEnterLeave(false, true);
+                        }));
+                        _this.triggerUnlisteners.push(_this.renderer.listen(overlayElement_1, 'mouseleave', function () {
+                            _this.delayEnterLeave(false, false);
+                        }));
+                    }
+                }));
+            }
+            else if (trigger === 'focus') {
+                this.triggerUnlisteners.push(this.renderer.listen(el, 'focus', function () { return _this.show(); }));
+                this.triggerUnlisteners.push(this.renderer.listen(el, 'blur', function () { return _this.hide(); }));
+            }
+            else if (trigger === 'click') {
+                this.triggerUnlisteners.push(this.renderer.listen(el, 'click', function (e) {
+                    e.preventDefault();
+                    _this.show();
+                }));
+            } // Else do nothing because user wants to control the visibility programmatically.
+        };
+        /**
+         * Sync changed properties to the component and trigger change detection in that component.
+         */
+        NzTooltipBaseDirective.prototype.updateChangedProperties = function (propertiesOrChanges) {
+            var _this = this;
+            var isArray = Array.isArray(propertiesOrChanges);
+            var keys_ = isArray ? propertiesOrChanges : Object.keys(propertiesOrChanges);
+            // tslint:disable-next-line no-any
+            keys_.forEach(function (property) {
+                if (_this.needProxyProperties.indexOf(property) !== -1) {
+                    // @ts-ignore
+                    _this.updateComponentValue(property, _this[property]);
+                }
+            });
+            if (isArray) {
+                this.updateComponentValue('nzTitle', this.title);
+                this.updateComponentValue('nzContent', this.content);
+                this.updateComponentValue('nzPlacement', this.placement);
+                this.updateComponentValue('nzTrigger', this.trigger);
+                this.updateComponentValue('bpsPopoverType', this.type);
+            }
+            else {
+                var c = propertiesOrChanges;
+                if (c.specificTitle || c.directiveNameTitle || c.nzTitle) {
+                    this.updateComponentValue('nzTitle', this.title);
+                }
+                if (c.specificContent || c.directiveNameContent || c.nzContent) {
+                    this.updateComponentValue('nzContent', this.content);
+                }
+                if (c.specificTrigger || c.nzTrigger) {
+                    this.updateComponentValue('nzTrigger', this.trigger);
+                }
+                if (c.specificPlacement || c.nzPlacement) {
+                    this.updateComponentValue('nzPlacement', this.placement);
+                }
+            }
+            this.tooltip.updateByDirective();
+        };
+        // tslint:disable-next-line no-any
+        NzTooltipBaseDirective.prototype.updateComponentValue = function (key, value) {
+            if (typeof value !== 'undefined') {
+                // @ts-ignore
+                this.tooltip[key] = value;
+            }
+        };
+        NzTooltipBaseDirective.prototype.delayEnterLeave = function (isOrigin, isEnter, delay) {
+            var _this = this;
+            if (delay === void 0) { delay = -1; }
+            if (this.delayTimer) {
+                this.clearTogglingTimer();
+            }
+            else if (delay > 0) {
+                this.delayTimer = setTimeout(function () {
+                    _this.delayTimer = undefined;
+                    isEnter ? _this.show() : _this.hide();
+                }, delay * 1000);
+            }
+            else {
+                // `isOrigin` is used due to the tooltip will not hide immediately
+                // (may caused by the fade-out animation).
+                isEnter && isOrigin ? this.show() : this.hide();
+            }
+        };
+        NzTooltipBaseDirective.prototype.removeTriggerListeners = function () {
+            this.triggerUnlisteners.forEach(function (cancel) { return cancel(); });
+            this.triggerUnlisteners.length = 0;
+        };
+        NzTooltipBaseDirective.prototype.clearTogglingTimer = function () {
+            if (this.delayTimer) {
+                clearTimeout(this.delayTimer);
+                this.delayTimer = undefined;
+            }
+        };
+        __decorate([
+            core.Input()
+        ], NzTooltipBaseDirective.prototype, "nzTitle", void 0);
+        __decorate([
+            core.Input()
+        ], NzTooltipBaseDirective.prototype, "nzContent", void 0);
+        __decorate([
+            core.Input()
+        ], NzTooltipBaseDirective.prototype, "nzTrigger", void 0);
+        __decorate([
+            core.Input()
+        ], NzTooltipBaseDirective.prototype, "nzPlacement", void 0);
+        __decorate([
+            core.Input()
+        ], NzTooltipBaseDirective.prototype, "nzMouseEnterDelay", void 0);
+        __decorate([
+            core.Input()
+        ], NzTooltipBaseDirective.prototype, "nzMouseLeaveDelay", void 0);
+        __decorate([
+            core.Input()
+        ], NzTooltipBaseDirective.prototype, "nzOverlayClassName", void 0);
+        __decorate([
+            core.Input()
+        ], NzTooltipBaseDirective.prototype, "nzOverlayStyle", void 0);
+        __decorate([
+            core.Input()
+        ], NzTooltipBaseDirective.prototype, "nzVisible", void 0);
+        __decorate([
+            core.Output()
+        ], NzTooltipBaseDirective.prototype, "nzVisibleChange", void 0);
+        return NzTooltipBaseDirective;
+    }());
+
+    var BpsPopoverDirective = /** @class */ (function (_super) {
+        __extends(BpsPopoverDirective, _super);
+        function BpsPopoverDirective(elementRef, hostView, resolver, renderer, tooltip, noAnimation) {
+            var _this = _super.call(this, elementRef, hostView, resolver, renderer, tooltip, noAnimation) || this;
+            _this.noAnimation = noAnimation;
+            _this.popoverType = 'variation_1';
+            _this.componentFactory = _this.resolver.resolveComponentFactory(BpsPopoverComponent);
+            return _this;
+        }
+        BpsPopoverDirective.ctorParameters = function () { return [
+            { type: core.ElementRef },
+            { type: core.ViewContainerRef },
+            { type: core.ComponentFactoryResolver },
+            { type: core.Renderer2 },
+            { type: BpsPopoverComponent, decorators: [{ type: core.Optional }] },
+            { type: core$1.NzNoAnimationDirective, decorators: [{ type: core.Host }, { type: core.Optional }] }
+        ]; };
+        __decorate([
+            core.Input('bpsPopoverTitle')
+        ], BpsPopoverDirective.prototype, "specificTitle", void 0);
+        __decorate([
+            core.Input('bpsPopoverContent')
+        ], BpsPopoverDirective.prototype, "specificContent", void 0);
+        __decorate([
+            core.Input('bps-popover')
+        ], BpsPopoverDirective.prototype, "directiveNameTitle", void 0);
+        __decorate([
+            core.Input('bpsPopoverTrigger')
+        ], BpsPopoverDirective.prototype, "specificTrigger", void 0);
+        __decorate([
+            core.Input('bpsPopoverPlacement')
+        ], BpsPopoverDirective.prototype, "specificPlacement", void 0);
+        __decorate([
+            core.Input('bpsPopoverType')
+        ], BpsPopoverDirective.prototype, "popoverType", void 0);
+        BpsPopoverDirective = __decorate([
+            core.Directive({
+                selector: '[bps-popover]',
+                exportAs: 'bpsPopover',
+                host: {
+                    '[class.ant-popover-open]': 'isTooltipComponentVisible'
+                }
+            }),
+            __param(4, core.Optional()),
+            __param(5, core.Host()), __param(5, core.Optional())
+        ], BpsPopoverDirective);
+        return BpsPopoverDirective;
+    }(NzTooltipBaseDirective));
+
+    var BpsToolTipComponent = /** @class */ (function (_super) {
+        __extends(BpsToolTipComponent, _super);
+        function BpsToolTipComponent(cdr, noAnimation) {
+            var _this = _super.call(this, cdr) || this;
+            _this.noAnimation = noAnimation;
+            _this.bpsPopoverType = 'variation_8a';
+            return _this;
+        }
+        BpsToolTipComponent_1 = BpsToolTipComponent;
+        var BpsToolTipComponent_1;
+        BpsToolTipComponent.ctorParameters = function () { return [
+            { type: core.ChangeDetectorRef },
+            { type: core$1.NzNoAnimationDirective, decorators: [{ type: core.Host }, { type: core.Optional }] }
+        ]; };
+        __decorate([
+            core.Input()
+        ], BpsToolTipComponent.prototype, "bpsPopoverType", void 0);
+        __decorate([
+            core.Input()
+        ], BpsToolTipComponent.prototype, "bpsTitle", void 0);
+        __decorate([
+            core.ContentChild('nzTemplate', { static: true })
+        ], BpsToolTipComponent.prototype, "nzTitleTemplate", void 0);
+        BpsToolTipComponent = BpsToolTipComponent_1 = __decorate([
+            core.Component({
+                selector: 'bps-tooltip',
+                exportAs: 'bpsTooltipComponent',
+                changeDetection: core.ChangeDetectionStrategy.OnPush,
+                encapsulation: core.ViewEncapsulation.None,
+                animations: [core$1.zoomBigMotion],
+                template: "<ng-content></ng-content>\n<ng-template\n  #overlay=\"cdkConnectedOverlay\"\n  cdkConnectedOverlay\n  nzConnectedOverlay\n  [cdkConnectedOverlayOrigin]=\"origin\"\n  [cdkConnectedOverlayOpen]=\"_visible\"\n  [cdkConnectedOverlayHasBackdrop]=\"_hasBackdrop\"\n  [cdkConnectedOverlayPositions]=\"_positions\"\n  (backdropClick)=\"hide()\"\n  (detach)=\"hide()\"\n  (positionChange)=\"onPositionChange($event)\">\n  <div\n    class=\"ant-tooltip\"\n    [ngClass]=\"_classMap\"\n    [ngStyle]=\"nzOverlayStyle\"\n    [@.disabled]=\"noAnimation?.nzNoAnimation\"\n    [nzNoAnimation]=\"noAnimation?.nzNoAnimation\"\n    [@zoomBigMotion]=\"'active'\">\n    <div class=\"ant-tooltip-content\">\n      <div class=\"ant-tooltip-arrow bps-tooltip-arrow-{{bpsPopoverType}}\"></div>\n      <div class=\"ant-tooltip-inner bps-tooltip-inner-{{bpsPopoverType}}\">\n        <ng-container *nzStringTemplateOutlet=\"title\">{{ title }}</ng-container>\n      </div>\n    </div>\n  </div>\n</ng-template>\n",
+                preserveWhitespaces: false,
+                providers: [
+                    {
+                        provide: ngZorroAntd.NzTooltipBaseComponentLegacy,
+                        useExisting: BpsToolTipComponent_1
+                    }
+                ],
+                styles: ["\n      .ant-tooltip {\n        position: relative;\n      }\n    ", ".ant-tooltip-inner{min-width:70px!important;height:22px!important;min-height:22px!important;font-size:11px!important;font-weight:500!important;font-stretch:normal!important;font-style:normal!important;letter-spacing:normal!important;color:#fff!important;padding:2px!important;text-align:center!important;border-radius:6px!important}.bps-tooltip-inner-variation_8a{background-color:#00a2d1!important;box-shadow:0 3px 12px 0 rgba(0,0,0,.9)!important}.bps-tooltip-arrow-variation_8a::before{background-color:#00a2d1!important}.bps-tooltip-inner-variation_8b{background-color:#7bc053!important;box-shadow:0 3px 12px 0 rgba(0,0,0,.9)!important}.bps-tooltip-arrow-variation_8b::before{background-color:#7bc053!important}.bps-tooltip-arrow-variation_9a::before,.bps-tooltip-inner-variation_9a{background-color:#00a2d1!important;box-shadow:none!important}.bps-tooltip-arrow-variation_9b::before,.bps-tooltip-inner-variation_9b{background-color:#7bc053!important;box-shadow:none!important}.bps-tooltip-inner-variation_10,.bps-tooltip-inner-variation_11{min-width:60px!important;box-shadow:0 3px 12px 0 rgba(0,0,0,.9)!important;border:1px solid #00a2d1!important;background-color:#363636}.bps-tooltip-inner-variation_11{box-shadow:none!important}.bps-tooltip-arrow-variation_10::before,.bps-tooltip-arrow-variation_11::before{content:unset!important}"]
+            }),
+            __param(1, core.Host()), __param(1, core.Optional())
+        ], BpsToolTipComponent);
+        return BpsToolTipComponent;
+    }(ngZorroAntd.NzTooltipBaseComponentLegacy));
+
+    var BpsTooltipDirective = /** @class */ (function (_super) {
+        __extends(BpsTooltipDirective, _super);
+        function BpsTooltipDirective(elementRef, hostView, resolver, renderer, _tooltip, noAnimation) {
+            var _this = _super.call(this, elementRef, hostView, resolver, renderer, _tooltip, noAnimation) || this;
+            _this.popoverType = 'variation_8a';
+            _this.componentFactory = _this.resolver.resolveComponentFactory(BpsToolTipComponent);
+            return _this;
+        }
+        BpsTooltipDirective.ctorParameters = function () { return [
+            { type: core.ElementRef },
+            { type: core.ViewContainerRef },
+            { type: core.ComponentFactoryResolver },
+            { type: core.Renderer2 },
+            { type: ngZorroAntd.NzTooltipBaseComponentLegacy, decorators: [{ type: core.Optional }] },
+            { type: core$1.NzNoAnimationDirective, decorators: [{ type: core.Host }, { type: core.Optional }] }
+        ]; };
+        __decorate([
+            core.Input('bpsTooltipTitle')
+        ], BpsTooltipDirective.prototype, "specificTitle", void 0);
+        __decorate([
+            core.Input('bps-tooltip')
+        ], BpsTooltipDirective.prototype, "directiveNameTitle", void 0);
+        __decorate([
+            core.Input('bpsTooltipTrigger')
+        ], BpsTooltipDirective.prototype, "specificTrigger", void 0);
+        __decorate([
+            core.Input('bpsTooltipPlacement')
+        ], BpsTooltipDirective.prototype, "specificPlacement", void 0);
+        __decorate([
+            core.Input('bpsTooltipType')
+        ], BpsTooltipDirective.prototype, "popoverType", void 0);
+        BpsTooltipDirective = __decorate([
+            core.Directive({
+                selector: '[bps-tooltip]',
+                exportAs: 'bpsTooltip',
+                host: {
+                    '[class.ant-tooltip-open]': 'isTooltipComponentVisible'
+                }
+            }),
+            __param(4, core.Optional()),
+            __param(5, core.Host()), __param(5, core.Optional())
+        ], BpsTooltipDirective);
+        return BpsTooltipDirective;
+    }(NzTooltipBaseDirective));
+
     var ɵ0 = ngZorroAntd.en_US;
     var BpsComponentsLibModule = /** @class */ (function () {
         function BpsComponentsLibModule() {
@@ -3501,6 +4000,10 @@
         BpsComponentsLibModule = __decorate([
             core.NgModule({
                 declarations: [
+                    BpsTooltipDirective,
+                    BpsToolTipComponent,
+                    BpsPopoverDirective,
+                    BpsPopoverComponent,
                     BpsComponentsLibComponent,
                     BpsInputGroupComponent,
                     BpsInputDirective,
@@ -3541,6 +4044,7 @@
                     icon.NzIconModule,
                     overlay.OverlayModule,
                     ngZorroAntd.NzNoAnimationModule,
+                    ngZorroAntd.NzToolTipModule,
                     ngZorroAntd.NzOverlayModule,
                     empty.NzEmptyModule,
                     forms.FormsModule,
@@ -3548,6 +4052,8 @@
                     core$1.NzWaveModule
                 ],
                 exports: [
+                    BpsPopoverDirective,
+                    BpsPopoverComponent,
                     BpsComponentsLibComponent,
                     BpsComponentsLibComponent,
                     BpsInputGroupComponent,
@@ -3580,11 +4086,17 @@
                     BpsRadioGroupComponent,
                     BpsRadioButtonComponent,
                     BpsCollapseComponent,
-                    BpsCollapsePanelComponent
+                    BpsCollapsePanelComponent,
+                    BpsTooltipDirective,
+                    BpsToolTipComponent,
                 ],
                 providers: [
                     { provide: ngZorroAntd.NZ_I18N, useValue: ɵ0 }
                 ],
+                entryComponents: [
+                    BpsPopoverComponent,
+                    BpsToolTipComponent
+                ]
             })
         ], BpsComponentsLibModule);
         return BpsComponentsLibModule;
@@ -3617,6 +4129,8 @@
     exports.BpsOptionContainerComponent = BpsOptionContainerComponent;
     exports.BpsOptionGroupComponent = BpsOptionGroupComponent;
     exports.BpsOptionLiComponent = BpsOptionLiComponent;
+    exports.BpsPopoverComponent = BpsPopoverComponent;
+    exports.BpsPopoverDirective = BpsPopoverDirective;
     exports.BpsRadioButtonComponent = BpsRadioButtonComponent;
     exports.BpsRadioComponent = BpsRadioComponent;
     exports.BpsRadioGroupComponent = BpsRadioGroupComponent;
@@ -3625,9 +4139,12 @@
     exports.BpsSelectTopControlComponent = BpsSelectTopControlComponent;
     exports.BpsSelectUnselectableDirective = BpsSelectUnselectableDirective;
     exports.BpsSwitchComponent = BpsSwitchComponent;
+    exports.BpsToolTipComponent = BpsToolTipComponent;
+    exports.BpsTooltipDirective = BpsTooltipDirective;
     exports.defaultFilterOption = defaultFilterOption;
     exports.isAutoSizeType = isAutoSizeType;
     exports.ɵ0 = ɵ0;
+    exports.ɵa = NzTooltipBaseDirective;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

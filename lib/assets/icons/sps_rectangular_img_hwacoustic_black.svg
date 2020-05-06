@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="151.4" height="129" viewBox="0 0 151.4 129">
+    <defs>
+        <style>
+            .prefix__cls-1,.prefix__cls-2{fill:none}.prefix__cls-1{stroke:#707070}.prefix__cls-2{stroke:#00a2d1}.prefix__cls-3{fill:#00a2d1}.prefix__cls-4{fill:#fff;font-size:14px;font-family:SegoeUI,Segoe UI}
+        </style>
+    </defs>
+    <g id="prefix__sps_rectangular_img_hwacoustic_black" transform="translate(-515.691 -815.001)">
+        <g id="prefix__Group_3959" data-name="Group 3959" transform="translate(184.691 537.001)">
+            <path id="prefix__Path_532" d="M15040 15248l105 25v-85l-105-20z" class="prefix__cls-1" data-name="Path 532" transform="translate(-14675 -14885.804)"/>
+            <path id="prefix__Path_533" d="M15145 15273l11.78-2.2v-85l-11.78 2.2" class="prefix__cls-1" data-name="Path 533" transform="translate(-14675 -14885.804)"/>
+            <path id="prefix__Path_534" d="M15157.309 15185.349l-105.13-19.545L15040 15168" class="prefix__cls-1" data-name="Path 534" transform="translate(-14675 -14885.804)"/>
+            <path id="prefix__Path_535" d="M15040 15258l105 25" class="prefix__cls-2" data-name="Path 535" transform="translate(-14675 -14883)"/>
+            <path id="prefix__Path_536" d="M15030 15237v-79" class="prefix__cls-2" data-name="Path 536" transform="translate(-14677 -14878)"/>
+            <circle id="prefix__Ellipse_185" cx="2" cy="2" r="2" class="prefix__cls-3" data-name="Ellipse 185" transform="translate(351 278)"/>
+            <circle id="prefix__Ellipse_186" cx="2" cy="2" r="2" class="prefix__cls-3" data-name="Ellipse 186" transform="translate(351 357)"/>
+            <circle id="prefix__Ellipse_187" cx="2" cy="2" r="2" class="prefix__cls-3" data-name="Ellipse 187" transform="translate(363 373)"/>
+            <circle id="prefix__Ellipse_188" cx="2" cy="2" r="2" class="prefix__cls-3" data-name="Ellipse 188" transform="translate(468 398)"/>
+            <text id="prefix__h" class="prefix__cls-4" transform="translate(331 314)">
+                <tspan x="6.539" y="15">h</tspan>
+            </text>
+            <text id="prefix__w" class="prefix__cls-4" transform="translate(398 388)">
+                <tspan x="5.441" y="15">w</tspan>
+            </text>
+            <path id="prefix__Path_537" d="M15040 15196.76l37.746 8.986v-41.379l-37.746-7.19z" class="prefix__cls-1" data-name="Path 537" transform="translate(-14641.373 -14850.746)"/>
+            <path id="prefix__Path_538" d="M15040 15189.862l31.169 7.42v-34.169l-31.169-5.937z" class="prefix__cls-1" data-name="Path 538" transform="translate(-14638.085 -14846.515)"/>
+            <path id="prefix__Path_539" d="M15040 15182.68l24.319 5.789v-26.659l-24.319-4.633z" class="prefix__cls-1" data-name="Path 539" transform="translate(-14634.66 -14842.107)"/>
+        </g>
+    </g>
+</svg>
