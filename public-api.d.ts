@@ -36,3 +36,6 @@ export * from './lib/components/bps-popover/bps-popover.component';
 export * from './lib/components/bps-popover/bps-popover.directive';
 export * from './lib/components/bps-tooltip/bps-tooltip.component';
 export * from './lib/components/bps-tooltip/bps-tooltip.directive';
+export * from './lib/components/bps-list/bps-list-item-meta.component';
+export * from './lib/components/bps-list/bps-list-item.component';
+export * from './lib/components/bps-list/bps-list.component';

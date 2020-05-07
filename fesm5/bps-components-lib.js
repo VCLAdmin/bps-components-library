@@ -1,6 +1,6 @@
 import { __decorate, __read, __spread, __param, __extends } from 'tslib';
 import { ɵɵdefineInjectable, Injectable, Component, Renderer2, ElementRef, Input, Directive, NgZone, ContentChildren, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, TemplateRef, Pipe, ChangeDetectorRef, EventEmitter, ViewChildren, Output, Host, Optional, forwardRef, ContentChild, Inject, HostBinding, HostListener, ViewContainerRef, ComponentFactoryResolver, NgModule } from '@angular/core';
-import { NzTooltipBaseComponentLegacy as NzTooltipBaseComponentLegacy$1, en_US, NgZorroAntdModule, NzNoAnimationModule, NzToolTipModule, NzOverlayModule, NZ_I18N } from 'ng-zorro-antd';
+import { NzTooltipBaseComponentLegacy as NzTooltipBaseComponentLegacy$1, en_US, NgZorroAntdModule, NzNoAnimationModule, NzToolTipModule, NzOverlayModule, NzSpinModule, NzGridModule, NzAvatarModule, NZ_I18N } from 'ng-zorro-antd';
 import { CommonModule } from '@angular/common';
 import { CdkOverlayOrigin, CdkConnectedOverlay, OverlayModule } from '@angular/cdk/overlay';
 import { InputBoolean, NzDomEventService, isNotNil, isNil, NzNoAnimationDirective, zoomMotion, toBoolean, slideMotion, warnDeprecation, helpMotion, NzUpdateHostClassService, NzConfigService, WithConfig, NzWaveDirective, isEmpty, findFirstNotEmptyNode, findLastNotEmptyNode, NZ_WAVE_GLOBAL_CONFIG, collapseMotion, zoomBigMotion, NzAddOnModule, NzWaveModule } from 'ng-zorro-antd/core';
@@ -3793,6 +3793,245 @@ var BpsTooltipDirective = /** @class */ (function (_super) {
     return BpsTooltipDirective;
 }(NzTooltipBaseDirective));
 
+var BpsListComponent = /** @class */ (function () {
+    function BpsListComponent(el, updateHostClassService) {
+        this.el = el;
+        this.updateHostClassService = updateHostClassService;
+        this.bpsBordered = false;
+        this.bpsDisabled = false;
+        this.bpsListType = 'variation1';
+        this.bpsItemLayout = 'horizontal';
+        this.bpsLoading = false;
+        this.bpsSize = 'default';
+        this.bpsSplit = true;
+        // #endregion
+        // #region styles
+        this.prefixCls = 'ant-list';
+        // #endregion
+        this.itemLayoutNotifySource = new BehaviorSubject(this.bpsItemLayout);
+    }
+    BpsListComponent.prototype._setClassMap = function () {
+        var _a;
+        var classMap = (_a = {},
+            _a['bps-cmacs-custom-scrollbar'] = true,
+            _a[this.prefixCls] = true,
+            _a["bps-list-type-" + this.bpsListType] = true,
+            _a[this.prefixCls + "-vertical"] = this.bpsItemLayout === 'vertical',
+            _a[this.prefixCls + "-lg"] = this.bpsSize === 'large',
+            _a[this.prefixCls + "-sm"] = this.bpsSize === 'small',
+            _a[this.prefixCls + "-split"] = this.bpsSplit,
+            _a[this.prefixCls + "-bordered"] = this.bpsBordered,
+            _a[this.prefixCls + "-loading"] = this.bpsLoading,
+            _a[this.prefixCls + "-grid"] = this.bpsGrid,
+            _a[this.prefixCls + "-something-after-last-item"] = !!(this.bpsLoadMore || this.bpsPagination || this.bpsFooter),
+            _a);
+        this.updateHostClassService.updateHostClass(this.el.nativeElement, classMap);
+    };
+    Object.defineProperty(BpsListComponent.prototype, "itemLayoutNotify$", {
+        get: function () {
+            return this.itemLayoutNotifySource.asObservable();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    BpsListComponent.prototype.ngOnInit = function () {
+        this._setClassMap();
+    };
+    BpsListComponent.prototype.ngOnChanges = function (changes) {
+        this._setClassMap();
+        if (changes.bpsItemLayout) {
+            this.itemLayoutNotifySource.next(this.bpsItemLayout);
+        }
+    };
+    BpsListComponent.prototype.ngOnDestroy = function () {
+        this.itemLayoutNotifySource.unsubscribe();
+    };
+    BpsListComponent.ctorParameters = function () { return [
+        { type: ElementRef },
+        { type: NzUpdateHostClassService }
+    ]; };
+    __decorate([
+        Input()
+    ], BpsListComponent.prototype, "bpsDataSource", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsListComponent.prototype, "bpsBordered", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsListComponent.prototype, "bpsDisabled", void 0);
+    __decorate([
+        Input()
+    ], BpsListComponent.prototype, "bpsGrid", void 0);
+    __decorate([
+        Input()
+    ], BpsListComponent.prototype, "bpsListType", void 0);
+    __decorate([
+        Input()
+    ], BpsListComponent.prototype, "bpsHeader", void 0);
+    __decorate([
+        Input()
+    ], BpsListComponent.prototype, "bpsFooter", void 0);
+    __decorate([
+        Input()
+    ], BpsListComponent.prototype, "bpsItemLayout", void 0);
+    __decorate([
+        Input()
+    ], BpsListComponent.prototype, "bpsRenderItem", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsListComponent.prototype, "bpsLoading", void 0);
+    __decorate([
+        Input()
+    ], BpsListComponent.prototype, "bpsLoadMore", void 0);
+    __decorate([
+        Input()
+    ], BpsListComponent.prototype, "bpsPagination", void 0);
+    __decorate([
+        Input()
+    ], BpsListComponent.prototype, "bpsSize", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsListComponent.prototype, "bpsSplit", void 0);
+    __decorate([
+        Input()
+    ], BpsListComponent.prototype, "bpsNoResult", void 0);
+    BpsListComponent = __decorate([
+        Component({
+            selector: 'bps-list, [bps-list]',
+            exportAs: 'bpsList',
+            template: "<ng-container *ngIf=\"!bpsDisabled\">\r\n  <ng-template #itemsTpl>\r\n    <div class=\"ant-list-items\" *ngIf=\"bpsDataSource.length > 0\">\r\n      <ng-container *ngFor=\"let item of bpsDataSource; let index = index\">\r\n        <ng-template [ngTemplateOutlet]=\"bpsRenderItem\" [ngTemplateOutletContext]=\"{ $implicit: item, index: index }\"></ng-template>\r\n      </ng-container>\r\n    </div>\r\n  </ng-template>\r\n  <div *ngIf=\"bpsHeader\" class=\"ant-list-header\">\r\n    <ng-container *nzStringTemplateOutlet=\"bpsHeader\">{{ bpsHeader }}</ng-container>\r\n  </div>\r\n  <nz-spin [nzSpinning]=\"bpsLoading\">\r\n    <ng-container *ngIf=\"bpsDataSource\">\r\n      <div *ngIf=\"bpsLoading && bpsDataSource.length === 0\" [style.min-height.px]=\"53\"></div>\r\n      <div *ngIf=\"bpsGrid; else itemsTpl\" nz-row [nzGutter]=\"bpsGrid.gutter\">\r\n        <div nz-col [nzSpan]=\"bpsGrid.span\" [nzXs]=\"bpsGrid.xs\" [nzSm]=\"bpsGrid.sm\" [nzMd]=\"bpsGrid.md\" [nzLg]=\"bpsGrid.lg\" [nzXl]=\"bpsGrid.xl\"\r\n             [nzXXl]=\"bpsGrid.xxl\" *ngFor=\"let item of bpsDataSource; let index = index\">\r\n          <ng-template [ngTemplateOutlet]=\"bpsRenderItem\" [ngTemplateOutletContext]=\"{ $implicit: item, index: index }\"></ng-template>\r\n        </div>\r\n      </div>\r\n      <div *ngIf=\"!bpsLoading && bpsDataSource.length === 0\" class=\"ant-list-empty-text\">\r\n        <nz-embed-empty [nzComponentName]=\"'list'\" [specificContent]=\"bpsNoResult\"></nz-embed-empty>\r\n      </div>\r\n    </ng-container>\r\n    <ng-content></ng-content>\r\n  </nz-spin>\r\n  <div *ngIf=\"bpsFooter\" class=\"ant-list-footer\">\r\n    <ng-container *nzStringTemplateOutlet=\"bpsFooter\">{{ bpsFooter }}</ng-container>\r\n  </div>\r\n  <ng-template [ngTemplateOutlet]=\"bpsLoadMore\"></ng-template>\r\n  <div *ngIf=\"bpsPagination\" class=\"ant-list-pagination\">\r\n    <ng-template [ngTemplateOutlet]=\"bpsPagination\"></ng-template>\r\n  </div>\r\n</ng-container>\n",
+            providers: [NzUpdateHostClassService],
+            preserveWhitespaces: false,
+            encapsulation: ViewEncapsulation.None,
+            changeDetection: ChangeDetectionStrategy.OnPush,
+            styles: ["\n      bps-list,\n      bps-list nz-spin {\n        display: block;\n      }\n    ", ".ant-list-bordered{width:215px!important;max-width:215px!important;height:80px!important;max-height:80px!important;overflow-y:scroll!important;overflow-x:hidden!important;padding:5px!important;border-radius:4px!important;border:1px solid #474747!important}.ant-list-bordered .ant-list-item{width:200px!important;height:20px!important;border-radius:10px!important;font-size:11px!important;font-weight:300!important;font-stretch:normal!important;font-style:normal!important;line-height:1.36!important;letter-spacing:normal!important;text-align:left!important;color:#fff!important;margin-bottom:2px!important;padding:0 8px 2px 9px!important}.ant-list-bordered .ant-list-item:hover{cursor:pointer}.ant-list-bordered.bps-list-type-variation1 .ant-list-item{background-color:#005068!important}.ant-list-bordered.bps-list-type-variation2 .ant-list-item{background-color:#00a2d1!important}.ant-list-bordered.bps-list-type-variation3 .ant-list-item{background-color:#005681!important}.ant-list-bordered.bps-list-type-variation4 .ant-list-item{background-color:#06809f!important}.ant-list-bordered.bps-list-type-variation5 .ant-list-item{background-color:#445c67!important}.ant-list-bordered.bps-list-type-variation6 .ant-list-item{background-color:#778d98!important}.ant-list-split .ant-list-item{border-bottom:unset}.bps-delete-list-icon{position:relative;float:right;top:50%;transform:translateY(-50%)}.bps-list-item-content{position:relative;float:left;top:50%;width:calc(100% - 8px);max-width:calc(100% - 8px);overflow:hidden;text-overflow:ellipsis;transform:translateY(-50%);white-space:nowrap;padding-right:5px;margin-top:-4px}.ant-list-bordered .ant-list-item.bps-delete-icon-hovered{background-color:#bc0000!important}"]
+        })
+    ], BpsListComponent);
+    return BpsListComponent;
+}());
+
+var BpsListItemMetaComponent = /** @class */ (function () {
+    function BpsListItemMetaComponent(elementRef, renderer) {
+        this.elementRef = elementRef;
+        this.renderer = renderer;
+        this.avatarStr = '';
+        this.renderer.addClass(elementRef.nativeElement, 'ant-list-item-meta');
+    }
+    Object.defineProperty(BpsListItemMetaComponent.prototype, "bpsAvatar", {
+        set: function (value) {
+            if (value instanceof TemplateRef) {
+                this.avatarStr = '';
+                this.avatarTpl = value;
+            }
+            else {
+                this.avatarStr = value;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    BpsListItemMetaComponent.ctorParameters = function () { return [
+        { type: ElementRef },
+        { type: Renderer2 }
+    ]; };
+    __decorate([
+        Input()
+    ], BpsListItemMetaComponent.prototype, "bpsAvatar", null);
+    __decorate([
+        Input()
+    ], BpsListItemMetaComponent.prototype, "bpsTitle", void 0);
+    __decorate([
+        Input()
+    ], BpsListItemMetaComponent.prototype, "bpsDescription", void 0);
+    BpsListItemMetaComponent = __decorate([
+        Component({
+            selector: 'bps-list-item-meta, [bps-list-item-meta]',
+            exportAs: 'bpsListItemMeta',
+            template: "<div *ngIf=\"avatarStr || avatarTpl\" class=\"ant-list-item-meta-avatar\">\n  <ng-container *ngIf=\"avatarStr; else avatarTpl\">\n    <nz-avatar [nzSrc]=\"avatarStr\"></nz-avatar>\n  </ng-container>\n</div>\n<div *ngIf=\"bpsTitle || bpsDescription\" class=\"ant-list-item-meta-content\">\n  <h4 *ngIf=\"bpsTitle\" class=\"ant-list-item-meta-title\">\n    <ng-container *nzStringTemplateOutlet=\"bpsTitle\">{{ bpsTitle }}</ng-container>\n  </h4>\n  <div *ngIf=\"bpsDescription\" class=\"ant-list-item-meta-description\">\n    <ng-container *nzStringTemplateOutlet=\"bpsDescription\">{{ bpsDescription }}</ng-container>\n  </div>\n</div>\n",
+            preserveWhitespaces: false,
+            changeDetection: ChangeDetectionStrategy.OnPush,
+            encapsulation: ViewEncapsulation.None
+        })
+    ], BpsListItemMetaComponent);
+    return BpsListItemMetaComponent;
+}());
+
+var BpsListItemComponent = /** @class */ (function () {
+    function BpsListItemComponent(elementRef, renderer, parentComp, cdr) {
+        this.parentComp = parentComp;
+        this.cdr = cdr;
+        this._onDeleteHover = false;
+        this.bpsActions = [];
+        this.bpsNoFlex = false;
+        this.bpsDelete = false;
+        this.ondelete = new EventEmitter();
+        renderer.addClass(elementRef.nativeElement, 'ant-list-item');
+    }
+    Object.defineProperty(BpsListItemComponent.prototype, "isVerticalAndExtra", {
+        get: function () {
+            return this.itemLayout === 'vertical' && !!this.bpsExtra;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    BpsListItemComponent.prototype.onDelete = function () {
+        this.ondelete.emit();
+    };
+    BpsListItemComponent.prototype.ngAfterViewInit = function () {
+        var _this = this;
+        this.itemLayout$ = this.parentComp.itemLayoutNotify$.subscribe(function (val) {
+            _this.itemLayout = val;
+            _this.cdr.detectChanges();
+        });
+    };
+    BpsListItemComponent.prototype.ngOnDestroy = function () {
+        if (this.itemLayout$) {
+            this.itemLayout$.unsubscribe();
+        }
+    };
+    BpsListItemComponent.ctorParameters = function () { return [
+        { type: ElementRef },
+        { type: Renderer2 },
+        { type: BpsListComponent },
+        { type: ChangeDetectorRef }
+    ]; };
+    __decorate([
+        ContentChildren(BpsListItemMetaComponent)
+    ], BpsListItemComponent.prototype, "metas", void 0);
+    __decorate([
+        Input()
+    ], BpsListItemComponent.prototype, "bpsActions", void 0);
+    __decorate([
+        Input()
+    ], BpsListItemComponent.prototype, "bpsContent", void 0);
+    __decorate([
+        Input()
+    ], BpsListItemComponent.prototype, "bpsExtra", void 0);
+    __decorate([
+        Input(), InputBoolean(), HostBinding('class.ant-list-item-no-flex')
+    ], BpsListItemComponent.prototype, "bpsNoFlex", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsListItemComponent.prototype, "bpsDelete", void 0);
+    __decorate([
+        Output()
+    ], BpsListItemComponent.prototype, "ondelete", void 0);
+    BpsListItemComponent = __decorate([
+        Component({
+            selector: 'bps-list-item, [bps-list-item]',
+            exportAs: 'bpsListItem',
+            template: "<ng-template #actionsTpl>\n  <ul *ngIf=\"bpsActions?.length > 0\" class=\"ant-list-item-action\">\n    <li *ngFor=\"let i of bpsActions; let last=last;\">\n      <ng-template [ngTemplateOutlet]=\"i\"></ng-template>\n      <em *ngIf=\"!last\" class=\"ant-list-item-action-split\"></em>\n    </li>\n  </ul>\n</ng-template>\n<ng-template #contentTpl>\n  <div class=\"bps-list-item-content\">\r\n    <ng-content></ng-content>\r\n  </div>\n  <ng-container *ngIf=\"bpsDelete\">\r\n    <div class=\"bps-delete-list-icon\"\r\n         (click)=\"onDelete()\"\r\n         (mouseenter)=\"_onDeleteHover = true;\"\r\n         (mouseleave)=\"_onDeleteHover = false;\">\r\n      <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"10.609\" height=\"10.609\" viewBox=\"0 0 10.609 10.609\">\r\n        <defs>\r\n          <style>\r\n\r\n            .prefix__cls-1 {\r\n              fill: #fff\r\n            }\r\n          </style>\r\n        </defs>\r\n        <g id=\"prefix__sps_x_icon_deleteglass_white\" transform=\"rotate(45 799.93 -996.928)\">\r\n          <rect id=\"prefix__Rectangle_1881\" width=\"2\" height=\"13\" class=\"prefix__cls-1\" data-name=\"Rectangle 1881\" rx=\"1\" transform=\"translate(945.732 267.142)\" />\r\n          <rect id=\"prefix__Rectangle_1882\" width=\"2\" height=\"13\" class=\"prefix__cls-1\" data-name=\"Rectangle 1882\" rx=\"1\" transform=\"rotate(-90 607.436 -332.794)\" />\r\n        </g>\r\n      </svg>\r\n    </div>\r\n  </ng-container>\n  <ng-container *ngIf=\"bpsContent\">\n    <ng-container *nzStringTemplateOutlet=\"bpsContent\">{{ bpsContent }}</ng-container>\n  </ng-container>\n</ng-template>\n<ng-template #simpleTpl>\n  <ng-template [ngTemplateOutlet]=\"contentTpl\"></ng-template>\n  <ng-template [ngTemplateOutlet]=\"bpsExtra\"></ng-template>\n  <ng-template [ngTemplateOutlet]=\"actionsTpl\"></ng-template>\n</ng-template>\n<ng-container *ngIf=\"isVerticalAndExtra; else simpleTpl\">\n  <div class=\"ant-list-item-main\">\n    <ng-template [ngTemplateOutlet]=\"contentTpl\"></ng-template>\n    <ng-template [ngTemplateOutlet]=\"actionsTpl\"></ng-template>\n  </div>\n  <div class=\"ant-list-item-extra\">\n    <ng-template [ngTemplateOutlet]=\"bpsExtra\"></ng-template>\n  </div>\n</ng-container>\n",
+            preserveWhitespaces: false,
+            encapsulation: ViewEncapsulation.None,
+            changeDetection: ChangeDetectionStrategy.OnPush,
+            host: {
+                '[class.bps-delete-icon-hovered]': '_onDeleteHover'
+            }
+        })
+    ], BpsListItemComponent);
+    return BpsListItemComponent;
+}());
+
 var ɵ0 = en_US;
 var BpsComponentsLibModule = /** @class */ (function () {
     function BpsComponentsLibModule() {
@@ -3800,6 +4039,9 @@ var BpsComponentsLibModule = /** @class */ (function () {
     BpsComponentsLibModule = __decorate([
         NgModule({
             declarations: [
+                BpsListComponent,
+                BpsListItemComponent,
+                BpsListItemMetaComponent,
                 BpsTooltipDirective,
                 BpsToolTipComponent,
                 BpsPopoverDirective,
@@ -3849,9 +4091,15 @@ var BpsComponentsLibModule = /** @class */ (function () {
                 NzEmptyModule,
                 FormsModule,
                 ObserversModule,
-                NzWaveModule
+                NzWaveModule,
+                NzSpinModule,
+                NzGridModule,
+                NzAvatarModule
             ],
             exports: [
+                BpsListComponent,
+                BpsListItemComponent,
+                BpsListItemMetaComponent,
                 BpsPopoverDirective,
                 BpsPopoverComponent,
                 BpsComponentsLibComponent,
@@ -3910,5 +4158,5 @@ var BpsComponentsLibModule = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { BpsAutosizeDirective, BpsButtonComponent, BpsButtonGroupComponent, BpsCheckboxComponent, BpsCheckboxGroupComponent, BpsCheckboxWrapperComponent, BpsCollapseComponent, BpsCollapsePanelComponent, BpsComponentsLibComponent, BpsComponentsLibModule, BpsComponentsLibService, BpsFilterGroupOptionPipe, BpsFilterOptionPipe, BpsFormControlComponent, BpsFormDirective, BpsFormExplainComponent, BpsFormExtraComponent, BpsFormItemComponent, BpsFormLabelComponent, BpsFormSplitComponent, BpsFormTextComponent, BpsInputDirective, BpsInputGroupComponent, BpsOptionComponent, BpsOptionContainerComponent, BpsOptionGroupComponent, BpsOptionLiComponent, BpsPopoverComponent, BpsPopoverDirective, BpsRadioButtonComponent, BpsRadioComponent, BpsRadioGroupComponent, BpsSelectComponent, BpsSelectService, BpsSelectTopControlComponent, BpsSelectUnselectableDirective, BpsSwitchComponent, BpsToolTipComponent, BpsTooltipDirective, defaultFilterOption, isAutoSizeType, ɵ0, NzTooltipBaseDirective as ɵa };
+export { BpsAutosizeDirective, BpsButtonComponent, BpsButtonGroupComponent, BpsCheckboxComponent, BpsCheckboxGroupComponent, BpsCheckboxWrapperComponent, BpsCollapseComponent, BpsCollapsePanelComponent, BpsComponentsLibComponent, BpsComponentsLibModule, BpsComponentsLibService, BpsFilterGroupOptionPipe, BpsFilterOptionPipe, BpsFormControlComponent, BpsFormDirective, BpsFormExplainComponent, BpsFormExtraComponent, BpsFormItemComponent, BpsFormLabelComponent, BpsFormSplitComponent, BpsFormTextComponent, BpsInputDirective, BpsInputGroupComponent, BpsListComponent, BpsListItemComponent, BpsListItemMetaComponent, BpsOptionComponent, BpsOptionContainerComponent, BpsOptionGroupComponent, BpsOptionLiComponent, BpsPopoverComponent, BpsPopoverDirective, BpsRadioButtonComponent, BpsRadioComponent, BpsRadioGroupComponent, BpsSelectComponent, BpsSelectService, BpsSelectTopControlComponent, BpsSelectUnselectableDirective, BpsSwitchComponent, BpsToolTipComponent, BpsTooltipDirective, defaultFilterOption, isAutoSizeType, ɵ0, NzTooltipBaseDirective as ɵa };
 //# sourceMappingURL=bps-components-lib.js.map

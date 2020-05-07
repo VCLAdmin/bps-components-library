@@ -179,3 +179,27 @@
 .has-error .ant-input.bps-input-opened{
   border-bottom-color: #e94c0a !important;
 }
+
+/*custom scrollbar for Chrome and Opera*/
+.bps-cmacs-custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 7px;
+}
+
+.bps-cmacs-custom-scrollbar::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #262626;
+}
+
+.bps-cmacs-custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #363636;
+  border-radius: 10px;
+  border: 2px solid #262626;
+  background-clip: padding-box;
+}
+
+.bps-cmacs-custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #363636;
+  border-radius: 10px;
+}
+
