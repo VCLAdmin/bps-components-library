@@ -40,3 +40,6 @@ export * from './lib/components/bps-list/bps-list-item-meta.component';
 export * from './lib/components/bps-list/bps-list-item.component';
 export * from './lib/components/bps-list/bps-list.component';
 export * from './lib/components/bps-table/bps-table.component';
+export * from './lib/components/core/enums/celdType.enum';
+export * from './lib/components/core/enums/templateType.enum';
+export * from './lib/components/core/interfaces/grid-config';

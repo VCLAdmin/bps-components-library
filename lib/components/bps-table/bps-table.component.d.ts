@@ -36,10 +36,6 @@ export declare class BpsTableComponent<T = any> implements OnInit, OnDestroy, Af
         range: [number, number];
     }>;
     hideOnSinglePage: boolean;
-    itemRender: TemplateRef<{
-        $implicit: 'page' | 'prev' | 'next';
-        page: number;
-    }>;
     simple: boolean;
     virtualItemSize: number;
     virtualMaxBufferPx: number;
