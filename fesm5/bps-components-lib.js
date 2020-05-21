@@ -1,9 +1,9 @@
-import { __decorate, __read, __spread, __param, __extends } from 'tslib';
+import { __decorate, __read, __spread, __param, __extends, __assign } from 'tslib';
 import { ɵɵdefineInjectable, Injectable, Component, Renderer2, ElementRef, Input, Directive, NgZone, ContentChildren, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, TemplateRef, Pipe, ChangeDetectorRef, EventEmitter, ViewChildren, Output, Host, Optional, forwardRef, ContentChild, Inject, HostBinding, HostListener, ViewContainerRef, ComponentFactoryResolver, NgModule } from '@angular/core';
-import { NzTooltipBaseComponentLegacy as NzTooltipBaseComponentLegacy$1, en_US, NgZorroAntdModule, NzNoAnimationModule, NzToolTipModule, NzOverlayModule, NzSpinModule, NzGridModule, NzAvatarModule, NZ_I18N } from 'ng-zorro-antd';
+import { NzTooltipBaseComponentLegacy as NzTooltipBaseComponentLegacy$1, en_US, NgZorroAntdModule, NzNoAnimationModule, NzToolTipModule, NzOverlayModule, NzSpinModule, NzGridModule, NzAvatarModule, NzTableModule, NZ_I18N } from 'ng-zorro-antd';
 import { CommonModule } from '@angular/common';
 import { CdkOverlayOrigin, CdkConnectedOverlay, OverlayModule } from '@angular/cdk/overlay';
-import { InputBoolean, NzDomEventService, isNotNil, isNil, NzNoAnimationDirective, zoomMotion, toBoolean, slideMotion, warnDeprecation, helpMotion, NzUpdateHostClassService, NzConfigService, WithConfig, NzWaveDirective, isEmpty, findFirstNotEmptyNode, findLastNotEmptyNode, NZ_WAVE_GLOBAL_CONFIG, collapseMotion, zoomBigMotion, NzAddOnModule, NzWaveModule } from 'ng-zorro-antd/core';
+import { InputBoolean, NzDomEventService, isNotNil, isNil, NzNoAnimationDirective, zoomMotion, toBoolean, slideMotion, warnDeprecation, helpMotion, NzUpdateHostClassService, NzConfigService, WithConfig, NzWaveDirective, isEmpty, findFirstNotEmptyNode, findLastNotEmptyNode, NZ_WAVE_GLOBAL_CONFIG, collapseMotion, zoomBigMotion, InputNumber, NzAddOnModule, NzWaveModule } from 'ng-zorro-antd/core';
 import { NzIconDirective, NzIconModule } from 'ng-zorro-antd/icon';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NG_VALUE_ACCESSOR, FormControl, NgModel, FormControlName, FormControlDirective, NgControl, FormsModule } from '@angular/forms';
@@ -17,6 +17,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { ANIMATION_MODULE_TYPE } from '@angular/platform-browser/animations';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { NzTooltipBaseComponentLegacy, NzToolTipComponent } from 'ng-zorro-antd/tooltip';
+import { NzI18nService } from 'ng-zorro-antd/i18n';
 
 var BpsComponentsLibService = /** @class */ (function () {
     function BpsComponentsLibService() {
@@ -2846,7 +2847,7 @@ var BpsCheckboxComponent = /** @class */ (function () {
             preserveWhitespaces: false,
             changeDetection: ChangeDetectionStrategy.OnPush,
             encapsulation: ViewEncapsulation.None,
-            template: "<ng-template #content><ng-content></ng-content></ng-template>\n\n<span class=\"ant-checkbox\"\n  [class.ant-checkbox-checked]=\"bpsChecked && !bpsIndeterminate\"\n  [class.ant-checkbox-disabled]=\"bpsDisabled\"\n  [class.bps-checkbox-variation1]=\"bpsType === 'variation1'\"\n  [class.ant-checkbox-indeterminate]=\"bpsIndeterminate\">\n  <input #inputElement [checked]=\"bpsChecked\" [ngModel]=\"bpsChecked\" [disabled]=\"bpsDisabled\" (ngModelChange)=\"innerCheckedChange($event)\" (click)=\"$event.stopPropagation();\" type=\"checkbox\" class=\"ant-checkbox-input\">\n  <span class=\"ant-checkbox-inner\">\r\n    <ng-container *ngIf=\"bpsType === 'variation1'\">\r\n      <ng-container *ngTemplateOutlet=\"content\"></ng-container>\r\n    </ng-container>\r\n  </span>\n</span>\n<span #contentElement (cdkObserveContent)=\"checkContent()\">\n  <ng-container *ngIf=\"bpsType === 'variation2'\">\r\n    <ng-container *ngTemplateOutlet=\"content\"></ng-container>\r\n  </ng-container>\n</span>\n",
+            template: "<ng-template #content><ng-content></ng-content></ng-template>\r\n\r\n<span class=\"ant-checkbox\"\r\n  [class.ant-checkbox-checked]=\"bpsChecked && !bpsIndeterminate\"\r\n  [class.ant-checkbox-disabled]=\"bpsDisabled\"\r\n  [class.bps-checkbox-variation1]=\"bpsType === 'variation1'\"\r\n  [class.bps-checkbox-variation3]=\"bpsType === 'variation3'\"\r\n  [class.ant-checkbox-indeterminate]=\"bpsIndeterminate\">\r\n  <input #inputElement [checked]=\"bpsChecked\" [ngModel]=\"bpsChecked\" [disabled]=\"bpsDisabled\" (ngModelChange)=\"innerCheckedChange($event)\" (click)=\"$event.stopPropagation();\" type=\"checkbox\" class=\"ant-checkbox-input\">\r\n  <span class=\"ant-checkbox-inner\">\r\n    <ng-container *ngIf=\"bpsType === 'variation1' || bpsType === 'variation3'\">\r\n      <ng-container *ngTemplateOutlet=\"content\"></ng-container>\r\n    </ng-container>\r\n  </span>\r\n</span>\r\n<span #contentElement (cdkObserveContent)=\"checkContent()\">\r\n  <ng-container *ngIf=\"bpsType === 'variation2'\">\r\n    <ng-container *ngTemplateOutlet=\"content\"></ng-container>\r\n  </ng-container>\r\n</span>\r\n",
             providers: [
                 {
                     provide: NG_VALUE_ACCESSOR,
@@ -2857,7 +2858,7 @@ var BpsCheckboxComponent = /** @class */ (function () {
             host: {
                 '(click)': 'hostClick($event)'
             },
-            styles: [".ant-checkbox-inner{width:15px!important;height:15px!important;border-radius:3px!important;background-color:#363636!important;border:1px solid #707070!important}.ant-checkbox-inner::after{top:48%!important;left:22%!important}.ant-checkbox{border-radius:3px!important;font-size:12px!important;width:15px!important;height:15px!important}.ant-checkbox:hover .ant-checkbox-inner{border:1px solid #445c67!important}.ant-checkbox-checked .ant-checkbox-inner::after{border-color:#00a2d1!important}.ant-checkbox-checked::after{border:none!important}.ant-checkbox-wrapper.cdk-focused .ant-checkbox-inner{box-shadow:0 0 8px 0 #00a2d1!important;border:1px solid #707070!important}.bps-checkbox-variation1,.bps-checkbox-variation1 .ant-checkbox-inner,.bps-checkbox-variation1:hover{width:65px!important;height:40px!important;border-radius:8px!important}.bps-checkbox-variation1 .ant-checkbox-inner{border:1px solid #666;display:table!important}.bps-checkbox-variation1:not(.ant-checkbox-disabled):hover .ant-checkbox-inner{border:2px solid #00a2d1!important;transition:.1s!important}.bps-checkbox-variation1 .ant-checkbox-inner svg{display:table-cell!important;vertical-align:middle!important;text-align:center!important;margin:0 auto!important;height:100%!important}.ant-checkbox-checked.bps-checkbox-variation1 .ant-checkbox-inner::after{content:unset!important}.ant-checkbox-checked.bps-checkbox-variation1 .ant-checkbox-inner{border:2px solid #00a2d1!important}.ant-checkbox.ant-checkbox-disabled .ant-checkbox-inner,.ant-checkbox.ant-checkbox-disabled .ant-checkbox-inner::after,.ant-checkbox.ant-checkbox-disabled:hover .ant-checkbox-inner{border-color:#474747!important;box-shadow:none!important}.bps-checkbox-variation1.ant-checkbox-disabled .ant-checkbox-inner svg{opacity:.4!important}"]
+            styles: [".ant-checkbox-inner{width:15px!important;height:15px!important;border-radius:3px!important;background-color:#363636!important;border:1px solid #707070!important}.ant-checkbox-inner::after{top:48%!important;left:22%!important}.ant-checkbox{border-radius:3px!important;font-size:12px!important;width:15px!important;height:15px!important}.ant-checkbox:hover .ant-checkbox-inner{border:1px solid #445c67!important}.ant-checkbox.bps-checkbox-variation3:hover .ant-checkbox-inner{border:none!important}.ant-checkbox.bps-checkbox-variation3,.ant-checkbox.bps-checkbox-variation3:hover{width:15px!important;height:15px!important;border:none!important;box-shadow:none!important;transition:.3s}.ant-checkbox-checked .ant-checkbox-inner::after{border-color:#00a2d1!important}.ant-checkbox-checked::after{border:none!important}.ant-checkbox-wrapper.cdk-focused .ant-checkbox-inner{box-shadow:0 0 8px 0 #00a2d1!important;border:1px solid #707070!important}.ant-checkbox-wrapper.cdk-focused .bps-checkbox-variation3 .ant-checkbox-inner{box-shadow:none!important;border:none!important}.bps-checkbox-variation3.ant-checkbox-checked .ant-checkbox-inner::after{border:none!important}.bps-checkbox-variation1,.bps-checkbox-variation1 .ant-checkbox-inner,.bps-checkbox-variation1:hover{width:65px!important;height:40px!important;border-radius:8px!important}.bps-checkbox-variation1 .ant-checkbox-inner{border:1px solid #666;display:table!important}.bps-checkbox-variation3 .ant-checkbox-inner,.bps-checkbox-variation3 .ant-checkbox-inner:hover{border:none!important;display:table!important;background-color:transparent!important}.bps-checkbox-variation1:not(.ant-checkbox-disabled):hover .ant-checkbox-inner{border:2px solid #00a2d1!important;transition:.1s!important}.bps-checkbox-variation1 .ant-checkbox-inner svg,.bps-checkbox-variation3 .ant-checkbox-inner svg{display:table-cell!important;vertical-align:middle!important;text-align:center!important;margin:0 auto!important;height:100%!important}.ant-checkbox-checked.bps-checkbox-variation1 .ant-checkbox-inner::after,.ant-checkbox-checked.bps-checkbox-variation3 .ant-checkbox-inner::after{content:unset!important}.ant-checkbox-checked.bps-checkbox-variation1 .ant-checkbox-inner{border:2px solid #00a2d1!important}.ant-checkbox.ant-checkbox-disabled .ant-checkbox-inner,.ant-checkbox.ant-checkbox-disabled .ant-checkbox-inner::after,.ant-checkbox.ant-checkbox-disabled:hover .ant-checkbox-inner{border-color:#474747!important;box-shadow:none!important}.bps-checkbox-variation1.ant-checkbox-disabled .ant-checkbox-inner svg{opacity:.4!important}"]
         }),
         __param(2, Optional())
     ], BpsCheckboxComponent);
@@ -3899,12 +3900,12 @@ var BpsListComponent = /** @class */ (function () {
         Component({
             selector: 'bps-list, [bps-list]',
             exportAs: 'bpsList',
-            template: "<ng-container *ngIf=\"!bpsDisabled\">\r\n  <ng-template #itemsTpl>\r\n    <div class=\"ant-list-items\" *ngIf=\"bpsDataSource.length > 0\">\r\n      <ng-container *ngFor=\"let item of bpsDataSource; let index = index\">\r\n        <ng-template [ngTemplateOutlet]=\"bpsRenderItem\" [ngTemplateOutletContext]=\"{ $implicit: item, index: index }\"></ng-template>\r\n      </ng-container>\r\n    </div>\r\n  </ng-template>\r\n  <div *ngIf=\"bpsHeader\" class=\"ant-list-header\">\r\n    <ng-container *nzStringTemplateOutlet=\"bpsHeader\">{{ bpsHeader }}</ng-container>\r\n  </div>\r\n  <nz-spin [nzSpinning]=\"bpsLoading\">\r\n    <ng-container *ngIf=\"bpsDataSource\">\r\n      <div *ngIf=\"bpsLoading && bpsDataSource.length === 0\" [style.min-height.px]=\"53\"></div>\r\n      <div *ngIf=\"bpsGrid; else itemsTpl\" nz-row [nzGutter]=\"bpsGrid.gutter\">\r\n        <div nz-col [nzSpan]=\"bpsGrid.span\" [nzXs]=\"bpsGrid.xs\" [nzSm]=\"bpsGrid.sm\" [nzMd]=\"bpsGrid.md\" [nzLg]=\"bpsGrid.lg\" [nzXl]=\"bpsGrid.xl\"\r\n             [nzXXl]=\"bpsGrid.xxl\" *ngFor=\"let item of bpsDataSource; let index = index\">\r\n          <ng-template [ngTemplateOutlet]=\"bpsRenderItem\" [ngTemplateOutletContext]=\"{ $implicit: item, index: index }\"></ng-template>\r\n        </div>\r\n      </div>\r\n      <div *ngIf=\"!bpsLoading && bpsDataSource.length === 0\" class=\"ant-list-empty-text\">\r\n        <nz-embed-empty [nzComponentName]=\"'list'\" [specificContent]=\"bpsNoResult\"></nz-embed-empty>\r\n      </div>\r\n    </ng-container>\r\n    <ng-content></ng-content>\r\n  </nz-spin>\r\n  <div *ngIf=\"bpsFooter\" class=\"ant-list-footer\">\r\n    <ng-container *nzStringTemplateOutlet=\"bpsFooter\">{{ bpsFooter }}</ng-container>\r\n  </div>\r\n  <ng-template [ngTemplateOutlet]=\"bpsLoadMore\"></ng-template>\r\n  <div *ngIf=\"bpsPagination\" class=\"ant-list-pagination\">\r\n    <ng-template [ngTemplateOutlet]=\"bpsPagination\"></ng-template>\r\n  </div>\r\n</ng-container>\n",
+            template: "<ng-container *ngIf=\"!bpsDisabled\">\r\n  <ng-template #itemsTpl>\r\n    <div class=\"ant-list-items\" *ngIf=\"bpsDataSource.length > 0\">\r\n      <ng-container *ngFor=\"let item of bpsDataSource; let index = index\">\r\n        <ng-template [ngTemplateOutlet]=\"bpsRenderItem\" [ngTemplateOutletContext]=\"{ $implicit: item, index: index }\"></ng-template>\r\n      </ng-container>\r\n    </div>\r\n  </ng-template>\r\n  <div *ngIf=\"bpsHeader\" class=\"ant-list-header\">\r\n    <ng-container *nzStringTemplateOutlet=\"bpsHeader\">{{ bpsHeader }}</ng-container>\r\n  </div>\r\n  <nz-spin [nzSpinning]=\"bpsLoading\">\r\n    <ng-container *ngIf=\"bpsDataSource\">\r\n      <div *ngIf=\"bpsLoading && bpsDataSource.length === 0\" [style.min-height.px]=\"53\"></div>\r\n      <div *ngIf=\"bpsGrid; else itemsTpl\" nz-row [nzGutter]=\"bpsGrid.gutter\">\r\n        <div nz-col [nzSpan]=\"bpsGrid.span\" [nzXs]=\"bpsGrid.xs\" [nzSm]=\"bpsGrid.sm\" [nzMd]=\"bpsGrid.md\" [nzLg]=\"bpsGrid.lg\" [nzXl]=\"bpsGrid.xl\"\r\n             [nzXXl]=\"bpsGrid.xxl\" *ngFor=\"let item of bpsDataSource; let index = index\">\r\n          <ng-template [ngTemplateOutlet]=\"bpsRenderItem\" [ngTemplateOutletContext]=\"{ $implicit: item, index: index }\"></ng-template>\r\n        </div>\r\n      </div>\r\n      <div *ngIf=\"!bpsLoading && bpsDataSource.length === 0\" class=\"ant-list-empty-text\">\r\n        <nz-embed-empty [nzComponentName]=\"'list'\" [specificContent]=\"bpsNoResult\"></nz-embed-empty>\r\n      </div>\r\n    </ng-container>\r\n    <ng-content></ng-content>\r\n  </nz-spin>\r\n  <div *ngIf=\"bpsFooter\" class=\"ant-list-footer\">\r\n    <ng-container *nzStringTemplateOutlet=\"bpsFooter\">{{ bpsFooter }}</ng-container>\r\n  </div>\r\n  <ng-template [ngTemplateOutlet]=\"bpsLoadMore\"></ng-template>\r\n  <div *ngIf=\"bpsPagination\" class=\"ant-list-pagination\">\r\n    <ng-template [ngTemplateOutlet]=\"bpsPagination\"></ng-template>\r\n  </div>\r\n</ng-container>\r\n",
             providers: [NzUpdateHostClassService],
             preserveWhitespaces: false,
             encapsulation: ViewEncapsulation.None,
             changeDetection: ChangeDetectionStrategy.OnPush,
-            styles: ["\n      bps-list,\n      bps-list nz-spin {\n        display: block;\n      }\n    ", ".ant-list-bordered{width:215px!important;max-width:215px!important;height:80px!important;max-height:80px!important;overflow-y:scroll!important;overflow-x:hidden!important;padding:5px!important;border-radius:4px!important;border:1px solid #474747!important}.ant-list-bordered .ant-list-item{width:200px!important;height:20px!important;border-radius:10px!important;font-size:11px!important;font-weight:300!important;font-stretch:normal!important;font-style:normal!important;line-height:1.36!important;letter-spacing:normal!important;text-align:left!important;color:#fff!important;margin-bottom:2px!important;padding:0 8px 2px 9px!important}.ant-list-bordered .ant-list-item:hover{cursor:pointer}.ant-list-bordered.bps-list-type-variation1 .ant-list-item{background-color:#005068!important}.ant-list-bordered.bps-list-type-variation2 .ant-list-item{background-color:#00a2d1!important}.ant-list-bordered.bps-list-type-variation3 .ant-list-item{background-color:#005681!important}.ant-list-bordered.bps-list-type-variation4 .ant-list-item{background-color:#06809f!important}.ant-list-bordered.bps-list-type-variation5 .ant-list-item{background-color:#445c67!important}.ant-list-bordered.bps-list-type-variation6 .ant-list-item{background-color:#778d98!important}.ant-list-split .ant-list-item{border-bottom:unset}.bps-delete-list-icon{position:relative;float:right;top:50%;transform:translateY(-50%)}.bps-list-item-content{position:relative;float:left;top:50%;width:calc(100% - 8px);max-width:calc(100% - 8px);overflow:hidden;text-overflow:ellipsis;transform:translateY(-50%);white-space:nowrap;padding-right:5px;margin-top:-4px}.ant-list-bordered .ant-list-item.bps-delete-icon-hovered{background-color:#bc0000!important}"]
+            styles: ["\n      bps-list,\n      bps-list nz-spin {\n        display: block;\n      }\n    ", ".ant-list-bordered{width:217px!important;max-width:217px!important;height:80px!important;max-height:80px!important;overflow-y:scroll!important;overflow-x:hidden!important;padding:5px!important;border-radius:4px!important;border:1px solid #474747!important}.ant-list-bordered .ant-list-item{width:200px!important;height:20px!important;border-radius:10px!important;font-size:11px!important;font-weight:300!important;font-stretch:normal!important;font-style:normal!important;line-height:1.36!important;letter-spacing:normal!important;text-align:left!important;color:#fff!important;margin-bottom:2px!important;padding:0 8px 2px 9px!important}.ant-list-bordered .ant-list-item:hover{cursor:pointer}.ant-list-bordered.bps-list-type-variation1 .ant-list-item{background-color:#005068!important}.ant-list-bordered.bps-list-type-variation2 .ant-list-item{background-color:#00a2d1!important}.ant-list-bordered.bps-list-type-variation3 .ant-list-item{background-color:#005681!important}.ant-list-bordered.bps-list-type-variation4 .ant-list-item{background-color:#06809f!important}.ant-list-bordered.bps-list-type-variation5 .ant-list-item{background-color:#445c67!important}.ant-list-bordered.bps-list-type-variation6 .ant-list-item{background-color:#778d98!important}.ant-list-split .ant-list-item{border-bottom:unset}.bps-delete-list-icon{position:relative;float:right;top:50%;transform:translateY(-50%)}.bps-list-item-content{position:relative;float:left;top:50%;width:calc(100% - 8px);max-width:calc(100% - 8px);overflow:hidden;text-overflow:ellipsis;transform:translateY(-50%);white-space:nowrap;padding-right:5px;margin-top:-4px}.ant-list-bordered .ant-list-item.bps-delete-icon-hovered{background-color:#bc0000!important}"]
         })
     ], BpsListComponent);
     return BpsListComponent;
@@ -4032,6 +4033,335 @@ var BpsListItemComponent = /** @class */ (function () {
     return BpsListItemComponent;
 }());
 
+var CeldType;
+(function (CeldType) {
+    CeldType[CeldType["Default"] = 0] = "Default";
+    CeldType[CeldType["TemplateRef"] = 1] = "TemplateRef";
+})(CeldType || (CeldType = {}));
+
+var BpsTableComponent = /** @class */ (function () {
+    function BpsTableComponent(cdr, i18n) {
+        this.cdr = cdr;
+        this.i18n = i18n;
+        this.locale = {}; // tslint:disable-line:no-any
+        this.destroy$ = new Subject();
+        this.checkboxCache = [];
+        this._data = [];
+        this.editId = null;
+        this.frontPagination = true;
+        this.total = 0;
+        this.pageIndex = 1;
+        this.pageSize = 10;
+        this.showPagination = true;
+        this.paginationPosition = 'bottom';
+        this.bordered = false;
+        this.widthConfig = [];
+        this.loading = false;
+        this.loadingDelay = 0;
+        this.scroll = { x: null, y: null };
+        this.pageSizeOptions = [10, 20, 30, 40, 50];
+        this.showQuickJumper = false;
+        this.showSizeChanger = false;
+        this.hideOnSinglePage = false;
+        this.simple = false;
+        this.virtualItemSize = 0;
+        this.virtualMaxBufferPx = 200;
+        this.virtualMinBufferPx = 100;
+        this.inlineEdit = false;
+        this.pageIndexChange = new EventEmitter();
+        this.currentPageDataChange = new EventEmitter();
+        this.queryParamsChange = new EventEmitter();
+        this.pageSizeChange = new EventEmitter();
+        this.onclickRow = new EventEmitter();
+        this.selectionChange = new EventEmitter();
+        /* Thead API */
+        this.singleSort = false;
+        this.sortChange = new EventEmitter();
+        this.configChange = new EventEmitter();
+        this.onedit = new EventEmitter();
+        this.clicks = 0;
+    }
+    Object.defineProperty(BpsTableComponent.prototype, "data", {
+        /* Table API */
+        // tslint:disable-next-line: no-input-rename
+        set: function (data) {
+            this._data = data;
+            this.updateCheckboxCache();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    BpsTableComponent.prototype.handleClick = function (e) {
+        if (this.editId && this.inputElement && this.inputElement.nativeElement !== e.target) {
+            this.emitOnEditEvent();
+            this.editId = null;
+        }
+    };
+    BpsTableComponent.prototype.emitOnEditEvent = function () {
+        var _this = this;
+        var editedEl = this._data.filter(function (el) { return el[_this.config.fieldId] === _this.editId; });
+        if (editedEl.length) {
+            this.onedit.emit(editedEl);
+        }
+    };
+    BpsTableComponent.prototype.endEditMode = function ($event, index, data) {
+        if (data === void 0) { data = null; }
+        if ($event.key === ('Enter' || 'enter')) {
+            this.emitOnEditEvent();
+            this.editId = null;
+        }
+    };
+    BpsTableComponent.prototype.preventDefault = function ($event) {
+        $event.preventDefault();
+        $event.stopImmediatePropagation();
+    };
+    BpsTableComponent.prototype.emitBpsEvent = function ($event, type) {
+        switch (type) {
+            case 'pageIndex':
+                this.pageIndexChange.emit($event);
+                break;
+            case 'currentPageData':
+                this.currentPageDataChange.emit($event);
+                break;
+            case 'queryParams':
+                this.queryParamsChange.emit($event);
+                break;
+            case 'pageSize':
+                this.pageSizeChange.emit($event);
+                break;
+            case 'sort':
+                this.sortChange.emit($event);
+                break;
+        }
+    };
+    BpsTableComponent.prototype.getFields = function () {
+        return this.config ? this.config.fields.filter(function (item) { return item.hidden === undefined || !item.hidden; }) : [];
+    };
+    BpsTableComponent.prototype.ngAfterViewInit = function () {
+        this.cdr.detectChanges();
+    };
+    BpsTableComponent.prototype.ngOnChanges = function (changes) {
+        if (changes.data && this.config) {
+            this.updateCheckboxCache();
+        }
+    };
+    BpsTableComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.i18n.localeChange.pipe(takeUntil(this.destroy$)).subscribe(function () {
+            _this.locale = _this.i18n.getLocaleData('Table');
+            _this.cdr.markForCheck();
+        });
+    };
+    BpsTableComponent.prototype.ngOnDestroy = function () {
+        this.destroy$.next();
+        this.destroy$.complete();
+    };
+    BpsTableComponent.prototype.isCeldTypeTemplateRef = function (field) {
+        return field.celdType === CeldType.TemplateRef;
+    };
+    BpsTableComponent.prototype.isCeldTypeDefault = function (field) {
+        return field.celdType === CeldType.Default;
+    };
+    BpsTableComponent.prototype.getTDClassMap = function (field, data, fi) {
+        var _a;
+        if (fi === void 0) { fi = 9999; }
+        return __assign(__assign({}, field.ngClass), (_a = {}, _a['bps-td-disabled'] = data.disabled, _a['bps-td-no-padding'] = data[this.config.fieldId] === this.editId, _a['bps-fst-column'] = !fi, _a));
+    };
+    BpsTableComponent.prototype.isRowSelected = function (data) {
+        var _this = this;
+        if (this.config) {
+            var dataSelected = this.checkboxCache.filter(function (item) { return item.selected; }).map(function (item) { return item.data[_this.config.fieldId]; });
+            return dataSelected.indexOf(data[this.config.fieldId]) !== -1;
+        }
+        return false;
+    };
+    BpsTableComponent.prototype.updateCheckboxCache = function () {
+        var _this = this;
+        this.checkboxCache.length = 0;
+        this._data.forEach(function (item) {
+            _this.checkboxCache.push({
+                selected: item.selected ? item.selected : false,
+                data: __assign({}, item)
+            });
+        });
+    };
+    BpsTableComponent.prototype.clickRow = function (event, data) {
+        var _this = this;
+        this.clicks++;
+        setTimeout(function () {
+            if (_this.clicks === 1) {
+                _this.selectRow(data);
+                event.preventDefault();
+                event.stopImmediatePropagation();
+            }
+            _this.clicks = 0;
+        }, 300);
+    };
+    BpsTableComponent.prototype.startEdit = function (data, event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (this.inlineEdit && !data.disabled) {
+            this.editId = data[this.config.fieldId];
+        }
+    };
+    BpsTableComponent.prototype.selectRow = function (data) {
+        var _this = this;
+        if (!data.disabled) {
+            this.onclickRow.emit(data);
+            this.checkboxCache.forEach(function (item) {
+                if (item.data[_this.config.fieldId] === data[_this.config.fieldId]) {
+                    item.selected = !item.selected;
+                    _this.selectionChange.emit(item);
+                }
+                else {
+                    item.selected = false;
+                }
+            });
+        }
+    };
+    BpsTableComponent.ctorParameters = function () { return [
+        { type: ChangeDetectorRef },
+        { type: NzI18nService }
+    ]; };
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "data", null);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsTableComponent.prototype, "frontPagination", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "total", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "pageIndex", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "pageSize", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsTableComponent.prototype, "showPagination", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "paginationPosition", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsTableComponent.prototype, "bordered", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "widthConfig", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsTableComponent.prototype, "loading", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "loadingDelay", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "loadingIndicator", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "scroll", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "title", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "footer", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "noResult", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "pageSizeOptions", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsTableComponent.prototype, "showQuickJumper", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsTableComponent.prototype, "showSizeChanger", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "showTotal", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsTableComponent.prototype, "hideOnSinglePage", void 0);
+    __decorate([
+        Input(), ViewChild('renderItemTemplate')
+    ], BpsTableComponent.prototype, "itemRender", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsTableComponent.prototype, "simple", void 0);
+    __decorate([
+        Input(), InputNumber()
+    ], BpsTableComponent.prototype, "virtualItemSize", void 0);
+    __decorate([
+        Input(), InputNumber()
+    ], BpsTableComponent.prototype, "virtualMaxBufferPx", void 0);
+    __decorate([
+        Input(), InputNumber()
+    ], BpsTableComponent.prototype, "virtualMinBufferPx", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "virtualForTrackBy", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsTableComponent.prototype, "inlineEdit", void 0);
+    __decorate([
+        Output()
+    ], BpsTableComponent.prototype, "pageIndexChange", void 0);
+    __decorate([
+        Output()
+    ], BpsTableComponent.prototype, "currentPageDataChange", void 0);
+    __decorate([
+        Output()
+    ], BpsTableComponent.prototype, "queryParamsChange", void 0);
+    __decorate([
+        Output()
+    ], BpsTableComponent.prototype, "pageSizeChange", void 0);
+    __decorate([
+        Output()
+    ], BpsTableComponent.prototype, "onclickRow", void 0);
+    __decorate([
+        Output()
+    ], BpsTableComponent.prototype, "selectionChange", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "singleSort", void 0);
+    __decorate([
+        Output()
+    ], BpsTableComponent.prototype, "sortChange", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "config", void 0);
+    __decorate([
+        Output()
+    ], BpsTableComponent.prototype, "configChange", void 0);
+    __decorate([
+        Input()
+    ], BpsTableComponent.prototype, "gridID", void 0);
+    __decorate([
+        Output()
+    ], BpsTableComponent.prototype, "onedit", void 0);
+    __decorate([
+        ViewChild(BpsInputDirective, { static: false, read: ElementRef })
+    ], BpsTableComponent.prototype, "inputElement", void 0);
+    __decorate([
+        HostListener('window:mouseup', ['$event'])
+    ], BpsTableComponent.prototype, "handleClick", null);
+    BpsTableComponent = __decorate([
+        Component({
+            // tslint:disable-next-line: component-selector
+            selector: 'bps-table',
+            exportAs: 'bpsTable',
+            template: "<div id=\"{{gridID}}\">\r\n  <nz-table #gridComponent\r\n            class=\"bps-table\"\r\n            [nzData]=\"_data\"\r\n            [nzFrontPagination]=\"frontPagination\"\r\n            [nzTotal]=\"total\"\r\n            [nzPageIndex]=\"pageIndex\"\r\n            [nzPageSize]=\"pageSize\"\r\n            [nzShowPagination]=\"showPagination\"\r\n            [nzPaginationPosition]=\"paginationPosition\"\r\n            [nzBordered]=\"bordered\"\r\n            [nzWidthConfig]=\"widthConfig\"\r\n            [nzLoading]=\"loading\"\r\n            [nzLoadingIndicator]=\"loadingIndicator\"\r\n            [nzLoadingDelay]=\"loadingDelay\"\r\n            [nzScroll]=\"scroll\"\r\n            [nzTitle]=\"title\"\r\n            [nzFooter]=\"footer\"\r\n            [nzNoResult]=\"noResult\"\r\n            [nzPageSizeOptions]=\"pageSizeOptions\"\r\n            [nzShowQuickJumper]=\"showQuickJumper\"\r\n            [nzShowSizeChanger]=\"showSizeChanger\"\r\n            [nzShowTotal]=\"showTotal\"\r\n            [nzHideOnSinglePage]=\"hideOnSinglePage\"\r\n            [nzItemRender]=\"itemRender\"\r\n            [nzSimple]=\"simple\"\r\n            [nzVirtualItemSize]=\"virtualItemSize\"\r\n            [nzVirtualMaxBufferPx]=\"virtualMaxBufferPx\"\r\n            [nzVirtualMinBufferPx]=\"virtualMinBufferPx\"\r\n            [nzVirtualForTrackBy]=\"virtualForTrackBy\"\r\n            (nzPageIndexChange)=\"emitBpsEvent($event, 'pageIndex')\"\r\n            (nzCurrentPageDataChange)=\"emitBpsEvent($event, 'currentPageData')\"\r\n            (nzQueryParams)=\"emitBpsEvent($event, 'queryParams')\"\r\n            (nzPageSizeChange)=\"emitBpsEvent($event, 'pageSize')\">\r\n    <thead (nzSortChange)=\"emitBpsEvent($event, 'sort')\"\r\n           [nzSingleSort]=\"singleSort\">\r\n      <tr>\r\n        <th *ngFor=\"let field of getFields()\"\r\n            [ngClass]=\"field.ngClass\"\r\n            [nzWidth]=\"field.width\">\r\n          <ng-container *ngIf=\"field.template; else cellValue\">\r\n            <ng-container *ngTemplateOutlet=\"field.template.ref; context: field.template.context\"></ng-container>\r\n          </ng-container>\r\n          <ng-template #cellValue>{{field.display}}</ng-template>\r\n        </th>\r\n      </tr>\r\n    </thead>\r\n\r\n    <tbody>\r\n      <tr *ngFor=\"let data of gridComponent.data; index as i\"\r\n          [class.ant-table-selected-row]=\"isRowSelected(data)\"\r\n          (click)=\"clickRow($event, data)\"\r\n          [class.bps-table-pair-row]=\"!(i % 2)\">\r\n       \r\n        <td *ngFor=\"let field of getFields(); index as fi\"\r\n            [ngClass]=\"getTDClassMap(field, data, fi)\">\r\n            <ng-container *ngIf=\"isCeldTypeTemplateRef(field)\">\r\n              <ng-container *ngIf=\"data[field.property]\">\r\n                <ng-container *ngTemplateOutlet=\"data[field.property].ref; context: data[field.property].context\"></ng-container>\r\n              </ng-container>\r\n            </ng-container>\r\n\r\n            <ng-container *ngIf=\"isCeldTypeDefault(field)\">\r\n              <ng-container *ngIf=\"editId !== data[config.fieldId]; else editTpl\">\r\n                <div (dblclick)=\"startEdit(data, $event)\">\r\n                  {{ data[field.property] }}\r\n                </div>\r\n              </ng-container>\r\n              <ng-template #editTpl>\r\n                <input bps-input [(ngModel)]=\"data[field.property]\"\r\n                       class=\"bps-editable-cell-input\"\r\n                       (click)=\"preventDefault($event)\"\r\n                       (keyup)=\"endEditMode($event, i, data)\" />\r\n              </ng-template>\r\n              \r\n            </ng-container>\r\n        </td>\r\n      </tr>\r\n    </tbody>\r\n  </nz-table>\r\n</div>\r\n",
+            styles: ["::ng-deep .bps-table .ant-table-tbody>tr>td,::ng-deep .bps-table .ant-table-thead>tr>th{padding:unset;font-size:12px;font-weight:400!important;font-stretch:normal!important;font-style:normal!important;line-height:1.33;letter-spacing:normal!important;text-align:left;color:#fff!important;background-color:#262626!important}::ng-deep .bps-table .ant-table-tbody>tr>td{padding:5px;border-bottom:none!important;border-right:1px solid #363636!important}::ng-deep .bps-table .ant-table-tbody>tr>td.bps-td-disabled{color:#666!important}::ng-deep .bps-table .ant-table-thead>tr:first-child>th:first-child{padding-left:20px!important}::ng-deep .bps-table .ant-table-tbody>tr>td:last-child{border-right:unset!important}::ng-deep .bps-table .ant-table-thead>tr>th{padding:9px;border-bottom:none!important;border-top:1px solid #363636!important;border-radius:0!important}::ng-deep .ant-table-tbody>tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)>td{background:#313b3f!important}::ng-deep .bps-table .ant-table-tbody>tr.bps-table-pair-row>td{background-color:#313131!important}::ng-deep .bps-table .ant-table-body{background-color:#363636!important}::ng-deep .bps-table .ant-table-body::-webkit-scrollbar{width:8px!important;height:8px!important}::ng-deep .bps-table .ant-table-body::-webkit-scrollbar-track{background-color:#262626!important}::ng-deep .bps-table .ant-table-body::-webkit-scrollbar-thumb{background-color:#363636!important;border-radius:10px!important;border:2px solid #262626!important;background-clip:padding-box!important}::ng-deep .bps-table .ant-table-body::-webkit-scrollbar-thumb:hover{background-color:#363636!important;border-radius:10px!important}::ng-deep .bps-table .ant-table-body::-webkit-scrollbar-corner{background-color:#262626!important}::ng-deep .bps-table .ant-table-header.ant-table-hide-scrollbar{margin-bottom:-14px!important;background-color:#262626!important}::ng-deep .bps-table .ant-table-tbody>tr.ant-table-selected-row>td{background-color:#445c67!important}.bps-fst-column{padding-left:20px!important}.bps-editable-cell-input{border-radius:0!important;border-color:#00a2d1!important;padding-left:18px!important}.bps-td-no-padding{padding:0!important}"]
+        })
+        // tslint:disable-next-line no-any
+    ], BpsTableComponent);
+    return BpsTableComponent;
+}());
+
 var ɵ0 = en_US;
 var BpsComponentsLibModule = /** @class */ (function () {
     function BpsComponentsLibModule() {
@@ -4039,6 +4369,7 @@ var BpsComponentsLibModule = /** @class */ (function () {
     BpsComponentsLibModule = __decorate([
         NgModule({
             declarations: [
+                BpsTableComponent,
                 BpsListComponent,
                 BpsListItemComponent,
                 BpsListItemMetaComponent,
@@ -4094,9 +4425,11 @@ var BpsComponentsLibModule = /** @class */ (function () {
                 NzWaveModule,
                 NzSpinModule,
                 NzGridModule,
-                NzAvatarModule
+                NzAvatarModule,
+                NzTableModule
             ],
             exports: [
+                BpsTableComponent,
                 BpsListComponent,
                 BpsListItemComponent,
                 BpsListItemMetaComponent,
@@ -4158,5 +4491,5 @@ var BpsComponentsLibModule = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { BpsAutosizeDirective, BpsButtonComponent, BpsButtonGroupComponent, BpsCheckboxComponent, BpsCheckboxGroupComponent, BpsCheckboxWrapperComponent, BpsCollapseComponent, BpsCollapsePanelComponent, BpsComponentsLibComponent, BpsComponentsLibModule, BpsComponentsLibService, BpsFilterGroupOptionPipe, BpsFilterOptionPipe, BpsFormControlComponent, BpsFormDirective, BpsFormExplainComponent, BpsFormExtraComponent, BpsFormItemComponent, BpsFormLabelComponent, BpsFormSplitComponent, BpsFormTextComponent, BpsInputDirective, BpsInputGroupComponent, BpsListComponent, BpsListItemComponent, BpsListItemMetaComponent, BpsOptionComponent, BpsOptionContainerComponent, BpsOptionGroupComponent, BpsOptionLiComponent, BpsPopoverComponent, BpsPopoverDirective, BpsRadioButtonComponent, BpsRadioComponent, BpsRadioGroupComponent, BpsSelectComponent, BpsSelectService, BpsSelectTopControlComponent, BpsSelectUnselectableDirective, BpsSwitchComponent, BpsToolTipComponent, BpsTooltipDirective, defaultFilterOption, isAutoSizeType, ɵ0, NzTooltipBaseDirective as ɵa };
+export { BpsAutosizeDirective, BpsButtonComponent, BpsButtonGroupComponent, BpsCheckboxComponent, BpsCheckboxGroupComponent, BpsCheckboxWrapperComponent, BpsCollapseComponent, BpsCollapsePanelComponent, BpsComponentsLibComponent, BpsComponentsLibModule, BpsComponentsLibService, BpsFilterGroupOptionPipe, BpsFilterOptionPipe, BpsFormControlComponent, BpsFormDirective, BpsFormExplainComponent, BpsFormExtraComponent, BpsFormItemComponent, BpsFormLabelComponent, BpsFormSplitComponent, BpsFormTextComponent, BpsInputDirective, BpsInputGroupComponent, BpsListComponent, BpsListItemComponent, BpsListItemMetaComponent, BpsOptionComponent, BpsOptionContainerComponent, BpsOptionGroupComponent, BpsOptionLiComponent, BpsPopoverComponent, BpsPopoverDirective, BpsRadioButtonComponent, BpsRadioComponent, BpsRadioGroupComponent, BpsSelectComponent, BpsSelectService, BpsSelectTopControlComponent, BpsSelectUnselectableDirective, BpsSwitchComponent, BpsTableComponent, BpsToolTipComponent, BpsTooltipDirective, defaultFilterOption, isAutoSizeType, ɵ0, NzTooltipBaseDirective as ɵa };
 //# sourceMappingURL=bps-components-lib.js.map

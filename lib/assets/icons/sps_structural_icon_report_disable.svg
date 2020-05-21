@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="prefix__sps_structural_icon_report_disable" width="18.261" height="18.261" viewBox="0 0 18.261 18.261">
+    <defs>
+        <style>
+            .prefix__cls-1{fill:#666}.prefix__cls-4{stroke:none}
+        </style>
+    </defs>
+    <g id="prefix__Group_363" data-name="Group 363" transform="translate(6.311 2.663)">
+        <circle id="prefix__Ellipse_52" cx=".95" cy=".95" r=".95" class="prefix__cls-1" data-name="Ellipse 52" transform="translate(0 9.13)"/>
+        <circle id="prefix__Ellipse_58" cx=".95" cy=".95" r=".95" class="prefix__cls-1" data-name="Ellipse 58"/>
+        <circle id="prefix__Ellipse_54" cx=".95" cy=".95" r=".95" class="prefix__cls-1" data-name="Ellipse 54" transform="translate(3.682 10.766)"/>
+        <circle id="prefix__Ellipse_59" cx=".95" cy=".95" r=".95" class="prefix__cls-1" data-name="Ellipse 59" transform="translate(3.682 2.016)"/>
+        <g id="prefix__Path_166" data-name="Path 166" style="fill:none">
+            <path d="M0 0l4 1.926v9.511L0 9.511z" class="prefix__cls-4" transform="translate(.754 .876)"/>
+            <path d="M1 1.591v7.291l2 .963V2.554l-2-.963M0 0l4 1.926v9.51L0 9.511V0z" style="stroke:none;fill:#666" transform="translate(.754 .876)"/>
+        </g>
+    </g>
+    <g id="prefix__Ellipse_98" data-name="Ellipse 98" style="stroke:#666;fill:none">
+        <ellipse cx="9.131" cy="9.13" class="prefix__cls-4" rx="9.131" ry="9.13"/>
+        <ellipse cx="9.131" cy="9.13" rx="8.631" ry="8.63" style="fill:none"/>
+    </g>
+</svg>

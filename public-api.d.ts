@@ -39,3 +39,4 @@ export * from './lib/components/bps-tooltip/bps-tooltip.directive';
 export * from './lib/components/bps-list/bps-list-item-meta.component';
 export * from './lib/components/bps-list/bps-list-item.component';
 export * from './lib/components/bps-list/bps-list.component';
+export * from './lib/components/bps-table/bps-table.component';

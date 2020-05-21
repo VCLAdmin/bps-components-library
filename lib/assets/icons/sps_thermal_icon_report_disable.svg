@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="prefix__sps_thermal_icon_report_disable" width="18.261" height="18.261" viewBox="0 0 18.261 18.261">
+    <defs>
+        <style>
+            .prefix__cls-1{fill:#666}.prefix__cls-2{fill:none;stroke:#666;stroke-linecap:round}
+        </style>
+    </defs>
+    <g id="prefix__Group_362" data-name="Group 362" transform="translate(4.336 6.848)">
+        <g id="prefix__Group_360" data-name="Group 360" transform="rotate(90 4.777 4.778)">
+            <circle id="prefix__Ellipse_61" cx=".95" cy=".95" r=".95" class="prefix__cls-1" data-name="Ellipse 61" transform="translate(.38 7.609)"/>
+            <circle id="prefix__Ellipse_62" cx=".95" cy=".95" r=".95" class="prefix__cls-1" data-name="Ellipse 62"/>
+            <path id="prefix__Path_167" d="M.836 7.381S-.852 4.812.569 3.742.128 0 .128 0" class="prefix__cls-2" data-name="Path 167" transform="translate(.495 .95)"/>
+        </g>
+        <g id="prefix__Group_361" data-name="Group 361" transform="rotate(90 3.37 6.139)">
+            <circle id="prefix__Ellipse_61-2" cx=".95" cy=".95" r=".95" class="prefix__cls-1" data-name="Ellipse 61" transform="translate(.38 7.609)"/>
+            <circle id="prefix__Ellipse_62-2" cx=".95" cy=".95" r=".95" class="prefix__cls-1" data-name="Ellipse 62"/>
+            <path id="prefix__Path_167-2" d="M.836 7.381S-.852 4.812.569 3.742.128 0 .128 0" class="prefix__cls-2" data-name="Path 167" transform="translate(.495 .95)"/>
+        </g>
+    </g>
+    <g id="prefix__Ellipse_98" data-name="Ellipse 98" style="stroke:#666;fill:none">
+        <ellipse cx="9.131" cy="9.13" rx="9.131" ry="9.13" style="stroke:none"/>
+        <ellipse cx="9.131" cy="9.13" rx="8.631" ry="8.63" style="fill:none"/>
+    </g>
+</svg>

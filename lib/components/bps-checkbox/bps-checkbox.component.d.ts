@@ -2,7 +2,7 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 import { AfterViewInit, ChangeDetectorRef, ElementRef, EventEmitter, OnChanges, OnDestroy, OnInit, Renderer2, SimpleChanges } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 import { BpsCheckboxWrapperComponent } from './bps-checkbox-wrapper.component';
-export declare type BpsCheckboxType = 'variation1' | 'variation2';
+export declare type BpsCheckboxType = 'variation1' | 'variation2' | 'variation3';
 export declare class BpsCheckboxComponent implements OnInit, ControlValueAccessor, OnChanges, AfterViewInit, OnDestroy {
     private elementRef;
     private renderer;
