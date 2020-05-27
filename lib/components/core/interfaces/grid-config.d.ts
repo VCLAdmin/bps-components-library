@@ -13,10 +13,12 @@ export interface Field {
     minWidth?: string;
     ngClass?: any;
     hidden?: boolean;
+    expandable?: boolean;
     select?: TableSelectConfig;
     sortOrder?: string | null;
     editTemplate?: TemplateType;
     showSort?: boolean;
+    showCustomFilter?: boolean;
     dateFormat?: string;
     readonly?: boolean;
     default?: any;

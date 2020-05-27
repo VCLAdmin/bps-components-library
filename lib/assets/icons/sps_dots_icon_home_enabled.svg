@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="13" height="3" viewBox="0 0 13 3">
+    <defs>
+        <style>
+            .prefix__cls-1{fill:#999}
+        </style>
+    </defs>
+    <g id="prefix__sps_dots_icon_home_enabled" transform="translate(-1223 -375)">
+        <circle id="prefix__Ellipse_538" cx="1.5" cy="1.5" r="1.5" class="prefix__cls-1" data-name="Ellipse 538" transform="translate(1223 375)"/>
+        <circle id="prefix__Ellipse_539" cx="1.5" cy="1.5" r="1.5" class="prefix__cls-1" data-name="Ellipse 539" transform="translate(1228 375)"/>
+        <circle id="prefix__Ellipse_540" cx="1.5" cy="1.5" r="1.5" class="prefix__cls-1" data-name="Ellipse 540" transform="translate(1233 375)"/>
+    </g>
+</svg>

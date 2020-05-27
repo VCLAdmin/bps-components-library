@@ -1,14 +1,21 @@
 import { ChangeDetectorRef, EventEmitter, OnDestroy, OnInit, AfterViewInit, TemplateRef, TrackByFunction, OnChanges, SimpleChanges, ElementRef } from '@angular/core';
 import { NzI18nService } from 'ng-zorro-antd/i18n';
 import { TableConfig, Field } from '../core/interfaces/grid-config';
+export declare type BpsTableType = 'report' | 'home' | 'glass_profile';
 export declare class BpsTableComponent<T = any> implements OnInit, OnDestroy, AfterViewInit, OnChanges {
     private cdr;
     private i18n;
     locale: any;
     private destroy$;
     checkboxCache: CheckboxSelect[];
+    mapOfExpandData: {
+        [key: string]: boolean;
+    };
     _data: any[];
     editId: any;
+    isExpanded: boolean;
+    searchBoxHovered: boolean;
+    private _searchSubject;
     set data(data: any);
     frontPagination: boolean;
     total: number;
@@ -53,15 +60,30 @@ export declare class BpsTableComponent<T = any> implements OnInit, OnDestroy, Af
     config: TableConfig;
     configChange: EventEmitter<TableConfig>;
     gridID: string;
+    filterPlaceholder: string;
     onedit: EventEmitter<any>;
+    tableType: BpsTableType;
+    expandable: boolean;
+    searchValueChange: EventEmitter<string>;
+    moreBtnClicked: EventEmitter<string>;
+    deleteBtnClicked: EventEmitter<string>;
+    moreMenu: TemplateRef<any>;
+    deleteMenu: TemplateRef<any>;
+    rowExpandTemplate: TemplateRef<any>;
     inputElement: ElementRef;
     handleClick(e: MouseEvent): void;
+    sort(sort: {
+        key: string;
+        value: string;
+    }): void;
     emitOnEditEvent(): void;
     endEditMode($event: KeyboardEvent, index: number, data?: any): void;
     preventDefault($event: MouseEvent): void;
     emitBpsEvent($event: any, type: string): void;
     getFields(): Field[];
     constructor(cdr: ChangeDetectorRef, i18n: NzI18nService);
+    private _setSearchSubscription;
+    updateSearch(searchTextValue: string): void;
     ngAfterViewInit(): void;
     ngOnChanges(changes: SimpleChanges): void;
     ngOnInit(): void;
