@@ -2,7 +2,7 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 import { AfterViewInit, ChangeDetectorRef, ElementRef, OnChanges, OnDestroy, Renderer2, SimpleChanges } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 import { Subject } from 'rxjs';
-export declare type BpsRadioButtonType = 'variation1' | 'variation2' | 'variation3' | 'variation5' | 'variation6' | 'variation7' | 'variation8a' | 'variation8b' | 'variation8c' | 'variation8d' | 'variation8e' | 'variation9';
+export declare type BpsRadioButtonType = 'variation1' | 'variation2' | 'variation3' | 'variation5' | 'variation6' | 'variation7' | 'variation8a' | 'variation8b' | 'variation8c' | 'variation8d' | 'variation8e' | 'variation9' | 'variation10' | 'variation11' | 'variation12';
 export declare class BpsRadioComponent implements ControlValueAccessor, AfterViewInit, OnChanges, OnDestroy {
     private elementRef;
     private renderer;
