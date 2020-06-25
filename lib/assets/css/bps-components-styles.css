@@ -203,3 +203,7 @@
   border-radius: 10px;
 }
 
+.bps-cmacs-custom-scrollbar::-webkit-scrollbar-corner {
+  background-color: #262626 !important;
+}
+
