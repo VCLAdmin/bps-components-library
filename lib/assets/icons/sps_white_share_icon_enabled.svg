@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16.356" height="17.83" viewBox="0 0 16.356 17.83">
+    <defs>
+        <style>
+            .prefix__cls-1,.prefix__cls-3{fill:none}.prefix__cls-1{stroke:#fff}.prefix__cls-2{stroke:none}
+        </style>
+    </defs>
+    <g id="prefix__sps_white_share_icon_enabled" transform="translate(-1097.339 -538.087)">
+        <g id="prefix__Group_5327" data-name="Group 5327" transform="translate(-14 478.005)">
+            <g id="prefix__Group_5325" data-name="Group 5325" transform="rotate(-30 1113.123 69.756)">
+                <g id="prefix__Group_5320" data-name="Group 5320" transform="rotate(-30 1086.139 37.796)">
+                    <g id="prefix__Ellipse_617" class="prefix__cls-1" data-name="Ellipse 617" transform="rotate(30 404.133 2079.883)">
+                        <circle cx="2.5" cy="2.5" r="2.5" class="prefix__cls-2"/>
+                        <circle cx="2.5" cy="2.5" r="2" class="prefix__cls-3"/>
+                    </g>
+                    <g id="prefix__Ellipse_621" class="prefix__cls-1" data-name="Ellipse 621" transform="rotate(30 398.633 2100.409)">
+                        <circle cx="2.5" cy="2.5" r="2.5" class="prefix__cls-2"/>
+                        <circle cx="2.5" cy="2.5" r="2" class="prefix__cls-3"/>
+                    </g>
+                    <path id="prefix__Path_1814" d="M1096.688 81.072l6 3.5" class="prefix__cls-1" data-name="Path 1814"/>
+                </g>
+            </g>
+            <g id="prefix__Group_5326" data-name="Group 5326" transform="rotate(30 1116.546 69.156)">
+                <g id="prefix__Group_5320-2" data-name="Group 5320" transform="rotate(-30 1086.139 37.796)">
+                    <g id="prefix__Ellipse_617-2" class="prefix__cls-1" data-name="Ellipse 617" transform="rotate(30 404.133 2079.883)">
+                        <circle cx="2.5" cy="2.5" r="2.5" class="prefix__cls-2"/>
+                        <circle cx="2.5" cy="2.5" r="2" class="prefix__cls-3"/>
+                    </g>
+                    <g id="prefix__Ellipse_621-2" class="prefix__cls-1" data-name="Ellipse 621" transform="rotate(30 398.633 2100.409)">
+                        <circle cx="2.5" cy="2.5" r="2.5" class="prefix__cls-2"/>
+                        <circle cx="2.5" cy="2.5" r="2" class="prefix__cls-3"/>
+                    </g>
+                    <path id="prefix__Path_1814-2" d="M1096.688 81.072l6 3.5" class="prefix__cls-1" data-name="Path 1814"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

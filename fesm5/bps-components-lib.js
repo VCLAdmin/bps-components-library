@@ -1,17 +1,17 @@
 import { __decorate, __read, __spread, __param, __extends, __assign } from 'tslib';
-import { ɵɵdefineInjectable, Injectable, Component, Renderer2, ElementRef, Input, Directive, NgZone, ContentChildren, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, TemplateRef, Pipe, ChangeDetectorRef, EventEmitter, ViewChildren, Output, Host, Optional, forwardRef, ContentChild, Inject, HostBinding, HostListener, ViewContainerRef, ComponentFactoryResolver, NgModule } from '@angular/core';
-import { NzTooltipBaseComponentLegacy as NzTooltipBaseComponentLegacy$1, NzTableComponent, InputBoolean as InputBoolean$1, en_US, NgZorroAntdModule, NzNoAnimationModule, NzToolTipModule, NzOverlayModule, NzSpinModule, NzGridModule, NzAvatarModule, NzTableModule, NZ_I18N } from 'ng-zorro-antd';
+import { ɵɵdefineInjectable, Injectable, Component, Renderer2, ElementRef, Input, Directive, NgZone, ContentChildren, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, TemplateRef, Pipe, ChangeDetectorRef, EventEmitter, ViewChildren, Output, Host, Optional, forwardRef, ContentChild, Inject, HostBinding, HostListener, ViewContainerRef, ComponentFactoryResolver, Self, Injector, NgModule } from '@angular/core';
+import { NzTooltipBaseComponentLegacy as NzTooltipBaseComponentLegacy$1, NzTableComponent, InputBoolean as InputBoolean$1, NzMenuDropdownService, en_US, NgZorroAntdModule, NzNoAnimationModule, NzToolTipModule, NzOverlayModule, NzSpinModule, NzGridModule, NzAvatarModule, NzTableModule, NZ_I18N } from 'ng-zorro-antd';
 import { CommonModule } from '@angular/common';
-import { CdkOverlayOrigin, CdkConnectedOverlay, OverlayModule } from '@angular/cdk/overlay';
-import { InputBoolean, NzDomEventService, isNotNil, isNil, NzNoAnimationDirective, zoomMotion, toBoolean, slideMotion, warnDeprecation, helpMotion, NzUpdateHostClassService, NzConfigService, WithConfig, NzWaveDirective, isEmpty, findFirstNotEmptyNode, findLastNotEmptyNode, NZ_WAVE_GLOBAL_CONFIG, collapseMotion, zoomBigMotion, InputNumber, NzAddOnModule, NzWaveModule } from 'ng-zorro-antd/core';
+import { CdkOverlayOrigin, CdkConnectedOverlay, OverlayConfig, Overlay, OverlayModule } from '@angular/cdk/overlay';
+import { InputBoolean, NzDomEventService, isNotNil, isNil, NzNoAnimationDirective, zoomMotion, toBoolean, slideMotion, warnDeprecation, helpMotion, NzUpdateHostClassService, NzConfigService, WithConfig, NzWaveDirective, isEmpty, findFirstNotEmptyNode, findLastNotEmptyNode, NZ_WAVE_GLOBAL_CONFIG, collapseMotion, zoomBigMotion, InputNumber, NzDropdownHigherOrderServiceToken, DEFAULT_DROPDOWN_POSITIONS, POSITION_MAP, NzAddOnModule, NzWaveModule } from 'ng-zorro-antd/core';
 import { NzIconDirective, NzIconModule } from 'ng-zorro-antd/icon';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NG_VALUE_ACCESSOR, FormControl, NgModel, FormControlName, FormControlDirective, NgControl, FormsModule } from '@angular/forms';
 import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
 import { Platform } from '@angular/cdk/platform';
 import { Subject, BehaviorSubject, ReplaySubject, combineLatest, merge, fromEvent, EMPTY, Subscription } from 'rxjs';
-import { takeUntil, finalize, distinctUntilChanged, map, filter, skip, share, tap, pairwise, startWith, flatMap, debounceTime } from 'rxjs/operators';
-import { TAB, SPACE, BACKSPACE, ENTER, DOWN_ARROW, UP_ARROW, LEFT_ARROW, RIGHT_ARROW } from '@angular/cdk/keycodes';
+import { takeUntil, finalize, distinctUntilChanged, map, filter, skip, share, tap, pairwise, startWith, flatMap, debounceTime, mapTo } from 'rxjs/operators';
+import { TAB, SPACE, BACKSPACE, ENTER, DOWN_ARROW, UP_ARROW, LEFT_ARROW, RIGHT_ARROW, ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
 import { NzRowDirective, NzColDirective } from 'ng-zorro-antd/grid';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { ANIMATION_MODULE_TYPE } from '@angular/platform-browser/animations';
@@ -19,6 +19,7 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 import { NzTooltipBaseComponentLegacy, NzToolTipComponent } from 'ng-zorro-antd/tooltip';
 import { NzI18nService } from 'ng-zorro-antd/i18n';
 import { NzResizableModule } from 'ng-zorro-antd/resizable';
+import { TemplatePortal } from '@angular/cdk/portal';
 
 var BpsComponentsLibService = /** @class */ (function () {
     function BpsComponentsLibService() {
@@ -4525,7 +4526,7 @@ var BpsTableComponent = /** @class */ (function () {
             // tslint:disable-next-line: component-selector
             selector: 'bps-table',
             exportAs: 'bpsTable',
-            template: "<div id=\"{{gridID}}\"\r\n     class=\"bps-table-{{tableType}}\">\r\n  <input bps-input\r\n         *ngIf=\"tableType === 'glass_profile'\"\r\n         class=\"bps-table-glass-filter\"\r\n         [placeholder]=\"filterPlaceholder\"\r\n         (click)=\"preventDefault($event)\"\r\n         (keyup)=\"updateSearch($event.target.value)\">\r\n  <nz-table #gridComponent\r\n            class=\"bps-table\"\r\n            [nzData]=\"_data\"\r\n            [nzFrontPagination]=\"frontPagination\"\r\n            [nzTotal]=\"total\"\r\n            [nzPageIndex]=\"pageIndex\"\r\n            [nzPageSize]=\"pageSize\"\r\n            [nzShowPagination]=\"showPagination\"\r\n            [nzPaginationPosition]=\"paginationPosition\"\r\n            [nzBordered]=\"bordered\"\r\n            [nzWidthConfig]=\"widthConfig\"\r\n            [nzLoading]=\"loading\"\r\n            [nzLoadingIndicator]=\"loadingIndicator\"\r\n            [nzLoadingDelay]=\"loadingDelay\"\r\n            [nzScroll]=\"scroll\"\r\n            [nzTitle]=\"title\"\r\n            [nzFooter]=\"footer\"\r\n            [nzNoResult]=\"noResult\"\r\n            [nzPageSizeOptions]=\"pageSizeOptions\"\r\n            [nzShowQuickJumper]=\"showQuickJumper\"\r\n            [nzShowSizeChanger]=\"showSizeChanger\"\r\n            [nzShowTotal]=\"showTotal\"\r\n            [nzHideOnSinglePage]=\"hideOnSinglePage\"\r\n            [nzSimple]=\"simple\"\r\n            [nzVirtualItemSize]=\"virtualItemSize\"\r\n            [nzVirtualMaxBufferPx]=\"virtualMaxBufferPx\"\r\n            [nzVirtualMinBufferPx]=\"virtualMinBufferPx\"\r\n            [nzVirtualForTrackBy]=\"virtualForTrackBy\"\r\n            (nzPageIndexChange)=\"emitBpsEvent($event, 'pageIndex')\"\r\n            (nzCurrentPageDataChange)=\"emitBpsEvent($event, 'currentPageData')\"\r\n            (nzQueryParams)=\"emitBpsEvent($event, 'queryParams')\"\r\n            (nzPageSizeChange)=\"emitBpsEvent($event, 'pageSize')\">\r\n    <thead (nzSortChange)=\"sort($event)\"\r\n           [nzSingleSort]=\"singleSort\">\r\n      <tr>\r\n\r\n        <th *ngIf=\"expandable\"\r\n            [nzWidth]=\"'40px'\"\r\n            nzShowExpand>\r\n        </th>\r\n\r\n        <th *ngFor=\"let field of getFields(); index as th\"\r\n            [ngClass]=\"field.ngClass\"\r\n            [class.bps-column-disabled]=\"field.disabled\"\r\n            [nzShowSort]=\"field.showSort\"\r\n            [nzSortKey]=\"field.property\"\r\n            nzCustomFilter\r\n            [nzWidth]=\"field.width\">\r\n          <ng-container *ngIf=\"field.template; else cellValue\">\r\n            <ng-container *ngTemplateOutlet=\"field.template.ref; context: field.template.context\"></ng-container>\r\n          </ng-container>\r\n          <ng-template #cellValue>{{field.display}}</ng-template>\r\n\r\n          <ng-container *ngIf=\"field.showCustomFilter\">\r\n            <ng-container [ngTemplateOutlet]=\"customFilter\"></ng-container>\r\n          </ng-container>\r\n        </th>\r\n\r\n        <th *ngIf=\"tableType === 'home'\"\r\n            [nzWidth]=\"'70px'\">\r\n        </th>\r\n      </tr>\r\n    </thead>\r\n\r\n    <tbody>\r\n      <ng-template ngFor let-data [ngForOf]=\"gridComponent.data\" let-i=\"index\">\r\n        <tr [class.ant-table-selected-row]=\"isRowSelected(data)\"\r\n            [class.bps-table4-custom-row]=\"data.bpsTable4CustomRow\"\r\n            (click)=\"clickRow($event, data)\"\r\n            [class.bps-table-pair-row]=\"tableType === 'report' && !(i % 2)\">\r\n\r\n          <ng-container *ngIf=\"expandable\">\r\n            <td nzShowExpand\r\n                [(nzExpand)]=\"mapOfExpandData[data[config.fieldId]]\"></td>\r\n          </ng-container>\r\n\r\n          <td *ngFor=\"let field of getFields(); index as fi\"\r\n              [ngClass]=\"getTDClassMap(field, data, fi)\">\r\n\r\n            <ng-container *ngIf=\"isCeldTypeTemplateRef(field)\">\r\n              <ng-container *ngIf=\"data[field.property]\">\r\n                <ng-container *ngTemplateOutlet=\"data[field.property].ref; context: data[field.property].context\"></ng-container>\r\n              </ng-container>\r\n            </ng-container>\r\n\r\n            <ng-container *ngIf=\"isCeldTypeDefault(field)\">\r\n              <ng-container *ngIf=\"editId !== data[config.fieldId]; else editTpl\">\r\n                <div (dblclick)=\"startEdit(data, $event)\">\r\n                  {{ data[field.property] }}\r\n                </div>\r\n              </ng-container>\r\n              <ng-template #editTpl>\r\n                <input bps-input [(ngModel)]=\"data[field.property]\"\r\n                       class=\"bps-editable-cell-input\"\r\n                       (click)=\"preventDefault($event)\"\r\n                       (keyup)=\"endEditMode($event, i, data)\" />\r\n              </ng-template>\r\n\r\n            </ng-container>\r\n          </td>\r\n\r\n          <td *ngIf=\"tableType === 'home'\">\r\n            <i class=\"bps-table-home-more-icon\"\r\n               nz-dropdown\r\n               (click)=\"emitBpsEvent(data, 'moreBtnClicked')\"\r\n               [nzDropdownMenu]=\"moreMenu\"\r\n               nzTrigger=\"click\"\r\n               nzPlacement=\"rightTop\"></i>\r\n            <i class=\"bps-table-home-delete-icon\"\r\n               nz-dropdown\r\n               (click)=\"emitBpsEvent(data, 'deleteBtnClicked')\"\r\n               [nzDropdownMenu]=\"deleteMenu\"\r\n               nzTrigger=\"click\"\r\n               nzPlacement=\"rightTop\"></i>\r\n          </td>\r\n\r\n        </tr>\r\n\r\n        <ng-container *ngIf=\"expandable\">\r\n          <tr [nzExpand]=\"mapOfExpandData[data[config.fieldId]]\">\r\n            <td [attr.colspan]=\"getFields().length + 2\">\r\n              <ng-container [ngTemplateOutlet]=\"rowExpandTemplate\" [ngTemplateOutletContext]=\"{data: data, index: i}\"></ng-container>\r\n            </td>\r\n          </tr>\r\n        </ng-container>\r\n      </ng-template>\r\n\r\n    </tbody>\r\n  </nz-table>\r\n</div>\r\n\r\n<ng-template #customFilter>\r\n  <div class=\"bps-table-filter-icon\">\r\n    <bps-input-group [bpsPrefix]=\"searchPrefixIcon\"\r\n                     (mouseenter)=\"searchBoxHovered = true;\"\r\n                     (mouseleave)=\"searchBoxHovered = false;\"\r\n                     class=\"bps-table-custom-filter\">\r\n      <input bps-input\r\n             nz-th-extra\r\n             class=\"bps-table-filter-custom-input\"\r\n             (click)=\"preventDefault($event)\"\r\n             (keyup)=\"updateSearch($event.target.value)\"\r\n             nzTableFilter>\r\n    </bps-input-group>\r\n  </div>\r\n  \r\n  <ng-template #searchPrefixIcon let-disabled=\"false\">\r\n    <ng-container *ngIf=\"!searchBoxHovered  && !disabled\">\r\n      <img class=\"bps-custom-filter-img\" src=\"/assets/bps-icons/sps_search_icon_home_enabled.svg\" />\r\n    </ng-container>\r\n    <ng-container *ngIf=\"searchBoxHovered && !disabled\">\r\n      <img class=\"bps-custom-filter-img\" src=\"/assets/bps-icons/sps_search_icon_home_hover_activated.svg\" />\r\n    </ng-container>\r\n    <ng-container *ngIf=\"disabled\">\r\n      <img class=\"bps-custom-filter-img\" src=\"/assets/bps-icons/sps_search_icon_home_disabled.svg\" />\r\n    </ng-container>\r\n  </ng-template>\r\n</ng-template>\r\n",
+            template: "<div id=\"{{gridID}}\"\r\n     class=\"bps-table-{{tableType}}\">\r\n  <input bps-input\r\n         *ngIf=\"tableType === 'glass_profile'\"\r\n         class=\"bps-table-glass-filter\"\r\n         [placeholder]=\"filterPlaceholder\"\r\n         (click)=\"preventDefault($event)\"\r\n         (keyup)=\"updateSearch($event.target.value)\">\r\n  <nz-table #gridComponent\r\n            class=\"bps-table\"\r\n            [nzData]=\"_data\"\r\n            [nzFrontPagination]=\"frontPagination\"\r\n            [nzTotal]=\"total\"\r\n            [nzPageIndex]=\"pageIndex\"\r\n            [nzPageSize]=\"pageSize\"\r\n            [nzShowPagination]=\"showPagination\"\r\n            [nzPaginationPosition]=\"paginationPosition\"\r\n            [nzBordered]=\"bordered\"\r\n            [nzWidthConfig]=\"widthConfig\"\r\n            [nzLoading]=\"loading\"\r\n            [nzLoadingIndicator]=\"loadingIndicator\"\r\n            [nzLoadingDelay]=\"loadingDelay\"\r\n            [nzScroll]=\"scroll\"\r\n            [nzTitle]=\"title\"\r\n            [nzFooter]=\"footer\"\r\n            [nzNoResult]=\"noResult\"\r\n            [nzPageSizeOptions]=\"pageSizeOptions\"\r\n            [nzShowQuickJumper]=\"showQuickJumper\"\r\n            [nzShowSizeChanger]=\"showSizeChanger\"\r\n            [nzShowTotal]=\"showTotal\"\r\n            [nzHideOnSinglePage]=\"hideOnSinglePage\"\r\n            [nzSimple]=\"simple\"\r\n            [nzVirtualItemSize]=\"virtualItemSize\"\r\n            [nzVirtualMaxBufferPx]=\"virtualMaxBufferPx\"\r\n            [nzVirtualMinBufferPx]=\"virtualMinBufferPx\"\r\n            [nzVirtualForTrackBy]=\"virtualForTrackBy\"\r\n            (nzPageIndexChange)=\"emitBpsEvent($event, 'pageIndex')\"\r\n            (nzCurrentPageDataChange)=\"emitBpsEvent($event, 'currentPageData')\"\r\n            (nzQueryParams)=\"emitBpsEvent($event, 'queryParams')\"\r\n            (nzPageSizeChange)=\"emitBpsEvent($event, 'pageSize')\">\r\n    <thead (nzSortChange)=\"sort($event)\"\r\n           [nzSingleSort]=\"singleSort\">\r\n      <tr>\r\n\r\n        <th *ngIf=\"expandable\"\r\n            [nzWidth]=\"'40px'\"\r\n            nzShowExpand>\r\n        </th>\r\n\r\n        <th *ngFor=\"let field of getFields(); index as th\"\r\n            [ngClass]=\"field.ngClass\"\r\n            [class.bps-column-disabled]=\"field.disabled\"\r\n            [nzShowSort]=\"field.showSort\"\r\n            [nzSortKey]=\"field.property\"\r\n            nzCustomFilter\r\n            [nzWidth]=\"field.width\">\r\n          <ng-container *ngIf=\"field.template; else cellValue\">\r\n            <ng-container *ngTemplateOutlet=\"field.template.ref; context: field.template.context\"></ng-container>\r\n          </ng-container>\r\n          <ng-template #cellValue>{{field.display}}</ng-template>\r\n\r\n          <ng-container *ngIf=\"field.showCustomFilter\">\r\n            <ng-container [ngTemplateOutlet]=\"customFilter\"></ng-container>\r\n          </ng-container>\r\n        </th>\r\n\r\n        <th *ngIf=\"tableType === 'home'\"\r\n            [nzWidth]=\"'70px'\">\r\n        </th>\r\n      </tr>\r\n    </thead>\r\n\r\n    <tbody>\r\n      <ng-template ngFor let-data [ngForOf]=\"gridComponent.data\" let-i=\"index\">\r\n        <tr [class.ant-table-selected-row]=\"isRowSelected(data)\"\r\n            [class.bps-table4-custom-row]=\"data.bpsTable4CustomRow\"\r\n            (click)=\"clickRow($event, data)\"\r\n            [class.bps-table-pair-row]=\"tableType === 'report' && !(i % 2)\">\r\n\r\n          <ng-container *ngIf=\"expandable\">\r\n            <td nzShowExpand\r\n                [(nzExpand)]=\"mapOfExpandData[data[config.fieldId]]\"></td>\r\n          </ng-container>\r\n\r\n          <td *ngFor=\"let field of getFields(); index as fi\"\r\n              [ngClass]=\"getTDClassMap(field, data, fi)\">\r\n\r\n            <ng-container *ngIf=\"isCeldTypeTemplateRef(field)\">\r\n              <ng-container *ngIf=\"data[field.property]\">\r\n                <ng-container *ngTemplateOutlet=\"data[field.property].ref; context: data[field.property].context\"></ng-container>\r\n              </ng-container>\r\n            </ng-container>\r\n\r\n            <ng-container *ngIf=\"isCeldTypeDefault(field)\">\r\n              <ng-container *ngIf=\"editId !== data[config.fieldId]; else editTpl\">\r\n                <div (dblclick)=\"startEdit(data, $event)\">\r\n                  {{ data[field.property] }}\r\n                </div>\r\n              </ng-container>\r\n              <ng-template #editTpl>\r\n                <input bps-input [(ngModel)]=\"data[field.property]\"\r\n                       class=\"bps-editable-cell-input\"\r\n                       (click)=\"preventDefault($event)\"\r\n                       (keyup)=\"endEditMode($event, i, data)\" />\r\n              </ng-template>\r\n\r\n            </ng-container>\r\n          </td>\r\n\r\n          <td *ngIf=\"tableType === 'home'\">\r\n            <i class=\"bps-table-home-more-icon\"\r\n               bps-dropdown\r\n               (click)=\"emitBpsEvent(data, 'moreBtnClicked')\"\r\n               [bpsDropdownMenu]=\"moreMenu\"\r\n               bpsTrigger=\"click\"\r\n               bpsPlacement=\"rightTop\"></i>\r\n            <i class=\"bps-table-home-delete-icon\"\r\n               bps-dropdown\r\n               (click)=\"emitBpsEvent(data, 'deleteBtnClicked')\"\r\n               [bpsDropdownMenu]=\"deleteMenu\"\r\n               bpsTrigger=\"click\"\r\n               bpsPlacement=\"rightTop\"></i>\r\n          </td>\r\n\r\n        </tr>\r\n\r\n        <ng-container *ngIf=\"expandable\">\r\n          <tr [nzExpand]=\"mapOfExpandData[data[config.fieldId]]\">\r\n            <td [attr.colspan]=\"getFields().length + 2\">\r\n              <ng-container [ngTemplateOutlet]=\"rowExpandTemplate\" [ngTemplateOutletContext]=\"{data: data, index: i}\"></ng-container>\r\n            </td>\r\n          </tr>\r\n        </ng-container>\r\n      </ng-template>\r\n\r\n    </tbody>\r\n  </nz-table>\r\n</div>\r\n\r\n<ng-template #customFilter>\r\n  <div class=\"bps-table-filter-icon\">\r\n    <bps-input-group [bpsPrefix]=\"searchPrefixIcon\"\r\n                     (mouseenter)=\"searchBoxHovered = true;\"\r\n                     (mouseleave)=\"searchBoxHovered = false;\"\r\n                     class=\"bps-table-custom-filter\">\r\n      <input bps-input\r\n             nz-th-extra\r\n             class=\"bps-table-filter-custom-input\"\r\n             (click)=\"preventDefault($event)\"\r\n             (keyup)=\"updateSearch($event.target.value)\"\r\n             nzTableFilter>\r\n    </bps-input-group>\r\n  </div>\r\n  \r\n  <ng-template #searchPrefixIcon let-disabled=\"false\">\r\n    <ng-container *ngIf=\"!searchBoxHovered  && !disabled\">\r\n      <img class=\"bps-custom-filter-img\" src=\"/assets/bps-icons/sps_search_icon_home_enabled.svg\" />\r\n    </ng-container>\r\n    <ng-container *ngIf=\"searchBoxHovered && !disabled\">\r\n      <img class=\"bps-custom-filter-img\" src=\"/assets/bps-icons/sps_search_icon_home_hover_activated.svg\" />\r\n    </ng-container>\r\n    <ng-container *ngIf=\"disabled\">\r\n      <img class=\"bps-custom-filter-img\" src=\"/assets/bps-icons/sps_search_icon_home_disabled.svg\" />\r\n    </ng-container>\r\n  </ng-template>\r\n</ng-template>\r\n",
             changeDetection: ChangeDetectionStrategy.OnPush,
             styles: ["::ng-deep .bps-table .ant-table-tbody>tr>td:not(.bps-td-expandable-panel),::ng-deep .bps-table .ant-table-thead>tr>th{padding:5px;font-size:12px;font-weight:400!important;font-stretch:normal!important;font-style:normal!important;line-height:1.33;letter-spacing:normal!important;text-align:left;color:#fff!important;background-color:#262626!important}::ng-deep .bps-table-report .bps-table .ant-table-tbody>tr>td:not(.bps-td-expandable-panel){border-bottom:none!important;border-right:1px solid #363636!important}::ng-deep .bps-table-home .bps-table .ant-table-tbody>tr>td:not(.bps-td-expandable-panel){padding:12px 5px 12px 0!important;border-bottom:1.2px solid #363636!important;border-right:none!important;color:#999!important}::ng-deep .bps-table .ant-table-tbody>tr>td:not(.bps-td-expandable-panel).bps-td-disabled{color:#666!important}::ng-deep .bps-table-report .bps-table .ant-table-thead>tr:first-child>th:first-child{padding-left:20px!important}::ng-deep .bps-table .ant-table-tbody>tr>td:not(.bps-td-expandable-panel):last-child{border-right:unset!important}::ng-deep .bps-table .ant-table-thead>tr>th{padding:9px;border-bottom:none!important;border-top:1px solid #363636!important;border-radius:0!important}::ng-deep .bps-table-home .bps-table .ant-table-thead>tr>th{padding:17px 5px 17px 0!important;border-bottom:1.2px solid #363636!important;border-top:1px solid #262626!important;border-radius:0!important}::ng-deep .ant-table-tbody>tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)>td:not(.bps-td-expandable-panel){background:#313b3f!important}::ng-deep .bps-table .ant-table-tbody>tr.bps-table-pair-row>td:not(.bps-td-expandable-panel){background-color:#313131!important}::ng-deep .bps-table .ant-table-body{background-color:#262626!important}::ng-deep .bps-table .ant-table-body::-webkit-scrollbar{width:8px!important;height:8px!important}::ng-deep .bps-table .ant-table-body::-webkit-scrollbar-track{background-color:#262626!important}::ng-deep .bps-table .ant-table-body::-webkit-scrollbar-thumb{background-color:#363636!important;border-radius:10px!important;border:2px solid #262626!important;background-clip:padding-box!important}::ng-deep .bps-table .ant-table-body::-webkit-scrollbar-thumb:hover{background-color:#363636!important;border-radius:10px!important}::ng-deep .bps-table .ant-table-body::-webkit-scrollbar-corner{background-color:#262626!important}::ng-deep .bps-table .ant-table-header.ant-table-hide-scrollbar{margin-bottom:-14px!important;background-color:#262626!important}::ng-deep .bps-table .ant-table-tbody>tr.ant-table-selected-row>td:not(.bps-td-expandable-panel){background-color:#445c67!important}.bps-fst-column{padding-left:20px!important}.bps-editable-cell-input{border-radius:0!important;border-color:#00a2d1!important;padding-left:18px!important}.bps-td-no-padding{padding:0!important}::ng-deep .bps-table .ant-table-expand-icon-th,::ng-deep .bps-table-home .bps-table .ant-table-tbody>tr>td.ant-table-row-expand-icon-cell{width:40px!important;min-width:40px!important;padding-right:0!important;text-align:center}::ng-deep .bps-table .ant-table-row-expand-icon{background:#262626!important;border:none!important;width:unset!important;height:unset!important}::ng-deep .bps-table .ant-table-row-expanded::after,::ng-deep .bps-table-home .bps-table .ant-table-tbody>tr.ant-table-selected-row.ant-table-expanded-row .ant-table-row-collapsed::after{content:url(/assets/bps-icons/sps_arrowdown_icon_home_active.svg)}::ng-deep .bps-table .ant-table-row-collapsed::after{content:url(/assets/bps-icons/sps_arrowdown_icon_home_enabled.svg)}::ng-deep .bps-table-home .bps-table .ant-table-tbody>tr.ant-table-selected-row>td:not(.bps-td-expandable-panel),::ng-deep .bps-table-home .bps-table .ant-table-tbody>tr:hover>td:not(.bps-td-expandable-panel){background:#262626!important;color:#fff!important;cursor:pointer}::ng-deep .bps-table-home .bps-table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row) .ant-table-row-collapsed::after{content:url(/assets/bps-icons/sps_arrowdown_icon_home_hover.svg)}::ng-deep .bps-table .anticon svg{display:none!important}::ng-deep .bps-table .anticon.ant-table-column-sorter-up.anticon-caret-up.off{display:none!important}::ng-deep .bps-table .anticon.ant-table-column-sorter-up.anticon-caret-up.on::after{content:url(/assets/bps-icons/sps_triangle_icon_sortingup_blue.svg);position:relative;top:2px}::ng-deep .bps-table .ant-table-column-sort .anticon.ant-table-column-sorter-down.anticon-caret-down.off::after{content:''}::ng-deep .bps-table .anticon.ant-table-column-sorter-down.anticon-caret-down.on::after{content:url(/assets/bps-icons/sps_triangle_icon_sortingdown_blue.svg)}::ng-deep .bps-table .anticon.ant-table-column-sorter-down.anticon-caret-down.off::after,::ng-deep .bps-table .bps-column-disabled .anticon.ant-table-column-sorter-down.anticon-caret-down.on::after,::ng-deep .bps-table .bps-column-disabled .anticon.ant-table-column-sorter-up.anticon-caret-up.on::after{content:url(/assets/bps-icons/sps_triangle_icon_sortingdown_grey.svg)}::ng-deep .bps-table .ant-table-thead>tr>th .ant-table-column-sorter .ant-table-column-sorter-inner{margin-top:unset!important;margin-left:10px!important;line-height:unset!important}::ng-deep .bps-table .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-filters{padding-right:unset!important}::ng-deep .bps-table .ant-table-thead>tr>th .ant-table-header-column .ant-table-column-sorters>:not(.ant-table-column-sorter){position:unset!important}.bps-table-filter-icon{position:absolute;top:14px;right:75px;width:270px;transition:.3s}::ng-deep .bps-table-custom-filter .ant-input-prefix{left:1.2px!important}.bps-custom-filter-img{border-radius:100px;background:#3d3d3d;padding:5px;transition:.3s}.bps-table-filter-custom-input{border:1px solid #535353!important;background-color:#343434!important;padding-left:24px!important;transition:.3s}.bps-table-filter-custom-input:hover{border:1px solid #535353!important}.bps-table-home-more-icon::after{content:url(/assets/bps-icons/sps_dots_icon_home_enabled.svg);position:relative;top:-3px}.bps-table-home-delete-icon::after{content:url(/assets/bps-icons/sps_x_icon_home_enabled.svg);position:relative}.bps-table-home-more-icon{margin-right:11px}.bps-table-home-delete-icon,.bps-table-home-more-icon{background-color:#363636;border-radius:100px;padding:4px 6px}.bps-table-home-delete-icon:hover,.bps-table-home-more-icon:hover{cursor:pointer}::ng-deep .bps-table-home .bps-table .ant-table-tbody>tr.ant-table-selected-row .bps-table-home-more-icon::after,::ng-deep .bps-table-home .bps-table .ant-table-tbody>tr:hover .bps-table-home-more-icon::after{content:url(/assets/bps-icons/sps_dots_icon_home_hover_active.svg)}::ng-deep .bps-table-home .bps-table .ant-table-tbody>tr.ant-table-selected-row .bps-table-home-delete-icon::after,::ng-deep .bps-table-home .bps-table .ant-table-tbody>tr:hover .bps-table-home-delete-icon::after{content:url(/assets/bps-icons/sps_x_icon_home_hover_active.svg)}::ng-deep .bps-table-glass_profile .bps-table .ant-table table{border-spacing:0 5px!important}::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr>td:not(.bps-td-expandable-panel),::ng-deep .bps-table-glass_profile .bps-table .ant-table-thead>tr>th{font-size:11px!important}::ng-deep .bps-table-glass_profile .bps-table .ant-table-thead>tr>th:first-child{padding-left:20px!important}::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr>td:not(.bps-td-expandable-panel):first-child{border-radius:3px 0 0 3px!important}::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr>td:not(.bps-td-expandable-panel):last-child{border-radius:0 3px 3px 0!important}::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr>td:not(.bps-td-expandable-panel){background-color:#363636!important;border-right:none!important;border-left:none!important;border-collapse:separate!important;padding:11px 5px}::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr:hover>td:not(.bps-td-expandable-panel){background-color:#363636!important}::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr:hover>td:not(.bps-td-disabled){cursor:pointer;box-shadow:0 1px 0 #445c67 inset,0 -1px 0 #445c67 inset!important}::ng-deep .bps-table .ant-table-thead>tr>th .ant-table-column-sorter{vertical-align:top!important}::ng-deep .bps-table .ant-table-thead>tr>th.bps-column-disabled{color:#666!important}::ng-deep .bps-table .ant-table-thead>tr>th.bps-column-disabled:hover{cursor:not-allowed}.bps-table-glass-filter{width:185px;font-size:10px!important;height:20px!important;border:none!important;margin-left:20px}::ng-deep .bps-table-glass_profile .bps-table .ant-table-thead>tr>th{border-top:none!important}.bps-table-glass-filter::-webkit-input-placeholder{color:#666;font-size:10px}.bps-table-glass-filter::-moz-placeholder{color:#666;font-size:10px}.bps-table-glass-filter:-ms-input-placeholder{color:#666;font-size:10px}.bps-table-glass-filter::-ms-input-placeholder{color:#666;font-size:10px}.bps-table-glass-filter::placeholder{color:#666;font-size:10px}::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr:hover>td:not(.bps-td-disabled):first-child{box-shadow:1px 0 0 #445c67 inset,0 1px 0 #445c67 inset,0 -1px 0 #445c67 inset!important}::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr:hover>td:not(.bps-td-disabled):last-child{box-shadow:0 1px 0 #445c67 inset,0 -1px 0 #445c67 inset,-1px 0 0 #445c67 inset!important}::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr>td{border-bottom:none!important;transition:.3s}.bps-td-disabled{cursor:not-allowed}::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr.ant-table-selected-row:hover>td:not(.bps-td-disabled),::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr.ant-table-selected-row>td:not(.bps-td-disabled){box-shadow:0 1px 0 #00a2d1 inset,0 -1px 0 #00a2d1 inset!important}::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr.ant-table-selected-row:hover>td:not(.bps-td-disabled):first-child,::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr.ant-table-selected-row>td:not(.bps-td-disabled):first-child{box-shadow:1px 0 0 #00a2d1 inset,0 1px 0 #00a2d1 inset,0 -1px 0 #00a2d1 inset!important}::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr.ant-table-selected-row:hover>td:not(.bps-td-disabled):last-child,::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr.ant-table-selected-row>td:not(.bps-td-disabled):last-child{box-shadow:0 1px 0 #00a2d1 inset,0 -1px 0 #00a2d1 inset,-1px 0 0 #00a2d1 inset!important}::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr.bps-table4-custom-row:hover>td,::ng-deep .bps-table-glass_profile .bps-table .ant-table-tbody>tr.bps-table4-custom-row>td{background-color:#253d47!important}"]
         })
@@ -4973,6 +4974,383 @@ var BpsConfigurationSelectorComponent = /** @class */ (function () {
     return BpsConfigurationSelectorComponent;
 }());
 
+var BpsDropDownADirective = /** @class */ (function () {
+    function BpsDropDownADirective(elementRef, renderer) {
+        this.elementRef = elementRef;
+        this.renderer = renderer;
+        this.renderer.addClass(this.elementRef.nativeElement, 'ant-dropdown-link');
+    }
+    BpsDropDownADirective.ctorParameters = function () { return [
+        { type: ElementRef },
+        { type: Renderer2 }
+    ]; };
+    BpsDropDownADirective = __decorate([
+        Directive({
+            selector: 'a[bps-dropdown]',
+            exportAs: 'bpsDropdown'
+        })
+    ], BpsDropDownADirective);
+    return BpsDropDownADirective;
+}());
+
+function dropdownMenuServiceFactory(injector) {
+    return injector.get(NzMenuDropdownService);
+}
+var BpsDropdownMenuComponent = /** @class */ (function () {
+    function BpsDropdownMenuComponent(cdr, elementRef, renderer, viewContainerRef, nzMenuDropdownService, noAnimation) {
+        this.cdr = cdr;
+        this.elementRef = elementRef;
+        this.renderer = renderer;
+        this.viewContainerRef = viewContainerRef;
+        this.nzMenuDropdownService = nzMenuDropdownService;
+        this.noAnimation = noAnimation;
+        this.open = false;
+        this.triggerWidth = 0;
+        this.dropDownPosition = 'bottom';
+        this.visible$ = new Subject();
+        this.bpsTrigger = 'hover';
+        this.bpsPlacement = 'bottomLeft';
+        this.bpsOverlayClassName = '';
+        this.bpsOverlayStyle = {};
+        this.bpsTableFilter = false;
+    }
+    BpsDropdownMenuComponent.prototype.setVisibleStateWhen = function (visible, trigger) {
+        if (trigger === void 0) { trigger = 'all'; }
+        if (this.bpsTrigger === trigger || trigger === 'all') {
+            this.visible$.next(visible);
+        }
+    };
+    BpsDropdownMenuComponent.prototype.setValue = function (key, value) {
+        this[key] = value;
+        this.cdr.markForCheck();
+    };
+    BpsDropdownMenuComponent.prototype.ngAfterContentInit = function () {
+        this.renderer.removeChild(this.renderer.parentNode(this.elementRef.nativeElement), this.elementRef.nativeElement);
+    };
+    BpsDropdownMenuComponent.ctorParameters = function () { return [
+        { type: ChangeDetectorRef },
+        { type: ElementRef },
+        { type: Renderer2 },
+        { type: ViewContainerRef },
+        { type: NzMenuDropdownService },
+        { type: NzNoAnimationDirective, decorators: [{ type: Host }, { type: Optional }] }
+    ]; };
+    __decorate([
+        ViewChild(TemplateRef, { static: true })
+    ], BpsDropdownMenuComponent.prototype, "templateRef", void 0);
+    BpsDropdownMenuComponent = __decorate([
+        Component({
+            selector: "bps-dropdown-menu",
+            template: "<ng-template>\n  <div *ngIf=\"open\" class=\"{{'ant-dropdown bps-dropdown nz-dropdown ant-dropdown-placement-'+bpsPlacement}}\"\n       [ngClass]=\"bpsOverlayClassName\"\n       [ngStyle]=\"bpsOverlayStyle\"\n       [@slideMotion]=\"dropDownPosition\"\n       [@.disabled]=\"noAnimation?.nzNoAnimation\"\n       [nzNoAnimation]=\"noAnimation?.nzNoAnimation\"\n       (mouseenter)=\"setVisibleStateWhen(true,'hover')\"\n       (mouseleave)=\"setVisibleStateWhen(false,'hover')\">\n    <div [class.ant-table-filter-dropdown]=\"bpsTableFilter\">\n      <ng-content></ng-content>\n    </div>\n  </div>\n</ng-template>\n",
+            exportAs: "bpsDropdownMenu",
+            animations: [slideMotion],
+            providers: [
+                NzMenuDropdownService,
+                {
+                    provide: NzDropdownHigherOrderServiceToken,
+                    useFactory: dropdownMenuServiceFactory,
+                    deps: [[new Self(), Injector]]
+                }
+            ],
+            preserveWhitespaces: false,
+            encapsulation: ViewEncapsulation.None,
+            changeDetection: ChangeDetectionStrategy.OnPush,
+            styles: [".bps-dropdown ul.ant-dropdown-menu{box-shadow:0 3px 12px 0 rgba(0,0,0,.9)!important;background-color:#262626!important;padding:10px 0!important;border-radius:10px!important}.bps-dropdown.ant-dropdown-placement-bottomRight:not(.bps-forced-updated-position) ul.ant-dropdown-menu{top:11px!important;left:6px!important}.bps-dropdown ul.ant-dropdown-menu .ant-dropdown-menu-item,.bps-dropdown ul.ant-dropdown-menu .ant-dropdown-menu-item.ant-dropdown-menu-item-selected{padding:7px 15px!important;background-color:#262626!important;color:#fff!important;font-size:12px!important;font-weight:300!important;font-stretch:normal!important;font-style:normal!important;line-height:.75!important;letter-spacing:normal!important;text-align:left!important;max-height:27px!important;height:27px!important}.bps-dropdown ul.ant-dropdown-menu .ant-dropdown-menu-item:hover{background-color:#353535!important}.bps-dropdown.ant-dropdown-placement-bottomRight:not(.bps-forced-updated-position) .ant-dropdown-menu-item:first-child::before{content:'';opacity:1;margin:0 auto;display:table;width:14px;position:absolute;border-top:transparent;border-left:transparent;height:14px;background-color:#262626;transform:rotate(-135deg);-webkit-transform:rotate(-135deg);top:-6px;transition:.3s;left:calc(100% - 29px)}.bps-dropdown.ant-dropdown-placement-rightTop:not(.bps-forced-updated-position) .ant-dropdown-menu-item:first-child::before{content:'';opacity:1;margin:0 auto;display:table;width:14px;position:absolute;border-left:transparent;border-bottom:transparent;height:14px;background-color:#262626;transform:rotate(-135deg);-webkit-transform:rotate(-135deg);top:17px;right:calc(100% - 8px);transition:.3s}.bps-dropdown.ant-dropdown-placement-rightTop:not(.bps-forced-updated-position) ul.ant-dropdown-menu{top:-9px!important;left:13px!important}.bps-dropdown.ant-dropdown-placement-rightTop .ant-dropdown-menu-item:first-child:hover::before{background-color:#353535!important}.bps-dropdown ul.ant-dropdown-menu .ant-dropdown-menu-item-disabled{color:#666!important}", "\n      :root .ant-dropdown.nz-dropdown {\n        top: 0;\n        left: 0;\n        position: relative;\n        width: 100%;\n        margin-top: 4px;\n        margin-bottom: 4px;\n      }\n    "]
+        }),
+        __param(5, Host()), __param(5, Optional())
+    ], BpsDropdownMenuComponent);
+    return BpsDropdownMenuComponent;
+}());
+
+var BpsDropDownDirective = /** @class */ (function () {
+    function BpsDropDownDirective(elementRef, renderer, overlay, platform, bpsButtonComponent, bpsButtonGroupComponent, viewContainerRef) {
+        this.elementRef = elementRef;
+        this.renderer = renderer;
+        this.overlay = overlay;
+        this.platform = platform;
+        this.bpsButtonComponent = bpsButtonComponent;
+        this.bpsButtonGroupComponent = bpsButtonGroupComponent;
+        this.viewContainerRef = viewContainerRef;
+        this.overlayRef = null;
+        this.destroy$ = new Subject();
+        this.triggerWidth = 0;
+        this.el = this.elementRef.nativeElement;
+        this.dropdownOpen = false;
+        this.positions = __spread(DEFAULT_DROPDOWN_POSITIONS);
+        this.positionSubscription = Subscription.EMPTY;
+        this.overlaySubscription = Subscription.EMPTY;
+        this.hover$ = merge(fromEvent(this.el, 'mouseenter').pipe(mapTo(true)), fromEvent(this.el, 'mouseleave').pipe(mapTo(false)));
+        this.$click = fromEvent(this.el, 'click').pipe(tap(function (e) { return e.stopPropagation(); }), mapTo(true));
+        this.bpsTrigger = 'hover';
+        this.bpsBackdrop = true;
+        this.bpsClickHide = true;
+        this.bpsDisabled = false;
+        this.bpsVisible = false;
+        this.bpsTableFilter = false;
+        this.bpsOverlayClassName = '';
+        this.bpsOverlayStyle = {};
+        this.bpsPlacement = 'bottomLeft';
+        this.bpsVisibleChange = new EventEmitter();
+        renderer.addClass(elementRef.nativeElement, 'ant-dropdown-trigger');
+        if (this.bpsButtonComponent) {
+            this.bpsButtonComponent.isInDropdown = true;
+        }
+        if (this.bpsButtonGroupComponent) {
+            this.bpsButtonGroupComponent.isInDropdown = true;
+        }
+    }
+    BpsDropDownDirective.prototype.setDisabled = function (disabled) {
+        if (disabled) {
+            this.renderer.setAttribute(this.el, 'disabled', '');
+            if (this.bpsVisible) {
+                this.bpsVisible = false;
+                this.bpsVisibleChange.emit(this.bpsVisible);
+                this.updateOverlayByVisible();
+            }
+        }
+        else {
+            this.renderer.removeAttribute(this.el, 'disabled');
+        }
+    };
+    BpsDropDownDirective.prototype.getOverlayConfig = function () {
+        return new OverlayConfig({
+            positionStrategy: this.overlay
+                .position()
+                .flexibleConnectedTo(this.el)
+                .withLockedPosition(),
+            minWidth: this.triggerWidth,
+            hasBackdrop: this.bpsTrigger === 'click',
+            backdropClass: this.bpsBackdrop ? undefined : 'nz-overlay-transparent-backdrop',
+            scrollStrategy: this.overlay.scrollStrategies.reposition()
+        });
+    };
+    BpsDropDownDirective.prototype.createOverlay = function () {
+        if (!this.overlayRef) {
+            var config = this.getOverlayConfig();
+            this.overlayRef = this.overlay.create(config);
+            this.subscribeOverlayEvent(this.overlayRef);
+            this.subscribeToPositions(config.positionStrategy);
+            return this.overlayRef;
+        }
+        else {
+            var overlayConfig = this.overlayRef.getConfig();
+            this.updateOverlayConfig(overlayConfig);
+            return this.overlayRef;
+        }
+    };
+    BpsDropDownDirective.prototype.updateOverlayConfig = function (overlayConfig) {
+        overlayConfig.minWidth = this.triggerWidth;
+        overlayConfig.hasBackdrop = this.bpsTrigger === 'click';
+        return overlayConfig;
+    };
+    BpsDropDownDirective.prototype.dispose = function () {
+        if (this.overlayRef) {
+            this.overlayRef.dispose();
+            this.overlayRef = null;
+            this.positionSubscription.unsubscribe();
+            this.overlaySubscription.unsubscribe();
+        }
+    };
+    BpsDropDownDirective.prototype.subscribeToPositions = function (position) {
+        var _this = this;
+        this.positionSubscription.unsubscribe();
+        this.positionSubscription = position.positionChanges.pipe(takeUntil(this.destroy$)).subscribe(function (change) {
+            _this.bpsOverlayClassName = '';
+            _this.bpsDropdownMenu.setValue('bpsOverlayClassName', _this.bpsOverlayClassName);
+            if (_this.bpsPlacement === 'bottomRight' && change.connectionPair.originY === 'top') {
+                _this.bpsOverlayClassName = 'bps-forced-updated-position';
+                _this.bpsDropdownMenu.setValue('bpsOverlayClassName', _this.bpsOverlayClassName);
+            }
+            if (_this.bpsPlacement === 'rightTop' && (change.connectionPair.overlayX === 'end' || change.connectionPair.originY === 'bottom')) {
+                _this.bpsOverlayClassName = 'bps-forced-updated-position';
+                _this.bpsDropdownMenu.setValue('bpsOverlayClassName', _this.bpsOverlayClassName);
+            }
+            _this.bpsDropdownMenu.setValue('dropDownPosition', change.connectionPair.originY);
+        });
+    };
+    BpsDropDownDirective.prototype.subscribeOverlayEvent = function (overlayRef) {
+        var _this = this;
+        this.overlaySubscription.unsubscribe();
+        this.overlaySubscription = merge(overlayRef.backdropClick(), overlayRef.detachments(), overlayRef.keydownEvents().pipe(filter(function (e) { return e.keyCode === ESCAPE && !hasModifierKey(e); })))
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(function () {
+            _this.bpsDropdownMenu.setVisibleStateWhen(false);
+        });
+    };
+    BpsDropDownDirective.prototype.getPortal = function () {
+        if (!this.portal || this.portal.templateRef !== this.bpsDropdownMenu.templateRef) {
+            this.portal = new TemplatePortal(this.bpsDropdownMenu.templateRef, this.viewContainerRef);
+        }
+        return this.portal;
+    };
+    BpsDropDownDirective.prototype.openMenu = function () {
+        if (!this.dropdownOpen) {
+            var overlayRef = this.createOverlay();
+            var overlayConfig = overlayRef.getConfig();
+            this.bpsDropdownMenu.setValue('open', true);
+            this.setPosition(overlayConfig.positionStrategy);
+            overlayRef.attach(this.getPortal());
+            this.dropdownOpen = true;
+        }
+    };
+    BpsDropDownDirective.prototype.closeMenu = function () {
+        if (this.overlayRef) {
+            this.overlayRef.detach();
+            this.dropdownOpen = false;
+            this.bpsDropdownMenu.setValue('open', false);
+        }
+    };
+    BpsDropDownDirective.prototype.setPosition = function (positionStrategy) {
+        this.positionStrategy = positionStrategy;
+        positionStrategy.withPositions(__spread(this.positions));
+    };
+    BpsDropDownDirective.prototype.updatePositionStrategy = function (positions) {
+        if (this.positionStrategy) {
+            this.positionStrategy.withPositions(positions);
+        }
+    };
+    BpsDropDownDirective.prototype.setTriggerWidth = function () {
+        if (this.platform.isBrowser) {
+            var element = this.bpsMatchWidthElement ? this.bpsMatchWidthElement.nativeElement : this.el;
+            this.triggerWidth = element.getBoundingClientRect().width;
+        }
+    };
+    BpsDropDownDirective.prototype.initActionSubscribe = function () {
+        var _this = this;
+        var hostVisible$ = this.bpsTrigger === 'hover' ? this.hover$ : this.$click;
+        var dropdownMenuVisible$ = this.bpsDropdownMenu.visible$;
+        var menuClickVisible$ = this.bpsClickHide
+            ? this.bpsDropdownMenu.nzMenuDropdownService.menuItemClick$.pipe(mapTo(false))
+            : EMPTY;
+        var supVisible$ = merge(dropdownMenuVisible$, hostVisible$, menuClickVisible$);
+        var subVisible$ = this.bpsDropdownMenu.nzMenuDropdownService.menuOpen$;
+        combineLatest([supVisible$, subVisible$])
+            .pipe(map(function (_a) {
+            var _b = __read(_a, 2), supVisible = _b[0], subVisible = _b[1];
+            return supVisible || subVisible;
+        }), debounceTime(50), distinctUntilChanged(), takeUntil(this.destroy$))
+            .subscribe(function (visible) {
+            if (!_this.bpsDisabled && _this.bpsVisible !== visible) {
+                _this.bpsVisible = visible;
+                _this.updateOverlayByVisible();
+                _this.bpsVisibleChange.emit(_this.bpsVisible);
+                _this.setTriggerWidth();
+                _this.bpsDropdownMenu.setValue('triggerWidth', _this.triggerWidth);
+            }
+        });
+    };
+    BpsDropDownDirective.prototype.updateOverlayByVisible = function () {
+        if (this.bpsVisible) {
+            this.openMenu();
+        }
+        else {
+            this.closeMenu();
+        }
+    };
+    BpsDropDownDirective.prototype.updateDisabledState = function () {
+        this.setDisabled(this.bpsDisabled);
+    };
+    BpsDropDownDirective.prototype.regeneratePosition = function (placement, positions) {
+        return __spread([POSITION_MAP[placement]], positions);
+    };
+    BpsDropDownDirective.prototype.ngAfterViewInit = function () {
+        if (this.bpsDropdownMenu) {
+            this.setTriggerWidth();
+            this.initActionSubscribe();
+            this.updateDisabledState();
+        }
+    };
+    BpsDropDownDirective.prototype.ngOnDestroy = function () {
+        this.destroy$.next();
+        this.destroy$.complete();
+        this.dispose();
+    };
+    BpsDropDownDirective.prototype.ngOnChanges = function (changes) {
+        var bpsVisible = changes.bpsVisible, bpsTrigger = changes.bpsTrigger, bpsPlacement = changes.bpsPlacement, bpsDisabled = changes.bpsDisabled, bpsOverlayClassName = changes.bpsOverlayClassName, bpsOverlayStyle = changes.bpsOverlayStyle, bpsTableFilter = changes.bpsTableFilter;
+        if (this.bpsDropdownMenu) {
+            if (bpsVisible) {
+                this.updateOverlayByVisible();
+                this.bpsDropdownMenu.visible$.next(this.bpsVisible);
+            }
+            if (bpsTrigger) {
+                this.bpsDropdownMenu.setValue('bpsTrigger', this.bpsTrigger);
+            }
+            if (bpsTableFilter) {
+                this.bpsDropdownMenu.setValue('bpsTableFilter', this.bpsTableFilter);
+            }
+            if (bpsOverlayClassName) {
+                this.bpsDropdownMenu.setValue('bpsOverlayClassName', this.bpsOverlayClassName);
+            }
+            if (bpsOverlayStyle) {
+                this.bpsDropdownMenu.setValue('bpsOverlayStyle', this.bpsOverlayStyle);
+            }
+            if (bpsPlacement) {
+                this.bpsDropdownMenu.setValue('bpsPlacement', this.bpsPlacement);
+                this.bpsDropdownMenu.setValue('dropDownPosition', this.bpsDropdownMenu.bpsPlacement.indexOf('top') !== -1 ? 'top' : 'bottom');
+                this.positions = this.regeneratePosition(this.bpsPlacement, this.positions);
+                this.updatePositionStrategy(this.positions);
+            }
+        }
+        if (bpsDisabled) {
+            this.updateDisabledState();
+        }
+    };
+    BpsDropDownDirective.ctorParameters = function () { return [
+        { type: ElementRef },
+        { type: Renderer2 },
+        { type: Overlay },
+        { type: Platform },
+        { type: BpsButtonComponent, decorators: [{ type: Optional }, { type: Host }] },
+        { type: BpsButtonGroupComponent, decorators: [{ type: Optional }] },
+        { type: ViewContainerRef }
+    ]; };
+    __decorate([
+        Input()
+    ], BpsDropDownDirective.prototype, "bpsDropdownMenu", void 0);
+    __decorate([
+        Input()
+    ], BpsDropDownDirective.prototype, "bpsTrigger", void 0);
+    __decorate([
+        Input()
+    ], BpsDropDownDirective.prototype, "bpsMatchWidthElement", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsDropDownDirective.prototype, "bpsBackdrop", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsDropDownDirective.prototype, "bpsClickHide", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsDropDownDirective.prototype, "bpsDisabled", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsDropDownDirective.prototype, "bpsVisible", void 0);
+    __decorate([
+        Input(), InputBoolean()
+    ], BpsDropDownDirective.prototype, "bpsTableFilter", void 0);
+    __decorate([
+        Input()
+    ], BpsDropDownDirective.prototype, "bpsOverlayClassName", void 0);
+    __decorate([
+        Input()
+    ], BpsDropDownDirective.prototype, "bpsOverlayStyle", void 0);
+    __decorate([
+        Input()
+    ], BpsDropDownDirective.prototype, "bpsPlacement", void 0);
+    __decorate([
+        Output()
+    ], BpsDropDownDirective.prototype, "bpsVisibleChange", void 0);
+    BpsDropDownDirective = __decorate([
+        Directive({
+            selector: '[bps-dropdown]',
+            exportAs: 'bpsDropdown'
+        }),
+        __param(4, Optional()), __param(4, Host()),
+        __param(5, Optional())
+    ], BpsDropDownDirective);
+    return BpsDropDownDirective;
+}());
+
 var ɵ0 = en_US;
 var BpsComponentsLibModule = /** @class */ (function () {
     function BpsComponentsLibModule() {
@@ -4980,6 +5358,9 @@ var BpsComponentsLibModule = /** @class */ (function () {
     BpsComponentsLibModule = __decorate([
         NgModule({
             declarations: [
+                BpsDropDownDirective,
+                BpsDropdownMenuComponent,
+                BpsDropDownADirective,
                 BpsTableComponent,
                 BpsListComponent,
                 BpsListItemComponent,
@@ -5043,6 +5424,9 @@ var BpsComponentsLibModule = /** @class */ (function () {
                 NzResizableModule
             ],
             exports: [
+                BpsDropDownDirective,
+                BpsDropdownMenuComponent,
+                BpsDropDownADirective,
                 BpsConfigurationSelectorComponent,
                 BpsTableComponent,
                 BpsListComponent,
@@ -5117,5 +5501,5 @@ var TemplateType;
  * Generated bundle index. Do not edit.
  */
 
-export { BpsAutosizeDirective, BpsButtonComponent, BpsButtonGroupComponent, BpsCheckboxComponent, BpsCheckboxGroupComponent, BpsCheckboxWrapperComponent, BpsCollapseComponent, BpsCollapsePanelComponent, BpsComponentsLibComponent, BpsComponentsLibModule, BpsComponentsLibService, BpsConfigurationSelectorComponent, BpsFilterGroupOptionPipe, BpsFilterOptionPipe, BpsFormControlComponent, BpsFormDirective, BpsFormExplainComponent, BpsFormExtraComponent, BpsFormItemComponent, BpsFormLabelComponent, BpsFormSplitComponent, BpsFormTextComponent, BpsInputDirective, BpsInputGroupComponent, BpsListComponent, BpsListItemComponent, BpsListItemMetaComponent, BpsOptionComponent, BpsOptionContainerComponent, BpsOptionGroupComponent, BpsOptionLiComponent, BpsPopoverComponent, BpsPopoverDirective, BpsRadioButtonComponent, BpsRadioComponent, BpsRadioGroupComponent, BpsSelectComponent, BpsSelectService, BpsSelectTopControlComponent, BpsSelectUnselectableDirective, BpsSwitchComponent, BpsTableComponent, BpsTableExpandablePanelComponent, BpsToolTipComponent, BpsTooltipDirective, CeldType, TemplateType, defaultFilterOption, isAutoSizeType, ɵ0, NzTooltipBaseDirective as ɵa };
+export { BpsAutosizeDirective, BpsButtonComponent, BpsButtonGroupComponent, BpsCheckboxComponent, BpsCheckboxGroupComponent, BpsCheckboxWrapperComponent, BpsCollapseComponent, BpsCollapsePanelComponent, BpsComponentsLibComponent, BpsComponentsLibModule, BpsComponentsLibService, BpsConfigurationSelectorComponent, BpsDropDownADirective, BpsDropDownDirective, BpsDropdownMenuComponent, BpsFilterGroupOptionPipe, BpsFilterOptionPipe, BpsFormControlComponent, BpsFormDirective, BpsFormExplainComponent, BpsFormExtraComponent, BpsFormItemComponent, BpsFormLabelComponent, BpsFormSplitComponent, BpsFormTextComponent, BpsInputDirective, BpsInputGroupComponent, BpsListComponent, BpsListItemComponent, BpsListItemMetaComponent, BpsOptionComponent, BpsOptionContainerComponent, BpsOptionGroupComponent, BpsOptionLiComponent, BpsPopoverComponent, BpsPopoverDirective, BpsRadioButtonComponent, BpsRadioComponent, BpsRadioGroupComponent, BpsSelectComponent, BpsSelectService, BpsSelectTopControlComponent, BpsSelectUnselectableDirective, BpsSwitchComponent, BpsTableComponent, BpsTableExpandablePanelComponent, BpsToolTipComponent, BpsTooltipDirective, CeldType, TemplateType, defaultFilterOption, dropdownMenuServiceFactory, isAutoSizeType, ɵ0, NzTooltipBaseDirective as ɵa };
 //# sourceMappingURL=bps-components-lib.js.map

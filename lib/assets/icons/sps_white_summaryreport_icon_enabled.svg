@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="10.485" height="13.106" viewBox="0 0 10.485 13.106">
+    <defs>
+        <style>
+            .prefix__cls-1{fill:none;stroke:#fff}
+        </style>
+    </defs>
+    <g id="prefix__sps_white_summaryreport_icon_enabled" transform="translate(-1222.287 -226.894)">
+        <g id="prefix__sps_round_icon_deleteconfiguration_white" transform="translate(-97.5 157.043)">
+            <g id="prefix__Group_2699" data-name="Group 2699" transform="translate(250.901 4.209)">
+                <g id="prefix__Rectangle_1411" class="prefix__cls-1" data-name="Rectangle 1411" transform="translate(1068.886 65.642)">
+                    <rect width="10.485" height="13.106" rx="1"/>
+                    <rect width="9.485" height="12.106" x=".5" y=".5" fill="none" rx=".5"/>
+                </g>
+                <path id="prefix__Path_989" d="M-9638-11025.905v-4.939" class="prefix__cls-1" data-name="Path 989" transform="rotate(-90 1268.384 -10834.12)"/>
+                <path id="prefix__Path_1849" d="M-9638-11028.375v-2.47" class="prefix__cls-1" data-name="Path 1849" transform="rotate(-90 1269.884 -10832.62)"/>
+                <path id="prefix__Path_1848" d="M-9638-11025.905v-4.939" class="prefix__cls-1" data-name="Path 1848" transform="rotate(-90 1266.884 -10835.62)"/>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -45,3 +45,6 @@ export * from './lib/components/core/enums/templateType.enum';
 export * from './lib/components/core/interfaces/grid-config';
 export * from './lib/components/bps-table-expandable-panel/bps-table-expandable-panel.component';
 export * from './lib/components/bps-configuration-selector/bps-configuration-selector.component';
+export * from './lib/components/bps-dropdown/bps-dropdown-a.directive';
+export * from './lib/components/bps-dropdown/bps-dropdown-menu.component';
+export * from './lib/components/bps-dropdown/bps-dropdown.directive';
