@@ -5548,6 +5548,973 @@
         return BpsDropDownDirective;
     }());
 
+    function NzTreeServiceFactory(higherOrderService, treeService) {
+        return higherOrderService ? higherOrderService : treeService;
+    }
+    var NZ_CONFIG_COMPONENT_NAME$5 = 'tree';
+    var BpsTreeComponent = /** @class */ (function (_super) {
+        __extends(BpsTreeComponent, _super);
+        function BpsTreeComponent(nzTreeService, nzConfigService, cdr, noAnimation) {
+            var _this = _super.call(this, nzTreeService) || this;
+            _this.nzConfigService = nzConfigService;
+            _this.cdr = cdr;
+            _this.noAnimation = noAnimation;
+            _this.bpsShowExpand = true;
+            _this.bpsShowLine = false;
+            _this.bpsCheckable = false;
+            _this.bpsAsyncData = false;
+            _this.bpsDraggable = false;
+            _this.bpsSelectMode = false;
+            _this.bpsCheckStrictly = false;
+            _this.bpsExpandAll = false;
+            _this.bpsCustomTree = true;
+            _this._bpsDefaultExpandAll = false;
+            _this.bpsMultiple = false;
+            _this.bpsExpandedKeysChange = new core.EventEmitter();
+            _this.bpsSelectedKeysChange = new core.EventEmitter();
+            _this.bpsCheckedKeysChange = new core.EventEmitter();
+            _this.bpsSearchValueChange = new core.EventEmitter();
+            /**
+             * @deprecated use `nzSearchValueChange` instead.
+             */
+            _this.bpsOnSearchNode = new core.EventEmitter();
+            _this.bpsClick = new core.EventEmitter();
+            _this.bpsDblClick = new core.EventEmitter();
+            _this.bpsContextMenu = new core.EventEmitter();
+            _this.bpsCheckBoxChange = new core.EventEmitter();
+            _this.bpsExpandChange = new core.EventEmitter();
+            _this.bpsOnDragStart = new core.EventEmitter();
+            _this.bpsOnDragEnter = new core.EventEmitter();
+            _this.bpsOnDragOver = new core.EventEmitter();
+            _this.bpsOnDragLeave = new core.EventEmitter();
+            _this.bpsOnDrop = new core.EventEmitter();
+            _this.bpsOnDragEnd = new core.EventEmitter();
+            _this.bpsDefaultSubject = new rxjs.ReplaySubject(6);
+            _this.destroy$ = new rxjs.Subject();
+            _this.prefixCls = 'ant-tree';
+            _this.classMap = {};
+            _this.onChange = function () { return null; };
+            _this.onTouched = function () { return null; };
+            return _this;
+        }
+        BpsTreeComponent_1 = BpsTreeComponent;
+        Object.defineProperty(BpsTreeComponent.prototype, "treeTemplate", {
+            get: function () {
+                return this.bpsTreeTemplate || this.bpsTreeTemplateChild;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeComponent.prototype, "bpsDefaultExpandAll", {
+            get: function () {
+                return this._bpsDefaultExpandAll;
+            },
+            /**
+             * @deprecated 9.0.0 use `bpsExpandAll` instead.
+             */
+            set: function (value) {
+                core$1.warnDeprecation("'bpsDefaultExpandAll' would be removed in 9.0.0. Please use 'bpsExpandAll' instead.");
+                this.bpsExpandAll = value;
+                this._bpsDefaultExpandAll = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeComponent.prototype, "bpsData", {
+            set: function (value) {
+                this.initNzData(value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeComponent.prototype, "bpsDefaultExpandedKeys", {
+            /**
+             * @deprecated 9.0.0 - use `bpsExpandedKeys` instead.
+             */
+            set: function (value) {
+                core$1.warnDeprecation("'bpsDefaultExpandedKeys' would be removed in 9.0.0. Please use 'bpsExpandedKeys' instead.");
+                this.bpsDefaultSubject.next({ type: 'nzExpandedKeys', keys: value });
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeComponent.prototype, "bpsDefaultSelectedKeys", {
+            /**
+             * @deprecated 9.0.0 - use `bpsSelectedKeys` instead.
+             */
+            set: function (value) {
+                core$1.warnDeprecation("'bpsDefaultSelectedKeys' would be removed in 9.0.0. Please use 'bpsSelectedKeys' instead.");
+                this.bpsDefaultSubject.next({ type: 'nzSelectedKeys', keys: value });
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeComponent.prototype, "bpsDefaultCheckedKeys", {
+            /**
+             * @deprecated 9.0.0 - use `bpsCheckedKeys` instead.
+             */
+            set: function (value) {
+                core$1.warnDeprecation("'bpsDefaultCheckedKeys' would be removed in 9.0.0. Please use 'bpsCheckedKeys' instead.");
+                this.bpsDefaultSubject.next({ type: 'nzCheckedKeys', keys: value });
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeComponent.prototype, "bpsExpandedKeys", {
+            set: function (value) {
+                this.bpsDefaultSubject.next({ type: 'nzExpandedKeys', keys: value });
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeComponent.prototype, "bpsSelectedKeys", {
+            set: function (value) {
+                this.bpsDefaultSubject.next({ type: 'nzSelectedKeys', keys: value });
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeComponent.prototype, "bpsCheckedKeys", {
+            set: function (value) {
+                this.bpsDefaultSubject.next({ type: 'nzCheckedKeys', keys: value });
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeComponent.prototype, "bpsSearchValue", {
+            get: function () {
+                return this._searchValue;
+            },
+            set: function (value) {
+                this._searchValue = value;
+                this.nzTreeService.searchExpand(value);
+                if (core$1.isNotNil(value)) {
+                    this.bpsSearchValueChange.emit(this.nzTreeService.formatEvent('search', null, null));
+                    /**
+                     * @deprecated 9.0.0 - use `nzOnSearchNode` instead.
+                     * Hide warning, need remove next version
+                     */
+                    this.bpsOnSearchNode.emit(this.nzTreeService.formatEvent('search', null, null));
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeComponent.prototype, "bpsNodes", {
+            /**
+             * To render nodes if root is changed.
+             */
+            get: function () {
+                return this.nzTreeService.rootNodes;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        BpsTreeComponent.prototype.setClassMap = function () {
+            var _a;
+            this.classMap = (_a = {},
+                _a[this.prefixCls] = true,
+                _a['bps-tree'] = true,
+                _a[this.prefixCls + '-show-line'] = this.bpsShowLine,
+                _a[this.prefixCls + "-icon-hide"] = !this.bpsShowIcon,
+                _a[this.prefixCls + "-block-node"] = this.bpsBlockNode,
+                _a['draggable-tree'] = this.bpsDraggable,
+                _a['ant-select-tree'] = this.bpsSelectMode,
+                _a);
+        };
+        BpsTreeComponent.prototype.writeValue = function (value) {
+            this.initNzData(value);
+        };
+        BpsTreeComponent.prototype.registerOnChange = function (fn) {
+            this.onChange = fn;
+        };
+        BpsTreeComponent.prototype.registerOnTouched = function (fn) {
+            this.onTouched = fn;
+        };
+        // tslint:disable-next-line:no-any
+        BpsTreeComponent.prototype.initNzData = function (value) {
+            if (Array.isArray(value)) {
+                this.nzTreeService.isCheckStrictly = this.bpsCheckStrictly;
+                this.nzTreeService.isMultiple = this.bpsMultiple;
+                this.nzTreeService.initTree(this.coerceTreeNodes(value));
+            }
+        };
+        BpsTreeComponent.prototype.ngOnInit = function () {
+            var _this = this;
+            this.setClassMap();
+            this.bpsDefaultSubject.pipe(operators.takeUntil(this.destroy$)).subscribe(function (data) {
+                if (!data || !data.keys) {
+                    return;
+                }
+                switch (data.type) {
+                    case 'nzExpandedKeys':
+                        _this.nzTreeService.calcExpandedKeys(data.keys, _this.bpsNodes);
+                        _this.bpsExpandedKeysChange.emit(data.keys);
+                        break;
+                    case 'nzSelectedKeys':
+                        _this.nzTreeService.calcSelectedKeys(data.keys, _this.bpsNodes, _this.bpsMultiple);
+                        _this.bpsSelectedKeysChange.emit(data.keys);
+                        break;
+                    case 'nzCheckedKeys':
+                        _this.nzTreeService.calcCheckedKeys(data.keys, _this.bpsNodes, _this.bpsCheckStrictly);
+                        _this.bpsCheckedKeysChange.emit(data.keys);
+                        break;
+                }
+                _this.cdr.markForCheck();
+            });
+            this.nzTreeService
+                .eventTriggerChanged()
+                .pipe(operators.takeUntil(this.destroy$))
+                .subscribe(function (data) {
+                switch (data.eventName) {
+                    case 'expand':
+                        _this.bpsExpandChange.emit(data);
+                        break;
+                    case 'click':
+                        _this.bpsClick.emit(data);
+                        break;
+                    case 'check':
+                        _this.bpsCheckBoxChange.emit(data);
+                        break;
+                    case 'dblclick':
+                        _this.bpsDblClick.emit(data);
+                        break;
+                    case 'contextmenu':
+                        _this.bpsContextMenu.emit(data);
+                        break;
+                    // drag drop
+                    case 'dragstart':
+                        _this.bpsOnDragStart.emit(data);
+                        break;
+                    case 'dragenter':
+                        _this.bpsOnDragEnter.emit(data);
+                        break;
+                    case 'dragover':
+                        _this.bpsOnDragOver.emit(data);
+                        break;
+                    case 'dragleave':
+                        _this.bpsOnDragLeave.emit(data);
+                        break;
+                    case 'drop':
+                        _this.bpsOnDrop.emit(data);
+                        break;
+                    case 'dragend':
+                        _this.bpsOnDragEnd.emit(data);
+                        break;
+                }
+            });
+        };
+        BpsTreeComponent.prototype.ngOnChanges = function (changes) {
+            if (changes.bpsCheckStrictly) {
+                this.nzTreeService.isCheckStrictly = this.bpsCheckStrictly;
+            }
+            if (changes.bpsMultiple) {
+                this.nzTreeService.isMultiple = this.bpsMultiple;
+            }
+        };
+        BpsTreeComponent.prototype.ngOnDestroy = function () {
+            this.destroy$.next();
+            this.destroy$.complete();
+        };
+        var BpsTreeComponent_1;
+        BpsTreeComponent.ctorParameters = function () { return [
+            { type: core$1.NzTreeBaseService },
+            { type: core$1.NzConfigService },
+            { type: core.ChangeDetectorRef },
+            { type: core$1.NzNoAnimationDirective, decorators: [{ type: core.Host }, { type: core.Optional }] }
+        ]; };
+        __decorate([
+            core.Input(), core$1.InputBoolean(), core$1.WithConfig(NZ_CONFIG_COMPONENT_NAME$5, false)
+        ], BpsTreeComponent.prototype, "bpsShowIcon", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeComponent.prototype, "bpsShowExpand", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeComponent.prototype, "bpsShowLine", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTreeComponent.prototype, "bpsExpandedIcon", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeComponent.prototype, "bpsCheckable", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeComponent.prototype, "bpsAsyncData", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeComponent.prototype, "bpsDraggable", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean(), core$1.WithConfig(NZ_CONFIG_COMPONENT_NAME$5, false)
+        ], BpsTreeComponent.prototype, "bpsHideUnMatched", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeComponent.prototype, "bpsSelectMode", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeComponent.prototype, "bpsCheckStrictly", void 0);
+        __decorate([
+            core.Input(), core$1.WithConfig(NZ_CONFIG_COMPONENT_NAME$5, false), core$1.InputBoolean()
+        ], BpsTreeComponent.prototype, "bpsBlockNode", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeComponent.prototype, "bpsExpandAll", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeComponent.prototype, "bpsCustomTree", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTreeComponent.prototype, "bpsTreeTemplate", void 0);
+        __decorate([
+            core.ContentChild('bpsTreeTemplate', { static: true })
+        ], BpsTreeComponent.prototype, "bpsTreeTemplateChild", void 0);
+        __decorate([
+            core.Input(),
+            core$1.InputBoolean()
+        ], BpsTreeComponent.prototype, "bpsDefaultExpandAll", null);
+        __decorate([
+            core.Input()
+        ], BpsTreeComponent.prototype, "bpsBeforeDrop", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeComponent.prototype, "bpsMultiple", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTreeComponent.prototype, "bpsData", null);
+        __decorate([
+            core.Input()
+        ], BpsTreeComponent.prototype, "bpsDefaultExpandedKeys", null);
+        __decorate([
+            core.Input()
+        ], BpsTreeComponent.prototype, "bpsDefaultSelectedKeys", null);
+        __decorate([
+            core.Input()
+        ], BpsTreeComponent.prototype, "bpsDefaultCheckedKeys", null);
+        __decorate([
+            core.Input()
+        ], BpsTreeComponent.prototype, "bpsExpandedKeys", null);
+        __decorate([
+            core.Input()
+        ], BpsTreeComponent.prototype, "bpsSelectedKeys", null);
+        __decorate([
+            core.Input()
+        ], BpsTreeComponent.prototype, "bpsCheckedKeys", null);
+        __decorate([
+            core.Input()
+        ], BpsTreeComponent.prototype, "bpsSearchValue", null);
+        __decorate([
+            core.Output()
+        ], BpsTreeComponent.prototype, "bpsExpandedKeysChange", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTreeComponent.prototype, "bpsSelectedKeysChange", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTreeComponent.prototype, "bpsCheckedKeysChange", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTreeComponent.prototype, "bpsSearchValueChange", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTreeComponent.prototype, "bpsOnSearchNode", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTreeComponent.prototype, "bpsClick", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTreeComponent.prototype, "bpsDblClick", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTreeComponent.prototype, "bpsContextMenu", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTreeComponent.prototype, "bpsCheckBoxChange", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTreeComponent.prototype, "bpsExpandChange", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTreeComponent.prototype, "bpsOnDragStart", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTreeComponent.prototype, "bpsOnDragEnter", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTreeComponent.prototype, "bpsOnDragOver", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTreeComponent.prototype, "bpsOnDragLeave", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTreeComponent.prototype, "bpsOnDrop", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTreeComponent.prototype, "bpsOnDragEnd", void 0);
+        BpsTreeComponent = BpsTreeComponent_1 = __decorate([
+            core.Component({
+                selector: 'bps-tree',
+                exportAs: 'bpsTree',
+                template: "<ul\n  role=\"tree\"\n  unselectable=\"on\"\n  [ngClass]=\"classMap\">\n  <ng-container *ngFor=\"let node of bpsNodes\">\n    <bps-tree-node\n      [bpsTreeNode]=\"node\"\n      [bpsSelectMode]=\"bpsSelectMode\"\n      [bpsShowLine]=\"bpsShowLine\"\n      [bpsExpandedIcon]=\"bpsExpandedIcon\"\n      [bpsDraggable]=\"bpsDraggable\"\n      [bpsCheckable]=\"bpsCheckable\"\n      [bpsShowExpand]=\"bpsShowExpand\"\n      [bpsAsyncData]=\"bpsAsyncData\"\n      [bpsSearchValue]=\"bpsSearchValue\"\n      [bpsHideUnMatched]=\"bpsHideUnMatched\"\n      [bpsBeforeDrop]=\"bpsBeforeDrop\"\n      [bpsExpandAll]=\"bpsExpandAll\"\n      [bpsShowIcon]=\"bpsShowIcon\"\n      [bpsTreeTemplate]=\"treeTemplate\"\n      [@.disabled]=\"noAnimation?.nzNoAnimation\"\n      [bpsNoAnimation]=\"noAnimation?.nzNoAnimation\">\n    </bps-tree-node>\n  </ng-container>\n</ul>\n",
+                changeDetection: core.ChangeDetectionStrategy.OnPush,
+                providers: [
+                    ngZorroAntd.NzTreeService,
+                    {
+                        provide: core$1.NzTreeBaseService,
+                        useFactory: NzTreeServiceFactory,
+                        deps: [[new core.SkipSelf(), new core.Optional(), core$1.NzTreeHigherOrderServiceToken], ngZorroAntd.NzTreeService]
+                    },
+                    {
+                        provide: forms.NG_VALUE_ACCESSOR,
+                        useExisting: core.forwardRef(function () { return BpsTreeComponent_1; }),
+                        multi: true
+                    }
+                ],
+                styles: ["::ng-deep .ant-tree.bps-tree li ul{padding:0!important}::ng-deep .ant-tree.ant-tree-block-node li .ant-tree-node-content-wrapper{width:100%!important}::ng-deep .bps-tree-leaf,::ng-deep .bps-tree-parent{height:70px!important;max-height:70px!important;overflow:hidden!important;background-color:#363636!important;border:1px solid #363636!important;border-radius:5px!important;color:#fff!important;font-size:11px!important;font-weight:400!important;font-stretch:normal!important;font-style:normal!important;line-height:1.27!important;letter-spacing:normal!important;text-align:left!important;margin-bottom:5px!important}::ng-deep .bps-tree-leaf{height:35px!important;max-height:35px!important;padding:10px 20px!important}::ng-deep .bps-tree-leaf:hover,::ng-deep .bps-tree-parent:hover{border:1px solid #445c67!important}::ng-deep .bps-tree-leaf.ant-tree-node-selected,::ng-deep .bps-tree-leaf.ant-tree-node-selected:hover,::ng-deep .bps-tree-parent.ant-tree-node-selected,::ng-deep .bps-tree-parent.ant-tree-node-selected:hover{border:1px solid #00a2d1!important}::ng-deep .ant-tree-treenode-disabled>.bps-tree-leaf,::ng-deep .ant-tree-treenode-disabled>.bps-tree-leaf:hover,::ng-deep .ant-tree-treenode-disabled>.bps-tree-parent,::ng-deep .ant-tree-treenode-disabled>.bps-tree-parent:hover{border:1px solid #363636!important}::ng-deep li.ant-tree-treenode-disabled>.ant-tree-node-content-wrapper,::ng-deep li.ant-tree-treenode-disabled>.ant-tree-node-content-wrapper span{color:#666!important}::ng-deep .ant-tree li{padding:0!important}"]
+            }),
+            __param(3, core.Host()), __param(3, core.Optional())
+        ], BpsTreeComponent);
+        return BpsTreeComponent;
+    }(core$1.NzTreeBase));
+
+    var BpsTreeNodeComponent = /** @class */ (function () {
+        function BpsTreeNodeComponent(nzTreeService, ngZone, renderer, elRef, cdr, noAnimation) {
+            this.nzTreeService = nzTreeService;
+            this.ngZone = ngZone;
+            this.renderer = renderer;
+            this.elRef = elRef;
+            this.cdr = cdr;
+            this.noAnimation = noAnimation;
+            this.bpsHideUnMatched = false;
+            this.bpsNoAnimation = false;
+            this.bpsSelectMode = false;
+            this.bpsShowIcon = false;
+            this.bpsSearchValue = '';
+            this.bpsCustomTree = true;
+            // default var
+            this.prefixCls = 'ant-tree';
+            this.bpsNodeClass = {};
+            this.bpsNodeSwitcherClass = {};
+            this.bpsNodeContentClass = {};
+            this.bpsNodeCheckboxClass = {};
+            this.bpsNodeContentIconClass = {};
+            this.bpsNodeContentLoadingClass = {};
+            /**
+             * drag var
+             */
+            this.destroy$ = new rxjs.Subject();
+            this.dragPos = 2;
+            this.dragPosClass = {
+                '0': 'drag-over',
+                '1': 'drag-over-gap-bottom',
+                '-1': 'drag-over-gap-top'
+            };
+            /**
+             * default set
+             */
+            this._bpsDraggable = false;
+            this._bpsExpandAll = false;
+        }
+        Object.defineProperty(BpsTreeNodeComponent.prototype, "bpsDraggable", {
+            get: function () {
+                return this._bpsDraggable;
+            },
+            set: function (value) {
+                this._bpsDraggable = value;
+                this.handDragEvent();
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeNodeComponent.prototype, "bpsDefaultExpandAll", {
+            get: function () {
+                return this._bpsExpandAll;
+            },
+            /**
+             * @deprecated use `nzExpandAll` instead.
+             */
+            set: function (value) {
+                core$1.warnDeprecation("'bpsDefaultExpandAll' is going to be removed in 9.0.0. Please use 'bpsExpandAll' instead.");
+                this._bpsExpandAll = value;
+                if (value && this.bpsTreeNode && !this.bpsTreeNode.isLeaf) {
+                    this.bpsTreeNode.isExpanded = true;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeNodeComponent.prototype, "bpsExpandAll", {
+            get: function () {
+                return this._bpsExpandAll;
+            },
+            // default set
+            set: function (value) {
+                this._bpsExpandAll = value;
+                if (value && this.bpsTreeNode && !this.bpsTreeNode.isLeaf) {
+                    this.bpsTreeNode.isExpanded = true;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeNodeComponent.prototype, "bpsIcon", {
+            get: function () {
+                return this.bpsTreeNode.icon;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeNodeComponent.prototype, "canDraggable", {
+            get: function () {
+                return this.bpsDraggable && !this.bpsTreeNode.isDisabled ? true : null;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeNodeComponent.prototype, "isShowLineIcon", {
+            get: function () {
+                return !this.bpsTreeNode.isLeaf && this.bpsShowLine;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeNodeComponent.prototype, "isShowSwitchIcon", {
+            get: function () {
+                return !this.bpsTreeNode.isLeaf && !this.bpsShowLine;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeNodeComponent.prototype, "isSwitcherOpen", {
+            get: function () {
+                return this.bpsTreeNode.isExpanded && !this.bpsTreeNode.isLeaf;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeNodeComponent.prototype, "isSwitcherClose", {
+            get: function () {
+                return !this.bpsTreeNode.isExpanded && !this.bpsTreeNode.isLeaf;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsTreeNodeComponent.prototype, "displayStyle", {
+            get: function () {
+                // to hide unmatched nodes
+                return this.bpsSearchValue &&
+                    this.bpsHideUnMatched &&
+                    !this.bpsTreeNode.isMatched &&
+                    !this.bpsTreeNode.isExpanded &&
+                    this.bpsTreeNode.canHide
+                    ? 'none'
+                    : '';
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * reset node class
+         */
+        BpsTreeNodeComponent.prototype.setClassMap = function () {
+            var _a, _b, _c, _d, _e, _f;
+            this.prefixCls = this.bpsSelectMode ? 'ant-select-tree' : 'ant-tree';
+            this.bpsNodeClass = (_a = {},
+                _a[this.prefixCls + "-treenode-disabled"] = this.bpsTreeNode.isDisabled,
+                _a[this.prefixCls + "-treenode-switcher-open"] = this.isSwitcherOpen,
+                _a[this.prefixCls + "-treenode-switcher-close"] = this.isSwitcherClose,
+                _a[this.prefixCls + "-treenode-checkbox-checked"] = this.bpsTreeNode.isChecked,
+                _a[this.prefixCls + "-treenode-checkbox-indeterminate"] = this.bpsTreeNode.isHalfChecked,
+                _a[this.prefixCls + "-treenode-selected"] = this.bpsTreeNode.isSelected,
+                _a[this.prefixCls + "-treenode-loading"] = this.bpsTreeNode.isLoading,
+                _a);
+            this.bpsNodeSwitcherClass = (_b = {},
+                _b[this.prefixCls + "-switcher"] = true,
+                _b[this.prefixCls + "-switcher-noop"] = this.bpsTreeNode.isLeaf,
+                _b[this.prefixCls + "-switcher_open"] = this.isSwitcherOpen,
+                _b[this.prefixCls + "-switcher_close"] = this.isSwitcherClose,
+                _b);
+            this.bpsNodeCheckboxClass = (_c = {},
+                _c[this.prefixCls + "-checkbox"] = true,
+                _c[this.prefixCls + "-checkbox-checked"] = this.bpsTreeNode.isChecked,
+                _c[this.prefixCls + "-checkbox-indeterminate"] = this.bpsTreeNode.isHalfChecked,
+                _c[this.prefixCls + "-checkbox-disabled"] = this.bpsTreeNode.isDisabled || this.bpsTreeNode.isDisableCheckbox,
+                _c);
+            this.bpsNodeContentClass = (_d = {},
+                _d[this.prefixCls + "-node-content-wrapper"] = true,
+                _d["bps-tree-leaf"] = this.bpsTreeNode.isLeaf,
+                _d["bps-tree-parent"] = !this.bpsTreeNode.isLeaf,
+                _d[this.prefixCls + "-node-content-wrapper-open"] = this.isSwitcherOpen,
+                _d[this.prefixCls + "-node-content-wrapper-close"] = this.isSwitcherClose,
+                _d[this.prefixCls + "-node-selected"] = this.bpsTreeNode.isSelected,
+                _d);
+            this.bpsNodeContentIconClass = (_e = {},
+                _e[this.prefixCls + "-iconEle"] = true,
+                _e[this.prefixCls + "-icon__customize"] = true,
+                _e);
+            this.bpsNodeContentLoadingClass = (_f = {},
+                _f[this.prefixCls + "-iconEle"] = true,
+                _f);
+        };
+        BpsTreeNodeComponent.prototype.onMousedown = function (event) {
+            if (this.bpsSelectMode) {
+                event.preventDefault();
+            }
+        };
+        /**
+         * click node to select, 200ms to dbl click
+         */
+        BpsTreeNodeComponent.prototype.nzClick = function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (this.bpsTreeNode.isSelectable && !this.bpsTreeNode.isDisabled) {
+                if (!this.bpsTreeNode.isSelected) {
+                    this.bpsTreeNode.isSelected = true;
+                }
+                if (this.bpsCustomTree) {
+                    this._clickExpand(event);
+                }
+            }
+            var eventNext = this.nzTreeService.formatEvent('click', this.bpsTreeNode, event);
+            this.nzTreeService.triggerEventChange$.next(eventNext);
+        };
+        BpsTreeNodeComponent.prototype.nzDblClick = function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var eventNext = this.nzTreeService.formatEvent('dblclick', this.bpsTreeNode, event);
+            this.nzTreeService.triggerEventChange$.next(eventNext);
+        };
+        /**
+         * @param event
+         */
+        BpsTreeNodeComponent.prototype.nzContextMenu = function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var eventNext = this.nzTreeService.formatEvent('contextmenu', this.bpsTreeNode, event);
+            this.nzTreeService.triggerEventChange$.next(eventNext);
+        };
+        /**
+         * collapse node
+         * @param event
+         */
+        BpsTreeNodeComponent.prototype._clickExpand = function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (!this.bpsTreeNode.isLoading && !this.bpsTreeNode.isLeaf) {
+                // set async state
+                if (this.bpsAsyncData && this.bpsTreeNode.children.length === 0 && !this.bpsTreeNode.isExpanded) {
+                    this.bpsTreeNode.isLoading = true;
+                }
+                this.bpsTreeNode.isExpanded = !this.bpsTreeNode.isExpanded;
+                if (this.bpsTreeNode.isMatched) {
+                    this.setDisplayForParentNodes(this.bpsTreeNode);
+                }
+                this.setDisplayForChildNodes(this.bpsTreeNode);
+                var eventNext = this.nzTreeService.formatEvent('expand', this.bpsTreeNode, event);
+                this.nzTreeService.triggerEventChange$.next(eventNext);
+            }
+        };
+        BpsTreeNodeComponent.prototype.setDisplayForChildNodes = function (parentNode) {
+            var _this = this;
+            var children = parentNode.children;
+            if (children.length > 0) {
+                children.map(function (node) {
+                    var canHide = !node.isMatched;
+                    node.canHide = canHide;
+                    _this.setDisplayForChildNodes(node);
+                });
+            }
+        };
+        BpsTreeNodeComponent.prototype.setDisplayForParentNodes = function (targetNode) {
+            var parentNode = targetNode.getParentNode();
+            if (parentNode) {
+                parentNode.canHide = false;
+                this.setDisplayForParentNodes(parentNode);
+            }
+        };
+        /**
+         * check node
+         * @param event
+         */
+        BpsTreeNodeComponent.prototype._clickCheckBox = function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            // return if node is disabled
+            if (this.bpsTreeNode.isDisabled || this.bpsTreeNode.isDisableCheckbox) {
+                return;
+            }
+            this.bpsTreeNode.isChecked = !this.bpsTreeNode.isChecked;
+            this.bpsTreeNode.isHalfChecked = false;
+            if (!this.nzTreeService.isCheckStrictly) {
+                this.nzTreeService.conduct(this.bpsTreeNode);
+            }
+            var eventNext = this.nzTreeService.formatEvent('check', this.bpsTreeNode, event);
+            this.nzTreeService.triggerEventChange$.next(eventNext);
+        };
+        /**
+         * drag event
+         * @param e
+         */
+        BpsTreeNodeComponent.prototype.clearDragClass = function () {
+            var _this = this;
+            var dragClass = ['drag-over-gap-top', 'drag-over-gap-bottom', 'drag-over'];
+            dragClass.forEach(function (e) {
+                _this.renderer.removeClass(_this.dragElement.nativeElement, e);
+            });
+        };
+        BpsTreeNodeComponent.prototype.handleDragStart = function (e) {
+            e.stopPropagation();
+            try {
+                // ie throw error
+                // firefox-need-it
+                e.dataTransfer.setData('text/plain', this.bpsTreeNode.key);
+            }
+            catch (error) {
+                // empty
+            }
+            this.nzTreeService.setSelectedNode(this.bpsTreeNode);
+            this.bpsTreeNode.isExpanded = false;
+            var eventNext = this.nzTreeService.formatEvent('dragstart', this.bpsTreeNode, e);
+            this.nzTreeService.triggerEventChange$.next(eventNext);
+        };
+        BpsTreeNodeComponent.prototype.handleDragEnter = function (e) {
+            var _this = this;
+            e.preventDefault();
+            e.stopPropagation();
+            // reset position
+            this.dragPos = 2;
+            this.ngZone.run(function () {
+                var node = _this.nzTreeService.getSelectedNode();
+                if (node && node.key !== _this.bpsTreeNode.key && !_this.bpsTreeNode.isExpanded && !_this.bpsTreeNode.isLeaf) {
+                    _this.bpsTreeNode.isExpanded = true;
+                }
+                var eventNext = _this.nzTreeService.formatEvent('dragenter', _this.bpsTreeNode, e);
+                _this.nzTreeService.triggerEventChange$.next(eventNext);
+            });
+        };
+        BpsTreeNodeComponent.prototype.handleDragOver = function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var dropPosition = this.nzTreeService.calcDropPosition(e);
+            if (this.dragPos !== dropPosition) {
+                this.clearDragClass();
+                this.dragPos = dropPosition;
+                // leaf node will pass
+                if (!(this.dragPos === 0 && this.bpsTreeNode.isLeaf)) {
+                    this.renderer.addClass(this.dragElement.nativeElement, this.dragPosClass[this.dragPos]);
+                }
+            }
+            var eventNext = this.nzTreeService.formatEvent('dragover', this.bpsTreeNode, e);
+            this.nzTreeService.triggerEventChange$.next(eventNext);
+        };
+        BpsTreeNodeComponent.prototype.handleDragLeave = function (e) {
+            var _this = this;
+            e.stopPropagation();
+            this.ngZone.run(function () {
+                _this.clearDragClass();
+            });
+            var eventNext = this.nzTreeService.formatEvent('dragleave', this.bpsTreeNode, e);
+            this.nzTreeService.triggerEventChange$.next(eventNext);
+        };
+        BpsTreeNodeComponent.prototype.handleDragDrop = function (e) {
+            var _this = this;
+            e.preventDefault();
+            e.stopPropagation();
+            this.ngZone.run(function () {
+                _this.clearDragClass();
+                var node = _this.nzTreeService.getSelectedNode();
+                if (!node || (node && node.key === _this.bpsTreeNode.key) || (_this.dragPos === 0 && _this.bpsTreeNode.isLeaf)) {
+                    return;
+                }
+                // pass if node is leafNo
+                var dropEvent = _this.nzTreeService.formatEvent('drop', _this.bpsTreeNode, e);
+                var dragEndEvent = _this.nzTreeService.formatEvent('dragend', _this.bpsTreeNode, e);
+                if (_this.bpsBeforeDrop) {
+                    _this.bpsBeforeDrop({
+                        dragNode: _this.nzTreeService.getSelectedNode(),
+                        node: _this.bpsTreeNode,
+                        pos: _this.dragPos
+                    }).subscribe(function (canDrop) {
+                        if (canDrop) {
+                            _this.nzTreeService.dropAndApply(_this.bpsTreeNode, _this.dragPos);
+                        }
+                        _this.nzTreeService.triggerEventChange$.next(dropEvent);
+                        _this.nzTreeService.triggerEventChange$.next(dragEndEvent);
+                    });
+                }
+                else if (_this.bpsTreeNode) {
+                    _this.nzTreeService.dropAndApply(_this.bpsTreeNode, _this.dragPos);
+                    _this.nzTreeService.triggerEventChange$.next(dropEvent);
+                }
+            });
+        };
+        BpsTreeNodeComponent.prototype.handleDragEnd = function (e) {
+            var _this = this;
+            e.stopPropagation();
+            this.ngZone.run(function () {
+                // if user do not custom beforeDrop
+                if (!_this.bpsBeforeDrop) {
+                    var eventNext = _this.nzTreeService.formatEvent('dragend', _this.bpsTreeNode, e);
+                    _this.nzTreeService.triggerEventChange$.next(eventNext);
+                }
+            });
+        };
+        /**
+         * Listening to dragging events.
+         */
+        BpsTreeNodeComponent.prototype.handDragEvent = function () {
+            var _this = this;
+            this.ngZone.runOutsideAngular(function () {
+                if (_this.bpsDraggable) {
+                    _this.destroy$ = new rxjs.Subject();
+                    rxjs.fromEvent(_this.elRef.nativeElement, 'dragstart')
+                        .pipe(operators.takeUntil(_this.destroy$))
+                        .subscribe(function (e) { return _this.handleDragStart(e); });
+                    rxjs.fromEvent(_this.elRef.nativeElement, 'dragenter')
+                        .pipe(operators.takeUntil(_this.destroy$))
+                        .subscribe(function (e) { return _this.handleDragEnter(e); });
+                    rxjs.fromEvent(_this.elRef.nativeElement, 'dragover')
+                        .pipe(operators.takeUntil(_this.destroy$))
+                        .subscribe(function (e) { return _this.handleDragOver(e); });
+                    rxjs.fromEvent(_this.elRef.nativeElement, 'dragleave')
+                        .pipe(operators.takeUntil(_this.destroy$))
+                        .subscribe(function (e) { return _this.handleDragLeave(e); });
+                    rxjs.fromEvent(_this.elRef.nativeElement, 'drop')
+                        .pipe(operators.takeUntil(_this.destroy$))
+                        .subscribe(function (e) { return _this.handleDragDrop(e); });
+                    rxjs.fromEvent(_this.elRef.nativeElement, 'dragend')
+                        .pipe(operators.takeUntil(_this.destroy$))
+                        .subscribe(function (e) { return _this.handleDragEnd(e); });
+                }
+                else {
+                    _this.destroy$.next();
+                    _this.destroy$.complete();
+                }
+            });
+        };
+        BpsTreeNodeComponent.prototype.isTemplateRef = function (value) {
+            return value instanceof core.TemplateRef;
+        };
+        BpsTreeNodeComponent.prototype.markForCheck = function () {
+            this.cdr.markForCheck();
+        };
+        BpsTreeNodeComponent.prototype.ngOnInit = function () {
+            var _this = this;
+            // init expanded / selected / checked list
+            if (this.bpsTreeNode.isSelected) {
+                this.nzTreeService.setNodeActive(this.bpsTreeNode);
+            }
+            if (this.bpsTreeNode.isExpanded) {
+                this.nzTreeService.setExpandedNodeList(this.bpsTreeNode);
+            }
+            if (this.bpsTreeNode.isChecked) {
+                this.nzTreeService.setCheckedNodeList(this.bpsTreeNode);
+            }
+            // TODO
+            this.bpsTreeNode.component = this;
+            this.nzTreeService
+                .eventTriggerChanged()
+                .pipe(operators.filter(function (data) { return data.node.key === _this.bpsTreeNode.key; }), operators.takeUntil(this.destroy$))
+                .subscribe(function () {
+                _this.setClassMap();
+                _this.markForCheck();
+            });
+            this.setClassMap();
+        };
+        BpsTreeNodeComponent.prototype.ngOnChanges = function () {
+            this.setClassMap();
+        };
+        BpsTreeNodeComponent.prototype.ngOnDestroy = function () {
+            this.destroy$.next();
+            this.destroy$.complete();
+        };
+        BpsTreeNodeComponent.ctorParameters = function () { return [
+            { type: core$1.NzTreeBaseService },
+            { type: core.NgZone },
+            { type: core.Renderer2 },
+            { type: core.ElementRef },
+            { type: core.ChangeDetectorRef },
+            { type: core$1.NzNoAnimationDirective, decorators: [{ type: core.Host }, { type: core.Optional }] }
+        ]; };
+        __decorate([
+            core.ViewChild('dragElement', { static: false })
+        ], BpsTreeNodeComponent.prototype, "dragElement", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTreeNodeComponent.prototype, "bpsTreeNode", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeNodeComponent.prototype, "bpsShowLine", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeNodeComponent.prototype, "bpsShowExpand", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeNodeComponent.prototype, "bpsCheckable", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeNodeComponent.prototype, "bpsAsyncData", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeNodeComponent.prototype, "bpsHideUnMatched", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeNodeComponent.prototype, "bpsNoAnimation", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeNodeComponent.prototype, "bpsSelectMode", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeNodeComponent.prototype, "bpsShowIcon", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTreeNodeComponent.prototype, "bpsExpandedIcon", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTreeNodeComponent.prototype, "bpsTreeTemplate", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTreeNodeComponent.prototype, "bpsBeforeDrop", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTreeNodeComponent.prototype, "bpsSearchValue", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsTreeNodeComponent.prototype, "bpsCustomTree", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTreeNodeComponent.prototype, "bpsDraggable", null);
+        __decorate([
+            core.Input()
+        ], BpsTreeNodeComponent.prototype, "bpsDefaultExpandAll", null);
+        __decorate([
+            core.Input()
+        ], BpsTreeNodeComponent.prototype, "bpsExpandAll", null);
+        __decorate([
+            core.HostListener('mousedown', ['$event'])
+        ], BpsTreeNodeComponent.prototype, "onMousedown", null);
+        __decorate([
+            core.HostListener('click', ['$event'])
+        ], BpsTreeNodeComponent.prototype, "nzClick", null);
+        __decorate([
+            core.HostListener('dblclick', ['$event'])
+        ], BpsTreeNodeComponent.prototype, "nzDblClick", null);
+        __decorate([
+            core.HostListener('contextmenu', ['$event'])
+        ], BpsTreeNodeComponent.prototype, "nzContextMenu", null);
+        BpsTreeNodeComponent = __decorate([
+            core.Component({
+                selector: 'bps-tree-node',
+                exportAs: 'bpsTreeNode',
+                template: "<li\n  #dragElement\n  role=\"treeitem\"\n  [style.display]=\"displayStyle\"\n  [ngClass]=\"bpsNodeClass\">\n  <ng-container *ngIf=\"bpsShowExpand && !bpsCustomTree\">\n    <span\n      [ngClass]=\"bpsNodeSwitcherClass\"\n      (click)=\"_clickExpand($event)\">\n      <ng-container *ngIf=\"isShowSwitchIcon\">\n        <ng-container *ngIf=\"!bpsTreeNode.isLoading\">\n          <ng-template\n            *ngIf=\"isTemplateRef(bpsExpandedIcon)\"\n            [ngTemplateOutlet]=\"bpsExpandedIcon\"\n            [ngTemplateOutletContext]=\"{ $implicit: bpsTreeNode }\">\n          </ng-template>\n          <i\n            *ngIf=\"!isTemplateRef(bpsExpandedIcon)\"\n            nz-icon\n            nzType=\"caret-down\"\n            [class.ant-select-switcher-icon]=\"bpsSelectMode\"\n            [class.ant-tree-switcher-icon]=\"!bpsSelectMode\">\n          </i>\n        </ng-container>\n        <i *ngIf=\"bpsTreeNode.isLoading\" nz-icon nzType=\"loading\" [nzSpin]=\"true\" class=\"ant-tree-switcher-loading-icon\"></i>\n      </ng-container>\n      <ng-container *ngIf=\"bpsShowLine\">\n        <ng-template\n          *ngIf=\"isTemplateRef(bpsExpandedIcon)\"\n          [ngTemplateOutlet]=\"bpsExpandedIcon\"\n          [ngTemplateOutletContext]=\"{ $implicit: bpsTreeNode }\">\n        </ng-template>\n        <ng-container *ngIf=\"!isTemplateRef(bpsExpandedIcon)\">\n          <i *ngIf=\"isShowLineIcon\" nz-icon [nzType]=\"isSwitcherOpen ? 'minus-square' : 'plus-square'\" class=\"ant-tree-switcher-line-icon\"></i>\n          <i *ngIf=\"!isShowLineIcon\" nz-icon nzType=\"file\" class=\"ant-tree-switcher-line-icon\"></i>\n        </ng-container>\n      </ng-container>\n    </span>\n  </ng-container>\n  <ng-container *ngIf=\"bpsCheckable && !bpsCustomTree\">\n    <span\n      [ngClass]=\"bpsNodeCheckboxClass\"\n      (click)=\"_clickCheckBox($event)\">\n      <span [class.ant-tree-checkbox-inner]=\"!bpsSelectMode\"\n            [class.ant-select-tree-checkbox-inner]=\"bpsSelectMode\"></span>\n    </span>\n  </ng-container>\n  <ng-container *ngIf=\"!bpsTreeTemplate\">\n    <span\n      title=\"{{bpsTreeNode.title}}\"\n      [attr.draggable]=\"canDraggable\"\n      [attr.aria-grabbed]=\"canDraggable\"\n      [ngClass]=\"bpsNodeContentClass\"\n      [class.draggable]=\"canDraggable\">\n      <span\n        *ngIf=\"bpsTreeNode.icon && bpsShowIcon\"\n        [class.ant-tree-icon__open]=\"isSwitcherOpen\"\n        [class.ant-tree-icon__close]=\"isSwitcherClose\"\n        [class.ant-tree-icon_loading]=\"bpsTreeNode.isLoading\"\n        [ngClass]=\"bpsNodeContentLoadingClass\">\n        <span\n          [ngClass]=\"bpsNodeContentIconClass\">\n          <i nz-icon *ngIf=\"bpsIcon\" [nzType]=\"bpsIcon\"></i>\n        </span>\n      </span>\n      <span class=\"ant-tree-title\" *ngIf=\"!bpsCustomTree || bpsTreeNode.isLeaf\" [innerHTML]=\"bpsTreeNode.title | nzHighlight: bpsSearchValue: '' : 'font-highlight'\">\n      </span>\n      <img *ngIf=\"bpsCustomTree && !bpsTreeNode.isLeaf\" [src]=\"bpsTreeNode.title\"/>\n    </span>\n  </ng-container>\n  <ng-template\n    [ngTemplateOutlet]=\"bpsTreeTemplate\"\n    [ngTemplateOutletContext]=\"{ $implicit: bpsTreeNode }\">\n  </ng-template>\n\n  <ul\n    *ngIf=\"bpsTreeNode.isExpanded\"\n    role=\"group\"\n    class=\"ant-tree-child-tree\"\n    [class.ant-tree-child-tree-open]=\"!bpsSelectMode || bpsTreeNode.isExpanded\"\n    data-expanded=\"true\"\n    [@.disabled]=\"noAnimation?.nzNoAnimation\"\n    @treeCollapseMotion>\n    <bps-tree-node\n      *ngFor=\"let node of bpsTreeNode.getChildren()\"\n      [bpsTreeNode]=\"node\"\n      [bpsShowExpand]=\"bpsShowExpand\"\n      [@.disabled]=\"noAnimation?.nzNoAnimation\"\n      [bpsNoAnimation]=\"noAnimation?.nzNoAnimation\"\n      [bpsSelectMode]=\"bpsSelectMode\"\n      [bpsShowLine]=\"bpsShowLine\"\n      [bpsExpandedIcon]=\"bpsExpandedIcon\"\n      [bpsDraggable]=\"bpsDraggable\"\n      [bpsCheckable]=\"bpsCheckable\"\n      [bpsAsyncData]=\"bpsAsyncData\"\n      [bpsExpandAll]=\"bpsExpandAll\"\n      [bpsShowIcon]=\"bpsShowIcon\"\n      [bpsSearchValue]=\"bpsSearchValue\"\n      [bpsHideUnMatched]=\"bpsHideUnMatched\"\n      [bpsBeforeDrop]=\"bpsBeforeDrop\"\n      [bpsTreeTemplate]=\"bpsTreeTemplate\">\n    </bps-tree-node>\n  </ul>\n</li>\n",
+                changeDetection: core.ChangeDetectionStrategy.OnPush,
+                preserveWhitespaces: false,
+                animations: [core$1.treeCollapseMotion]
+            }),
+            __param(5, core.Host()), __param(5, core.Optional())
+        ], BpsTreeNodeComponent);
+        return BpsTreeNodeComponent;
+    }());
+
     var ɵ0 = ngZorroAntd.en_US;
     var BpsComponentsLibModule = /** @class */ (function () {
         function BpsComponentsLibModule() {
@@ -5555,6 +6522,8 @@
         BpsComponentsLibModule = __decorate([
             core.NgModule({
                 declarations: [
+                    BpsTreeComponent,
+                    BpsTreeNodeComponent,
                     BpsDropDownDirective,
                     BpsDropdownMenuComponent,
                     BpsDropDownADirective,
@@ -5602,6 +6571,7 @@
                     BpsConfigurationSelectorComponent
                 ],
                 imports: [
+                    core$1.NzHighlightModule,
                     ngZorroAntd.NgZorroAntdModule,
                     common.CommonModule,
                     core$1.NzAddOnModule,
@@ -5621,6 +6591,8 @@
                     resizable.NzResizableModule
                 ],
                 exports: [
+                    BpsTreeComponent,
+                    BpsTreeNodeComponent,
                     BpsDropDownDirective,
                     BpsDropdownMenuComponent,
                     BpsDropDownADirective,
@@ -5738,6 +6710,9 @@
     exports.BpsTableExpandablePanelComponent = BpsTableExpandablePanelComponent;
     exports.BpsToolTipComponent = BpsToolTipComponent;
     exports.BpsTooltipDirective = BpsTooltipDirective;
+    exports.BpsTreeComponent = BpsTreeComponent;
+    exports.BpsTreeNodeComponent = BpsTreeNodeComponent;
+    exports.NzTreeServiceFactory = NzTreeServiceFactory;
     exports.defaultFilterOption = defaultFilterOption;
     exports.dropdownMenuServiceFactory = dropdownMenuServiceFactory;
     exports.isAutoSizeType = isAutoSizeType;

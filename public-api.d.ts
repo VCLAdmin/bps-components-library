@@ -48,3 +48,5 @@ export * from './lib/components/bps-configuration-selector/bps-configuration-sel
 export * from './lib/components/bps-dropdown/bps-dropdown-a.directive';
 export * from './lib/components/bps-dropdown/bps-dropdown-menu.component';
 export * from './lib/components/bps-dropdown/bps-dropdown.directive';
+export * from './lib/components/bps-tree/bps-tree-node.component';
+export * from './lib/components/bps-tree/bps-tree.component';
