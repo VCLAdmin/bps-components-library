@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('ng-zorro-antd'), require('@angular/common'), require('@angular/cdk/overlay'), require('ng-zorro-antd/core'), require('ng-zorro-antd/icon'), require('ng-zorro-antd/empty'), require('@angular/forms'), require('@angular/cdk/observers'), require('@angular/cdk/platform'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/keycodes'), require('ng-zorro-antd/grid'), require('@angular/cdk/layout'), require('@angular/platform-browser/animations'), require('@angular/cdk/a11y'), require('ng-zorro-antd/tooltip'), require('ng-zorro-antd/i18n'), require('ng-zorro-antd/resizable'), require('@angular/cdk/portal')) :
-    typeof define === 'function' && define.amd ? define('bps-components-lib', ['exports', '@angular/core', 'ng-zorro-antd', '@angular/common', '@angular/cdk/overlay', 'ng-zorro-antd/core', 'ng-zorro-antd/icon', 'ng-zorro-antd/empty', '@angular/forms', '@angular/cdk/observers', '@angular/cdk/platform', 'rxjs', 'rxjs/operators', '@angular/cdk/keycodes', 'ng-zorro-antd/grid', '@angular/cdk/layout', '@angular/platform-browser/animations', '@angular/cdk/a11y', 'ng-zorro-antd/tooltip', 'ng-zorro-antd/i18n', 'ng-zorro-antd/resizable', '@angular/cdk/portal'], factory) :
-    (global = global || self, factory(global['bps-components-lib'] = {}, global.ng.core, global.ngZorroAntd, global.ng.common, global.ng.cdk.overlay, global.core$1, global.icon, global.empty, global.ng.forms, global.ng.cdk.observers, global.ng.cdk.platform, global.rxjs, global.rxjs.operators, global.ng.cdk.keycodes, global.grid, global.ng.cdk.layout, global.ng.platformBrowser.animations, global.ng.cdk.a11y, global.tooltip, global.i18n, global.resizable, global.ng.cdk.portal));
-}(this, (function (exports, core, ngZorroAntd, common, overlay, core$1, icon, empty, forms, observers, platform, rxjs, operators, keycodes, grid, layout, animations, a11y, tooltip, i18n, resizable, portal) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('ng-zorro-antd'), require('@angular/common'), require('@angular/cdk/overlay'), require('ng-zorro-antd/core'), require('ng-zorro-antd/icon'), require('ng-zorro-antd/empty'), require('@angular/forms'), require('@angular/cdk/observers'), require('@angular/cdk/platform'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/keycodes'), require('ng-zorro-antd/grid'), require('@angular/cdk/layout'), require('@angular/platform-browser/animations'), require('@angular/cdk/a11y'), require('ng-zorro-antd/tooltip'), require('ng-zorro-antd/i18n'), require('ng-zorro-antd/resizable'), require('@angular/cdk/portal'), require('ng-zorro-antd/modal')) :
+    typeof define === 'function' && define.amd ? define('bps-components-lib', ['exports', '@angular/core', 'ng-zorro-antd', '@angular/common', '@angular/cdk/overlay', 'ng-zorro-antd/core', 'ng-zorro-antd/icon', 'ng-zorro-antd/empty', '@angular/forms', '@angular/cdk/observers', '@angular/cdk/platform', 'rxjs', 'rxjs/operators', '@angular/cdk/keycodes', 'ng-zorro-antd/grid', '@angular/cdk/layout', '@angular/platform-browser/animations', '@angular/cdk/a11y', 'ng-zorro-antd/tooltip', 'ng-zorro-antd/i18n', 'ng-zorro-antd/resizable', '@angular/cdk/portal', 'ng-zorro-antd/modal'], factory) :
+    (global = global || self, factory(global['bps-components-lib'] = {}, global.ng.core, global.ngZorroAntd, global.ng.common, global.ng.cdk.overlay, global.core$1, global.icon, global.empty, global.ng.forms, global.ng.cdk.observers, global.ng.cdk.platform, global.rxjs, global.rxjs.operators, global.ng.cdk.keycodes, global.grid, global.ng.cdk.layout, global.ng.platformBrowser.animations, global.ng.cdk.a11y, global.tooltip, global.i18n, global.resizable, global.ng.cdk.portal, global.modal));
+}(this, (function (exports, core, ngZorroAntd, common, overlay, core$1, icon, empty, forms, observers, platform, rxjs, operators, keycodes, grid, layout, animations, a11y, tooltip, i18n, resizable, portal, modal) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -6515,6 +6515,730 @@
         return BpsTreeNodeComponent;
     }());
 
+    var BpsModalFooterDirective = /** @class */ (function () {
+        function BpsModalFooterDirective(nzModalRef, templateRef) {
+            this.nzModalRef = nzModalRef;
+            this.templateRef = templateRef;
+            if (this.nzModalRef) {
+                this.nzModalRef.getInstance().setFooterWithTemplate(this.templateRef);
+            }
+        }
+        BpsModalFooterDirective.ctorParameters = function () { return [
+            { type: ngZorroAntd.NzModalRef, decorators: [{ type: core.Optional }] },
+            { type: core.TemplateRef }
+        ]; };
+        BpsModalFooterDirective = __decorate([
+            core.Directive({
+                selector: '[bpsModalFooter]',
+                exportAs: 'bpsModalFooter'
+            }),
+            __param(0, core.Optional())
+        ], BpsModalFooterDirective);
+        return BpsModalFooterDirective;
+    }());
+
+    /**
+     * API class that public to users to handle the modal instance.
+     * NzModalRef is aim to avoid accessing to the modal instance directly by users.
+     */
+    // tslint:disable-next-line:no-any
+    var BpsModalRef = /** @class */ (function () {
+        function BpsModalRef() {
+        }
+        return BpsModalRef;
+    }());
+
+    var BpsModalControlService = /** @class */ (function () {
+        function BpsModalControlService(parentService) {
+            this.parentService = parentService;
+            this.rootOpenModals = this.parentService ? null : [];
+            this.rootAfterAllClose = this.parentService ? null : new rxjs.Subject();
+            this.rootRegisteredMetaMap = this.parentService ? null : new Map();
+        }
+        Object.defineProperty(BpsModalControlService.prototype, "afterAllClose", {
+            // Track singleton afterAllClose through over the injection tree
+            get: function () {
+                return this.parentService ? this.parentService.afterAllClose : this.rootAfterAllClose;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsModalControlService.prototype, "openModals", {
+            // Track singleton openModals array through over the injection tree
+            get: function () {
+                return this.parentService ? this.parentService.openModals : this.rootOpenModals;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsModalControlService.prototype, "registeredMetaMap", {
+            get: function () {
+                // Registered modal for later usage
+                return this.parentService ? this.parentService.registeredMetaMap : this.rootRegisteredMetaMap;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        // Register a modal to listen its open/close
+        BpsModalControlService.prototype.registerModal = function (modalRef) {
+            var _this = this;
+            if (!this.hasRegistered(modalRef)) {
+                var afterOpenSubscription = modalRef.afterOpen.subscribe(function () { return _this.openModals.push(modalRef); });
+                var afterCloseSubscription = modalRef.afterClose.subscribe(function () { return _this.removeOpenModal(modalRef); });
+                this.registeredMetaMap.set(modalRef, { modalRef: modalRef, afterOpenSubscription: afterOpenSubscription, afterCloseSubscription: afterCloseSubscription });
+            }
+        };
+        // deregister modals
+        BpsModalControlService.prototype.deregisterModal = function (modalRef) {
+            var registeredMeta = this.registeredMetaMap.get(modalRef);
+            if (registeredMeta) {
+                // Remove this modal if it is still in the opened modal list (NOTE: it may trigger "afterAllClose")
+                this.removeOpenModal(registeredMeta.modalRef);
+                registeredMeta.afterOpenSubscription.unsubscribe();
+                registeredMeta.afterCloseSubscription.unsubscribe();
+                this.registeredMetaMap.delete(modalRef);
+            }
+        };
+        BpsModalControlService.prototype.hasRegistered = function (modalRef) {
+            return this.registeredMetaMap.has(modalRef);
+        };
+        // Close all registered opened modals
+        BpsModalControlService.prototype.closeAll = function () {
+            var i = this.openModals.length;
+            while (i--) {
+                this.openModals[i].close();
+            }
+        };
+        BpsModalControlService.prototype.removeOpenModal = function (modalRef) {
+            var index = this.openModals.indexOf(modalRef);
+            if (index > -1) {
+                this.openModals.splice(index, 1);
+                if (!this.openModals.length) {
+                    this.afterAllClose.next();
+                }
+            }
+        };
+        BpsModalControlService.ctorParameters = function () { return [
+            { type: BpsModalControlService, decorators: [{ type: core.Optional }, { type: core.SkipSelf }] }
+        ]; };
+        BpsModalControlService.ɵprov = core["ɵɵdefineInjectable"]({ factory: function BpsModalControlService_Factory() { return new BpsModalControlService(core["ɵɵinject"](BpsModalControlService, 12)); }, token: BpsModalControlService, providedIn: modal.NzModalControlServiceModule });
+        BpsModalControlService = __decorate([
+            core.Injectable({
+                providedIn: ngZorroAntd.NzModalControlServiceModule
+            }),
+            __param(0, core.Optional()), __param(0, core.SkipSelf())
+        ], BpsModalControlService);
+        return BpsModalControlService;
+    }());
+
+    var NZ_MODAL_CONFIG = new core.InjectionToken('NZ_MODAL_CONFIG');
+
+    var MODAL_ANIMATE_DURATION = 200; // Duration when perform animations (ms)
+    var WRAP_CLASS_NAME = 'ant-modal-wrap';
+    var NZ_CONFIG_COMPONENT_NAME$6 = 'modal';
+    var BpsModalComponent = /** @class */ (function (_super) {
+        __extends(BpsModalComponent, _super);
+        function BpsModalComponent(nzConfigService, overlay, overlayKeyboardDispatcher, i18n, cfr, elementRef, viewContainer, modalControl, focusTrapFactory, cdr, bpsModalGlobalConfig, document // tslint:disable-line:no-any
+        ) {
+            var _this = _super.call(this) || this;
+            _this.nzConfigService = nzConfigService;
+            _this.overlay = overlay;
+            _this.overlayKeyboardDispatcher = overlayKeyboardDispatcher;
+            _this.i18n = i18n;
+            _this.cfr = cfr;
+            _this.elementRef = elementRef;
+            _this.viewContainer = viewContainer;
+            _this.modalControl = modalControl;
+            _this.focusTrapFactory = focusTrapFactory;
+            _this.cdr = cdr;
+            _this.bpsModalGlobalConfig = bpsModalGlobalConfig;
+            _this.document = document;
+            _this.bpsVisible = false;
+            _this.bpsClosable = true;
+            _this.bpsOkLoading = false;
+            _this.bpsOkDisabled = false;
+            _this.bpsCancelDisabled = false;
+            _this.bpsCancelLoading = false;
+            _this.bpsKeyboard = true;
+            _this.bpsNoAnimation = false;
+            _this.bpsModalDisabled = false;
+            _this.bpsGetContainer = function () { return _this.overlay.create(); }; // [STATIC]
+            _this.bpsZIndex = 1000;
+            _this.bpsWidth = 520;
+            _this.bpsCloseIcon = 'close';
+            _this.bpsOkType = 'variation-1';
+            _this.bpsIconType = 'question-circle'; // Confirm Modal ONLY
+            _this.bpsModalType = 'default';
+            _this.bpsOnOk = new core.EventEmitter();
+            _this.bpsOnCancel = new core.EventEmitter();
+            _this.bpsAfterOpen = new core.EventEmitter(); // Trigger when modal open(visible) after animations
+            _this.bpsAfterClose = new core.EventEmitter(); // Trigger when modal leave-animation over
+            _this.bpsVisibleChange = new core.EventEmitter();
+            _this.locale = {};
+            _this.transformOrigin = '0px 0px 0px'; // The origin point that animation based on
+            _this.unsubscribe$ = new rxjs.Subject();
+            _this.dialogMouseDown = false;
+            _this.scrollStrategy = _this.overlay.scrollStrategies.block();
+            if (_this.bpsModalGlobalConfig) {
+                core$1.warnDeprecation('`NZ_MODAL_CONFIG` has been deprecated and will be removed in 9.0.0. Please use global config instead.');
+            }
+            return _this;
+        }
+        Object.defineProperty(BpsModalComponent.prototype, "modalFooter", {
+            set: function (value) {
+                if (value && value.templateRef) {
+                    this.setFooterWithTemplate(value.templateRef);
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsModalComponent.prototype, "afterOpen", {
+            get: function () {
+                // Observable alias for nzAfterOpen
+                return this.bpsAfterOpen.asObservable();
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsModalComponent.prototype, "afterClose", {
+            get: function () {
+                // Observable alias for nzAfterClose
+                return this.bpsAfterClose.asObservable();
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsModalComponent.prototype, "cancelText", {
+            get: function () {
+                return this.bpsCancelText || this.locale.cancelText;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsModalComponent.prototype, "okText", {
+            get: function () {
+                return this.bpsOkText || this.locale.okText;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsModalComponent.prototype, "hidden", {
+            get: function () {
+                return !this.bpsVisible && !this.animationState;
+            } // Indicate whether this dialog should hidden
+            ,
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsModalComponent.prototype, "mask", {
+            /**
+             * @description
+             * The calculated highest weight of mask value
+             *
+             * Weight of different mask input:
+             * component default value < global configuration < component input value
+             */
+            get: function () {
+                if (this.bpsMask != null) {
+                    return this.bpsMask;
+                }
+                else if (this.bpsModalGlobalConfig && this.bpsModalGlobalConfig.bpsMask != null) {
+                    return this.bpsModalGlobalConfig.bpsMask;
+                }
+                else {
+                    return true;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(BpsModalComponent.prototype, "maskClosable", {
+            /**
+             * @description
+             * The calculated highest weight of maskClosable value
+             *
+             * Weight of different maskClosable input:
+             * component default value < global configuration < component input value
+             */
+            get: function () {
+                if (this.bpsMaskClosable != null) {
+                    return this.bpsMaskClosable;
+                }
+                else if (this.bpsModalGlobalConfig && this.bpsModalGlobalConfig.bpsMaskClosable != null) {
+                    return this.bpsModalGlobalConfig.bpsMaskClosable;
+                }
+                else {
+                    return true;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        BpsModalComponent.prototype.ngOnInit = function () {
+            var _this = this;
+            this.i18n.localeChange.pipe(operators.takeUntil(this.unsubscribe$)).subscribe(function () {
+                _this.locale = _this.i18n.getLocaleData('Modal');
+            });
+            if (this.isComponent(this.bpsContent)) {
+                this.createDynamicComponent(this.bpsContent); // Create component along without View
+            }
+            if (this.isModalButtons(this.bpsFooter)) {
+                // Setup default button options
+                this.bpsFooter = this.formatModalButtons(this.bpsFooter);
+            }
+            // Place the modal dom to elsewhere
+            this.container = typeof this.bpsGetContainer === 'function' ? this.bpsGetContainer() : this.bpsGetContainer;
+            if (this.container instanceof HTMLElement) {
+                this.container.appendChild(this.elementRef.nativeElement);
+                rxjs.fromEvent(this.document.body, 'keydown')
+                    .pipe(operators.takeUntil(this.unsubscribe$))
+                    .subscribe(function (e) { return _this.keydownListener(e); });
+            }
+            else if (this.container instanceof overlay.OverlayRef) {
+                // NOTE: only attach the dom to overlay, the view container is not changed actually
+                this.setOverlayRef(this.container);
+                this.container.overlayElement.appendChild(this.elementRef.nativeElement);
+            }
+            if (this.overlayRef) {
+                this.overlayRef
+                    .keydownEvents()
+                    .pipe(operators.takeUntil(this.unsubscribe$))
+                    .subscribe(function (e) { return _this.keydownListener(e); });
+            }
+            // Register modal when afterOpen/afterClose is stable
+            this.modalControl.registerModal(this);
+        };
+        // [NOTE] NOT available when using by service!
+        // Because ngOnChanges never be called when using by service,
+        // here we can't support "nzContent"(Component) etc. as inputs that initialized dynamically.
+        // BUT: User also can change "nzContent" dynamically to trigger UI changes (provided you don't use Component that needs initializations)
+        BpsModalComponent.prototype.ngOnChanges = function (changes) {
+            if (changes.bpsVisible) {
+                this.handleVisibleStateChange(this.bpsVisible, !changes.bpsVisible.firstChange); // Do not trigger animation while initializing
+            }
+        };
+        BpsModalComponent.prototype.ngAfterViewInit = function () {
+            // If using Component, it is the time to attach View while bodyContainer is ready
+            if (this.contentComponentRef) {
+                this.bodyContainer.insert(this.contentComponentRef.hostView);
+            }
+            if (this.autoFocusButtonOk) {
+                this.autoFocusButtonOk.nativeElement.focus();
+            }
+        };
+        BpsModalComponent.prototype.ngOnDestroy = function () {
+            var _this = this;
+            // Close self before destructing
+            this.changeVisibleFromInside(false).then(function () {
+                _this.modalControl.deregisterModal(_this);
+                if (_this.container instanceof overlay.OverlayRef) {
+                    _this.container.dispose();
+                }
+                _this.unsubscribe$.next();
+                _this.unsubscribe$.complete();
+            });
+            clearTimeout(this.timeoutId);
+        };
+        BpsModalComponent.prototype.setFooterWithTemplate = function (templateRef) {
+            this.bpsFooter = templateRef;
+            this.cdr.markForCheck();
+        };
+        BpsModalComponent.prototype.setOverlayRef = function (overlayRef) {
+            this.overlayRef = overlayRef;
+        };
+        BpsModalComponent.prototype.keydownListener = function (event) {
+            if (event.keyCode === keycodes.ESCAPE && this.bpsKeyboard) {
+                this.onClickOkCancel('cancel');
+            }
+        };
+        BpsModalComponent.prototype.open = function () {
+            this.changeVisibleFromInside(true);
+        };
+        BpsModalComponent.prototype.close = function (result) {
+            this.changeVisibleFromInside(false, result);
+        };
+        BpsModalComponent.prototype.destroy = function (result) {
+            // Destroy equals Close
+            this.close(result);
+        };
+        BpsModalComponent.prototype.triggerOk = function () {
+            this.onClickOkCancel('ok');
+        };
+        BpsModalComponent.prototype.triggerCancel = function () {
+            this.onClickOkCancel('cancel');
+        };
+        BpsModalComponent.prototype.getInstance = function () {
+            return this;
+        };
+        BpsModalComponent.prototype.getContentComponentRef = function () {
+            return this.contentComponentRef;
+        };
+        BpsModalComponent.prototype.getContentComponent = function () {
+            return this.contentComponentRef && this.contentComponentRef.instance;
+        };
+        BpsModalComponent.prototype.getElement = function () {
+            return this.elementRef && this.elementRef.nativeElement;
+        };
+        BpsModalComponent.prototype.onMaskDialogDown = function () {
+            this.dialogMouseDown = true;
+        };
+        BpsModalComponent.prototype.onDialogUp = function () {
+            var _this = this;
+            if (this.dialogMouseDown) {
+                this.timeoutId = setTimeout(function () {
+                    _this.dialogMouseDown = false;
+                }, 0);
+            }
+        };
+        BpsModalComponent.prototype.onClickMask = function ($event) {
+            if (this.mask &&
+                this.maskClosable &&
+                $event.target.classList.contains(WRAP_CLASS_NAME) &&
+                this.bpsVisible &&
+                !this.dialogMouseDown) {
+                this.onClickOkCancel('cancel');
+            }
+        };
+        BpsModalComponent.prototype.isModalType = function (type) {
+            return this.bpsModalType === type;
+        };
+        BpsModalComponent.prototype.onClickCloseBtn = function () {
+            if (this.bpsVisible) {
+                this.onClickOkCancel('cancel');
+            }
+        };
+        BpsModalComponent.prototype.onClickOkCancel = function (type) {
+            var _this = this;
+            var trigger = { ok: this.bpsOnOk, cancel: this.bpsOnCancel }[type];
+            var loadingKey = { ok: 'bpsOkLoading', cancel: 'bpsCancelLoading' }[type];
+            if (trigger instanceof core.EventEmitter) {
+                trigger.emit(this.getContentComponent());
+            }
+            else if (typeof trigger === 'function') {
+                var result = trigger(this.getContentComponent());
+                var caseClose_1 = function (doClose) { return doClose !== false && _this.close(doClose); }; // Users can return "false" to prevent closing by default
+                if (core$1.isPromise(result)) {
+                    this[loadingKey] = true;
+                    var handleThen = function (doClose) {
+                        _this[loadingKey] = false;
+                        caseClose_1(doClose);
+                    };
+                    result.then(handleThen).catch(handleThen);
+                }
+                else {
+                    caseClose_1(result);
+                }
+            }
+        };
+        BpsModalComponent.prototype.isNonEmptyString = function (value) {
+            return typeof value === 'string' && value !== '';
+        };
+        BpsModalComponent.prototype.isTemplateRef = function (value) {
+            return value instanceof core.TemplateRef;
+        };
+        BpsModalComponent.prototype.isComponent = function (value) {
+            return value instanceof core.Type;
+        };
+        BpsModalComponent.prototype.isModalButtons = function (value) {
+            return Array.isArray(value) && value.length > 0;
+        };
+        // Do rest things when visible state changed
+        BpsModalComponent.prototype.handleVisibleStateChange = function (visible, animation, closeResult) {
+            var _this = this;
+            if (animation === void 0) { animation = true; }
+            if (visible) {
+                // Hide scrollbar at the first time when shown up
+                this.scrollStrategy.enable();
+                this.savePreviouslyFocusedElement();
+                this.trapFocus();
+                if (this.container instanceof overlay.OverlayRef) {
+                    this.overlayKeyboardDispatcher.add(this.overlayRef);
+                }
+            }
+            else {
+                if (this.container instanceof overlay.OverlayRef) {
+                    this.overlayKeyboardDispatcher.remove(this.overlayRef);
+                }
+            }
+            return Promise.resolve(animation ? this.animateTo(visible) : undefined).then(function () {
+                // Emit open/close event after animations over
+                if (visible) {
+                    _this.bpsAfterOpen.emit();
+                }
+                else {
+                    _this.bpsAfterClose.emit(closeResult);
+                    _this.restoreFocus();
+                    _this.scrollStrategy.disable();
+                    // Mark the for check so it can react if the view container is using OnPush change detection.
+                    _this.cdr.markForCheck();
+                }
+            });
+        };
+        // Lookup a button's property, if the prop is a function, call & then return the result, otherwise, return itself.
+        BpsModalComponent.prototype.getButtonCallableProp = function (options, prop) {
+            var value = options[prop];
+            var args = [];
+            if (this.contentComponentRef) {
+                args.push(this.contentComponentRef.instance);
+            }
+            return typeof value === 'function' ? value.apply(options, args) : value;
+        };
+        // On nzFooter's modal button click
+        BpsModalComponent.prototype.onButtonClick = function (button) {
+            var result = this.getButtonCallableProp(button, 'onClick'); // Call onClick directly
+            if (core$1.isPromise(result)) {
+                button.loading = true;
+                result.then(function () { return (button.loading = false); }).catch(function () { return (button.loading = false); });
+            }
+        };
+        // Change nzVisible from inside
+        BpsModalComponent.prototype.changeVisibleFromInside = function (visible, closeResult) {
+            if (this.bpsVisible !== visible) {
+                // Change nzVisible value immediately
+                this.bpsVisible = visible;
+                this.bpsVisibleChange.emit(visible);
+                return this.handleVisibleStateChange(visible, true, closeResult);
+            }
+            return Promise.resolve();
+        };
+        BpsModalComponent.prototype.changeAnimationState = function (state) {
+            var _a, _b;
+            this.animationState = state;
+            if (state) {
+                this.maskAnimationClassMap = (_a = {},
+                    _a["fade-" + state] = true,
+                    _a["fade-" + state + "-active"] = true,
+                    _a);
+                this.modalAnimationClassMap = (_b = {},
+                    _b["zoom-" + state] = true,
+                    _b["zoom-" + state + "-active"] = true,
+                    _b);
+            }
+            else {
+                this.maskAnimationClassMap = this.modalAnimationClassMap = null;
+            }
+        };
+        BpsModalComponent.prototype.animateTo = function (isVisible) {
+            var _this = this;
+            if (isVisible) {
+                // Figure out the lastest click position when shows up
+                setTimeout(function () { return _this.updateTransformOrigin(); }); // [NOTE] Using timeout due to the document.click event is fired later than visible change, so if not postponed to next event-loop, we can't get the lastest click position
+            }
+            this.changeAnimationState(isVisible ? 'enter' : 'leave');
+            return new Promise(function (resolve) {
+                return setTimeout(function () {
+                    // Return when animation is over
+                    _this.changeAnimationState(null);
+                    resolve();
+                }, _this.bpsNoAnimation ? 0 : MODAL_ANIMATE_DURATION);
+            });
+        };
+        BpsModalComponent.prototype.formatModalButtons = function (buttons) {
+            return buttons.map(function (button) {
+                return __assign({
+                    type: 'default',
+                    size: 'default',
+                    autoLoading: true,
+                    show: true,
+                    loading: false,
+                    disabled: false
+                }, button);
+            });
+        };
+        /**
+         * Create a component dynamically but not attach to any View (this action will be executed when bodyContainer is ready)
+         * @param component Component class
+         */
+        BpsModalComponent.prototype.createDynamicComponent = function (component) {
+            var factory = this.cfr.resolveComponentFactory(component);
+            var childInjector = core.Injector.create({
+                providers: [{ provide: BpsModalRef, useValue: this }],
+                parent: this.viewContainer.parentInjector
+            });
+            this.contentComponentRef = factory.create(childInjector);
+            if (this.bpsComponentParams) {
+                Object.assign(this.contentComponentRef.instance, this.bpsComponentParams);
+            }
+            // Do the first change detection immediately (or we do detection at ngAfterViewInit, multi-changes error will be thrown)
+            this.contentComponentRef.changeDetectorRef.detectChanges();
+        };
+        // Update transform-origin to the last click position on document
+        BpsModalComponent.prototype.updateTransformOrigin = function () {
+            var modalElement = this.modalContainer.nativeElement;
+            if (this.previouslyFocusedElement) {
+                var previouslyDOMRect = this.previouslyFocusedElement.getBoundingClientRect();
+                var lastPosition = core$1.getElementOffset(this.previouslyFocusedElement);
+                var x = lastPosition.left + previouslyDOMRect.width / 2;
+                var y = lastPosition.top + previouslyDOMRect.height / 2;
+                this.transformOrigin = x - modalElement.offsetLeft + "px " + (y - modalElement.offsetTop) + "px 0px";
+            }
+        };
+        BpsModalComponent.prototype.savePreviouslyFocusedElement = function () {
+            if (this.document) {
+                this.previouslyFocusedElement = this.document.activeElement;
+            }
+        };
+        BpsModalComponent.prototype.trapFocus = function () {
+            if (!this.focusTrap) {
+                this.focusTrap = this.focusTrapFactory.create(this.elementRef.nativeElement);
+            }
+            this.focusTrap.focusInitialElementWhenReady();
+        };
+        BpsModalComponent.prototype.restoreFocus = function () {
+            // We need the extra check, because IE can set the `activeElement` to null in some cases.
+            if (this.previouslyFocusedElement && typeof this.previouslyFocusedElement.focus === 'function') {
+                this.previouslyFocusedElement.focus();
+            }
+            if (this.focusTrap) {
+                this.focusTrap.destroy();
+            }
+        };
+        BpsModalComponent.ctorParameters = function () { return [
+            { type: core$1.NzConfigService },
+            { type: overlay.Overlay },
+            { type: overlay.OverlayKeyboardDispatcher },
+            { type: i18n.NzI18nService },
+            { type: core.ComponentFactoryResolver },
+            { type: core.ElementRef },
+            { type: core.ViewContainerRef },
+            { type: BpsModalControlService },
+            { type: a11y.FocusTrapFactory },
+            { type: core.ChangeDetectorRef },
+            { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [NZ_MODAL_CONFIG,] }] },
+            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
+        ]; };
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsModalComponent.prototype, "bpsVisible", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsModalComponent.prototype, "bpsClosable", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsModalComponent.prototype, "bpsOkLoading", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsModalComponent.prototype, "bpsOkDisabled", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsModalComponent.prototype, "bpsCancelDisabled", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsModalComponent.prototype, "bpsCancelLoading", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsModalComponent.prototype, "bpsKeyboard", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsModalComponent.prototype, "bpsNoAnimation", void 0);
+        __decorate([
+            core.Input(), core$1.InputBoolean()
+        ], BpsModalComponent.prototype, "bpsModalDisabled", void 0);
+        __decorate([
+            core.Input(), core$1.WithConfig(NZ_CONFIG_COMPONENT_NAME$6), core$1.InputBoolean()
+        ], BpsModalComponent.prototype, "bpsMask", void 0);
+        __decorate([
+            core.Input(), core$1.WithConfig(NZ_CONFIG_COMPONENT_NAME$6), core$1.InputBoolean()
+        ], BpsModalComponent.prototype, "bpsMaskClosable", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsContent", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsComponentParams", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsFooter", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsGetContainer", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsZIndex", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsWidth", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsWrapClassName", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsClassName", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsStyle", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsTitle", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsCloseIcon", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsMaskStyle", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsBodyStyle", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsOkText", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsCancelText", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsOkType", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsIconType", void 0);
+        __decorate([
+            core.Input()
+        ], BpsModalComponent.prototype, "bpsModalType", void 0);
+        __decorate([
+            core.Input(), core.Output()
+        ], BpsModalComponent.prototype, "bpsOnOk", void 0);
+        __decorate([
+            core.Input(), core.Output()
+        ], BpsModalComponent.prototype, "bpsOnCancel", void 0);
+        __decorate([
+            core.Output()
+        ], BpsModalComponent.prototype, "bpsAfterOpen", void 0);
+        __decorate([
+            core.Output()
+        ], BpsModalComponent.prototype, "bpsAfterClose", void 0);
+        __decorate([
+            core.Output()
+        ], BpsModalComponent.prototype, "bpsVisibleChange", void 0);
+        __decorate([
+            core.ViewChild('modalContainer', { static: true })
+        ], BpsModalComponent.prototype, "modalContainer", void 0);
+        __decorate([
+            core.ViewChild('bodyContainer', { static: false, read: core.ViewContainerRef })
+        ], BpsModalComponent.prototype, "bodyContainer", void 0);
+        __decorate([
+            core.ViewChild('autoFocusButtonOk', { static: false, read: core.ElementRef })
+        ], BpsModalComponent.prototype, "autoFocusButtonOk", void 0);
+        __decorate([
+            core.ContentChild(BpsModalFooterDirective, { static: false })
+        ], BpsModalComponent.prototype, "modalFooter", null);
+        BpsModalComponent = __decorate([
+            core.Component({
+                selector: 'bps-modal',
+                exportAs: 'bpsModal',
+                template: "<ng-template #tplOriginContent><ng-content></ng-content></ng-template> <!-- Compatible: the <ng-content> can appear only once -->\n\n<div [nzNoAnimation]=\"bpsNoAnimation\">\n  <div *ngIf=\"mask\"\n    class=\"ant-modal-mask\"\n    [ngClass]=\"maskAnimationClassMap\"\n    [class.ant-modal-mask-hidden]=\"hidden\"\n    [ngStyle]=\"bpsMaskStyle\"\n    [style.zIndex]=\"bpsZIndex\"\n  ></div>\n  <div\n    (click)=\"onClickMask($event)\"\n    (mouseup)=\"onDialogUp()\"\n    class=\"ant-modal-wrap {{ bpsWrapClassName }}\"\n    [style.zIndex]=\"bpsZIndex\"\n    [style.visibility]=\"hidden ? 'hidden' : null\"\n    tabindex=\"-1\"\n    role=\"dialog\"\n  >\n    <div #modalContainer\n      class=\"ant-modal {{ bpsClassName }}\"\n      (mousedown)=\"onMaskDialogDown()\"\n      [ngClass]=\"modalAnimationClassMap\"\n      [ngStyle]=\"bpsStyle\"\n      [style.width]=\"bpsWidth | nzToCssUnit\"\n      [style.transform-origin]=\"transformOrigin\"\n      role=\"document\"\n    >\n      <div class=\"ant-modal-content\">\n        <button *ngIf=\"bpsClosable\" (click)=\"onClickCloseBtn()\" class=\"ant-modal-close\" aria-label=\"Close\">\n          <span class=\"ant-modal-close-x\" [class.bps-modal-disabled]=\"bpsModalDisabled\">\n            <ng-container *nzStringTemplateOutlet=\"bpsCloseIcon\">\n              <i nz-icon [nzType]=\"bpsCloseIcon\" class=\"ant-modal-close-icon\"></i>\n            </ng-container>\n          </span>\n        </button>\n        <ng-container *ngIf=\"!hidden\" [ngSwitch]=\"true\">\n          <ng-container *ngSwitchCase=\"isModalType('default')\" [ngTemplateOutlet]=\"tplContentDefault\"></ng-container>\n          <ng-container *ngSwitchCase=\"isModalType('confirm')\" [ngTemplateOutlet]=\"tplContentConfirm\"></ng-container>\n        </ng-container>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- [Predefined] Default Modal Content -->\n<ng-template #tplContentDefault>\n  <div *ngIf=\"bpsTitle\" class=\"ant-modal-header\">\n    <div class=\"ant-modal-title\" [class.bps-modal-disabled]=\"bpsModalDisabled\">\n      <ng-container [ngSwitch]=\"true\">\n        <ng-container *ngSwitchCase=\"isTemplateRef(bpsTitle)\" [ngTemplateOutlet]=\"bpsTitle\"></ng-container>\n        <ng-container *ngSwitchCase=\"isNonEmptyString(bpsTitle)\"><div [innerHTML]=\"bpsTitle\"></div></ng-container>\n      </ng-container>\n    </div>\n  </div>\n  <div class=\"ant-modal-body\" [ngStyle]=\"bpsBodyStyle\">\n    <ng-container #bodyContainer>\n      <ng-container *ngIf=\"!isComponent(bpsContent)\" [ngSwitch]=\"true\">\n        <ng-container *ngSwitchCase=\"isTemplateRef(bpsContent)\" [ngTemplateOutlet]=\"bpsContent\"></ng-container>\n        <ng-container *ngSwitchCase=\"isNonEmptyString(bpsContent)\"><div [innerHTML]=\"bpsContent\"></div></ng-container>\n        <ng-container *ngSwitchDefault [ngTemplateOutlet]=\"tplOriginContent\"></ng-container>\n      </ng-container>\n    </ng-container>\n  </div>\n  <div *ngIf=\"bpsFooter !== null\" class=\"ant-modal-footer\">\n    <ng-container [ngSwitch]=\"true\">\n      <ng-container *ngSwitchCase=\"isTemplateRef(bpsFooter)\" [ngTemplateOutlet]=\"bpsFooter\"></ng-container>\n      <ng-container *ngSwitchCase=\"isNonEmptyString(bpsFooter)\"><div [innerHTML]=\"bpsFooter\"></div></ng-container>\n      <ng-container *ngSwitchCase=\"isModalButtons(bpsFooter)\">\n        <button *ngFor=\"let button of bpsFooter\" bps-button\n          (click)=\"onButtonClick(button)\"\n          [hidden]=\"!getButtonCallableProp(button, 'show')\"\n          [bpsLoading]=\"getButtonCallableProp(button, 'loading')\"\n          [disabled]=\"getButtonCallableProp(button, 'disabled')\"\n          [bpsType]=\"button.type\"\n          [bpsShape]=\"button.shape\"\n          [bpsSize]=\"button.size\"\n          [bpsGhost]=\"button.ghost\"\n        >{{ button.label }}</button>\n      </ng-container>\n      <ng-container *ngSwitchDefault>\n        <button *ngIf=\"bpsCancelText!==null\" bpsType=\"variation-1\" bps-button (click)=\"onClickOkCancel('cancel')\" [bpsLoading]=\"bpsCancelLoading\" [disabled]=\"bpsCancelDisabled\">\n          {{ cancelText }}\n        </button>\n        <button *ngIf=\"bpsOkText!==null\" bps-button [bpsType]=\"bpsOkType\" (click)=\"onClickOkCancel('ok')\" [bpsLoading]=\"bpsOkLoading\" [disabled]=\"bpsOkDisabled\">\n          {{ okText }}\n        </button>\n      </ng-container>\n    </ng-container>\n  </div>\n</ng-template>\n<!-- /[Predefined] Default Modal Content -->\n\n<!-- [Predefined] Confirm Modal Content -->\n<ng-template #tplContentConfirm>\n  <div class=\"ant-modal-body\" [ngStyle]=\"bpsBodyStyle\">\n    <div class=\"ant-modal-confirm-body-wrapper\">\n      <div class=\"ant-modal-confirm-body\">\n        <i nz-icon [nzType]=\"bpsIconType\"></i>\n        <span class=\"ant-modal-confirm-title\">\n          <ng-container [ngSwitch]=\"true\">\n            <ng-container *ngSwitchCase=\"isTemplateRef(bpsTitle)\" [ngTemplateOutlet]=\"bpsTitle\"></ng-container>\n            <ng-container *ngSwitchCase=\"isNonEmptyString(bpsTitle)\"><span [innerHTML]=\"bpsTitle\"></span></ng-container>\n          </ng-container>\n        </span>\n        <div class=\"ant-modal-confirm-content\">\n          <ng-container #bodyContainer>\n            <ng-container *ngIf=\"!isComponent(bpsContent)\" [ngSwitch]=\"true\">\n              <ng-container *ngSwitchCase=\"isTemplateRef(bpsContent)\" [ngTemplateOutlet]=\"bpsContent\"></ng-container>\n              <ng-container *ngSwitchCase=\"isNonEmptyString(bpsContent)\"><div [innerHTML]=\"bpsContent\"></div></ng-container>\n              <ng-container *ngSwitchDefault [ngTemplateOutlet]=\"tplOriginContent\"></ng-container>\n            </ng-container>\n          </ng-container>\n        </div>\n      </div>\n      <div class=\"ant-modal-confirm-btns\">\n        <button *ngIf=\"bpsCancelText!==null\"\n          bps-button\n          bpsType=\"variation-1\"\n          (click)=\"onClickOkCancel('cancel')\"\n          [bpsLoading]=\"bpsCancelLoading\"\n          [disabled]=\"bpsCancelDisabled\">\n          {{ cancelText }}\n        </button>\n        <button #autoFocusButtonOk\n          *ngIf=\"bpsOkText!==null\"\n          bps-button\n          (click)=\"onClickOkCancel('ok')\"\n          [bpsType]=\"bpsOkType\"\n          [bpsLoading]=\"bpsOkLoading\"\n          [disabled]=\"bpsOkDisabled\">\n          {{ okText }}\n        </button>\n      </div>\n    </div> <!-- /.ant-modal-confirm-body-wrapper -->\n  </div>\n</ng-template>\n<!-- /[Predefined] Confirm Modal Content -->\n",
+                // Using OnPush for modal caused footer can not to detect changes. we can fix it when 8.x.
+                changeDetection: core.ChangeDetectionStrategy.Default,
+                styles: [".ant-modal-content{border-radius:8px!important;box-shadow:0 3px 12px 0 rgba(0,0,0,.9)!important;background-color:#262626!important}.ant-modal-header{background-color:#00a2d1!important;border-bottom:none!important;padding:16px 0 16px 35px!important;border-radius:8px 8px 0 0!important}.ant-modal-title{font-size:18px!important;font-weight:400!important;font-stretch:normal!important;font-style:normal!important;line-height:.67!important;letter-spacing:normal!important;text-align:left!important;color:#fff!important}.ant-modal-close-x{width:46px!important;height:45px!important;color:#fff!important;line-height:45px!important;padding-right:19px!important}.bps-modal-disabled{color:#666!important}"]
+            })
+            // tslint:disable-next-line:no-any
+            ,
+            __param(10, core.Optional()), __param(10, core.Inject(NZ_MODAL_CONFIG)),
+            __param(11, core.Inject(common.DOCUMENT))
+        ], BpsModalComponent);
+        return BpsModalComponent;
+    }(BpsModalRef));
+
     var ɵ0 = ngZorroAntd.en_US;
     var BpsComponentsLibModule = /** @class */ (function () {
         function BpsComponentsLibModule() {
@@ -6522,6 +7246,8 @@
         BpsComponentsLibModule = __decorate([
             core.NgModule({
                 declarations: [
+                    BpsModalComponent,
+                    BpsModalFooterDirective,
                     BpsTreeComponent,
                     BpsTreeNodeComponent,
                     BpsDropDownDirective,
@@ -6571,6 +7297,7 @@
                     BpsConfigurationSelectorComponent
                 ],
                 imports: [
+                    core$1.NzPipesModule,
                     core$1.NzHighlightModule,
                     ngZorroAntd.NgZorroAntdModule,
                     common.CommonModule,
@@ -6591,6 +7318,8 @@
                     resizable.NzResizableModule
                 ],
                 exports: [
+                    BpsModalComponent,
+                    BpsModalFooterDirective,
                     BpsTreeComponent,
                     BpsTreeNodeComponent,
                     BpsDropDownDirective,
@@ -6692,6 +7421,8 @@
     exports.BpsListComponent = BpsListComponent;
     exports.BpsListItemComponent = BpsListItemComponent;
     exports.BpsListItemMetaComponent = BpsListItemMetaComponent;
+    exports.BpsModalComponent = BpsModalComponent;
+    exports.BpsModalFooterDirective = BpsModalFooterDirective;
     exports.BpsOptionComponent = BpsOptionComponent;
     exports.BpsOptionContainerComponent = BpsOptionContainerComponent;
     exports.BpsOptionGroupComponent = BpsOptionGroupComponent;
@@ -6712,12 +7443,17 @@
     exports.BpsTooltipDirective = BpsTooltipDirective;
     exports.BpsTreeComponent = BpsTreeComponent;
     exports.BpsTreeNodeComponent = BpsTreeNodeComponent;
+    exports.MODAL_ANIMATE_DURATION = MODAL_ANIMATE_DURATION;
     exports.NzTreeServiceFactory = NzTreeServiceFactory;
+    exports.WRAP_CLASS_NAME = WRAP_CLASS_NAME;
     exports.defaultFilterOption = defaultFilterOption;
     exports.dropdownMenuServiceFactory = dropdownMenuServiceFactory;
     exports.isAutoSizeType = isAutoSizeType;
     exports.ɵ0 = ɵ0;
-    exports.ɵa = NzTooltipBaseDirective;
+    exports.ɵa = BpsModalRef;
+    exports.ɵc = NZ_MODAL_CONFIG;
+    exports.ɵd = BpsModalControlService;
+    exports.ɵe = NzTooltipBaseDirective;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
