@@ -97,6 +97,7 @@ export declare class BpsTableComponent<T = any> implements OnInit, OnDestroy, Af
     clickRow(event: MouseEvent, data: any): void;
     startEdit(data: any, event: MouseEvent): void;
     selectRow(data: any, selectionOnly?: boolean): void;
+    expandRow(data: any, $event: any): void;
 }
 export interface CheckboxSelect {
     data: any;

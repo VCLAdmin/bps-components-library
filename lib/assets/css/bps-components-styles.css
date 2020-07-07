@@ -207,3 +207,14 @@
   background-color: #262626 !important;
 }
 
+.ant-input::placeholder {
+  color: #999999 !important;
+}
+
+.ant-input-disabled::placeholder {
+  color: #666666 !important;
+}
+
+.ant-input.bps-input-opened.ng-valid:not(.ant-input-disabled) {
+  color: #ffffff !important;
+}
