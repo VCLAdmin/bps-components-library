@@ -8,6 +8,7 @@ import { NzIconDirective, NzIconModule } from 'ng-zorro-antd/icon';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NG_VALUE_ACCESSOR, FormControl, NgModel, FormControlName, FormControlDirective, NgControl, FormsModule } from '@angular/forms';
 import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
+import { EditorModule } from '@tinymce/tinymce-angular';
 import { Platform } from '@angular/cdk/platform';
 import { Subject, BehaviorSubject, ReplaySubject, combineLatest, merge, fromEvent, EMPTY, Subscription } from 'rxjs';
 import { takeUntil, finalize, distinctUntilChanged, map, filter, skip, share, tap, pairwise, startWith, flatMap, debounceTime, mapTo } from 'rxjs/operators';
@@ -5219,6 +5220,11 @@ let BpsTreeComponent = BpsTreeComponent_1 = class BpsTreeComponent extends NzTre
             .subscribe(data => {
             switch (data.eventName) {
                 case 'expand':
+                    if (this.bpsCustomTree) {
+                        const keys = data.keys;
+                        data.keys = [keys[keys.length - 1]];
+                        this.nzTreeService.calcExpandedKeys(data.keys, this.bpsNodes);
+                    }
                     this.bpsExpandChange.emit(data);
                     break;
                 case 'click':
@@ -6576,6 +6582,102 @@ BpsModalComponent = __decorate([
     __param(11, Inject(DOCUMENT))
 ], BpsModalComponent);
 
+let BpsTextEditorComponent = class BpsTextEditorComponent {
+    constructor() {
+        this.showEditor = false;
+        this.oninit = new EventEmitter();
+        this.onchange = new EventEmitter();
+        this.onblur = new EventEmitter();
+        this.onkeyup = new EventEmitter();
+        this.height = '250px';
+        this.statusbar = false;
+        this.resize = false;
+        // tslint:disable-next-line: max-line-length
+        this.toolbarmobile = ['bold', 'italic', 'underline', 'strikethrough', 'alignleft', 'aligncenter', 'alignright', 'alignjustify', 'bullist', 'numlist', 'forecolor'];
+        this.toolbar = 'bold italic underline strikethrough  | alignleft aligncenter alignright alignjustify | bullist numlist | forecolor';
+    }
+    ngOnInit() {
+        if (this.tinyMceSettings === undefined) {
+            this.tinyMceSettings = {
+                mobile: {
+                    theme: 'mobile',
+                    plugins: ['image table textcolor'],
+                    toolbar: this.toolbarmobile
+                },
+                menubar: false,
+                image_title: true,
+                resize: this.resize,
+                automatic_uploads: true,
+                height: this.height,
+                statusbar: this.statusbar,
+                file_picker_types: 'image',
+                images_upload_url: '#',
+                setup: (editor) => {
+                    editor.on('init', (obj) => {
+                        this.oninit.emit(obj);
+                    });
+                    editor.on('blur', (obj) => {
+                        this.onblur.emit(obj);
+                    });
+                    editor.on('keyup', (obj) => {
+                        this.onkeyup.emit(obj);
+                    });
+                    editor.on('Change', (obj) => {
+                        this.onchange.emit(obj);
+                    });
+                },
+                plugins: ['image table textcolor'],
+                toolbar: this.toolbar
+            };
+        }
+        setTimeout(() => {
+            this.showEditor = true;
+        }, 100);
+    }
+};
+__decorate([
+    Output()
+], BpsTextEditorComponent.prototype, "oninit", void 0);
+__decorate([
+    Output()
+], BpsTextEditorComponent.prototype, "onchange", void 0);
+__decorate([
+    Output()
+], BpsTextEditorComponent.prototype, "onblur", void 0);
+__decorate([
+    Output()
+], BpsTextEditorComponent.prototype, "onkeyup", void 0);
+__decorate([
+    Input()
+], BpsTextEditorComponent.prototype, "disabled", void 0);
+__decorate([
+    Input()
+], BpsTextEditorComponent.prototype, "height", void 0);
+__decorate([
+    Input()
+], BpsTextEditorComponent.prototype, "statusbar", void 0);
+__decorate([
+    Input()
+], BpsTextEditorComponent.prototype, "resize", void 0);
+__decorate([
+    Input()
+], BpsTextEditorComponent.prototype, "toolbarmobile", void 0);
+__decorate([
+    Input()
+], BpsTextEditorComponent.prototype, "toolbar", void 0);
+__decorate([
+    Input()
+], BpsTextEditorComponent.prototype, "tinyMceSettings", void 0);
+BpsTextEditorComponent = __decorate([
+    Component({
+        exportAs: 'bpsTextEditor',
+        selector: 'bps-text-editor',
+        template: "<editor *ngIf=\"showEditor\" [init]=\"tinyMceSettings\" class=\"bps-editor\" [disabled]=\"disabled\"></editor>\n",
+        encapsulation: ViewEncapsulation.None,
+        styles: [""]
+    })
+], BpsTextEditorComponent);
+
 const ɵ0 = en_US;
 let BpsComponentsLibModule = class BpsComponentsLibModule {
 };
@@ -6630,7 +6732,8 @@ BpsComponentsLibModule = __decorate([
             BpsCollapseComponent,
             BpsCollapsePanelComponent,
             BpsTableExpandablePanelComponent,
-            BpsConfigurationSelectorComponent
+            BpsConfigurationSelectorComponent,
+            BpsTextEditorComponent
         ],
         imports: [
             NzPipesModule,
@@ -6651,6 +6754,7 @@ BpsComponentsLibModule = __decorate([
             NzGridModule,
             NzAvatarModule,
             NzTableModule,
+            EditorModule,
             NzResizableModule
         ],
         exports: [
@@ -6703,7 +6807,8 @@ BpsComponentsLibModule = __decorate([
             BpsCollapsePanelComponent,
             BpsTooltipDirective,
             BpsToolTipComponent,
-            BpsTableExpandablePanelComponent
+            BpsTableExpandablePanelComponent,
+            BpsTextEditorComponent
         ],
         providers: [
             { provide: NZ_I18N, useValue: ɵ0 }
@@ -6733,5 +6838,5 @@ var TemplateType;
  * Generated bundle index. Do not edit.
  */
 
-export { BpsAutosizeDirective, BpsButtonComponent, BpsButtonGroupComponent, BpsCheckboxComponent, BpsCheckboxGroupComponent, BpsCheckboxWrapperComponent, BpsCollapseComponent, BpsCollapsePanelComponent, BpsComponentsLibComponent, BpsComponentsLibModule, BpsComponentsLibService, BpsConfigurationSelectorComponent, BpsDropDownADirective, BpsDropDownDirective, BpsDropdownMenuComponent, BpsFilterGroupOptionPipe, BpsFilterOptionPipe, BpsFormControlComponent, BpsFormDirective, BpsFormExplainComponent, BpsFormExtraComponent, BpsFormItemComponent, BpsFormLabelComponent, BpsFormSplitComponent, BpsFormTextComponent, BpsInputDirective, BpsInputGroupComponent, BpsListComponent, BpsListItemComponent, BpsListItemMetaComponent, BpsModalComponent, BpsModalFooterDirective, BpsOptionComponent, BpsOptionContainerComponent, BpsOptionGroupComponent, BpsOptionLiComponent, BpsPopoverComponent, BpsPopoverDirective, BpsRadioButtonComponent, BpsRadioComponent, BpsRadioGroupComponent, BpsSelectComponent, BpsSelectService, BpsSelectTopControlComponent, BpsSelectUnselectableDirective, BpsSwitchComponent, BpsTableComponent, BpsTableExpandablePanelComponent, BpsToolTipComponent, BpsTooltipDirective, BpsTreeComponent, BpsTreeNodeComponent, CeldType, MODAL_ANIMATE_DURATION, NzTreeServiceFactory, TemplateType, WRAP_CLASS_NAME, defaultFilterOption, dropdownMenuServiceFactory, isAutoSizeType, ɵ0, BpsModalRef as ɵa, NZ_MODAL_CONFIG as ɵc, BpsModalControlService as ɵd, NzTooltipBaseDirective as ɵe };
+export { BpsAutosizeDirective, BpsButtonComponent, BpsButtonGroupComponent, BpsCheckboxComponent, BpsCheckboxGroupComponent, BpsCheckboxWrapperComponent, BpsCollapseComponent, BpsCollapsePanelComponent, BpsComponentsLibComponent, BpsComponentsLibModule, BpsComponentsLibService, BpsConfigurationSelectorComponent, BpsDropDownADirective, BpsDropDownDirective, BpsDropdownMenuComponent, BpsFilterGroupOptionPipe, BpsFilterOptionPipe, BpsFormControlComponent, BpsFormDirective, BpsFormExplainComponent, BpsFormExtraComponent, BpsFormItemComponent, BpsFormLabelComponent, BpsFormSplitComponent, BpsFormTextComponent, BpsInputDirective, BpsInputGroupComponent, BpsListComponent, BpsListItemComponent, BpsListItemMetaComponent, BpsModalComponent, BpsModalFooterDirective, BpsOptionComponent, BpsOptionContainerComponent, BpsOptionGroupComponent, BpsOptionLiComponent, BpsPopoverComponent, BpsPopoverDirective, BpsRadioButtonComponent, BpsRadioComponent, BpsRadioGroupComponent, BpsSelectComponent, BpsSelectService, BpsSelectTopControlComponent, BpsSelectUnselectableDirective, BpsSwitchComponent, BpsTableComponent, BpsTableExpandablePanelComponent, BpsTextEditorComponent, BpsToolTipComponent, BpsTooltipDirective, BpsTreeComponent, BpsTreeNodeComponent, CeldType, MODAL_ANIMATE_DURATION, NzTreeServiceFactory, TemplateType, WRAP_CLASS_NAME, defaultFilterOption, dropdownMenuServiceFactory, isAutoSizeType, ɵ0, BpsModalRef as ɵa, NZ_MODAL_CONFIG as ɵc, BpsModalControlService as ɵd, NzTooltipBaseDirective as ɵe };
 //# sourceMappingURL=bps-components-lib.js.map

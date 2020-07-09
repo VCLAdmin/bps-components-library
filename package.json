@@ -4,7 +4,8 @@
   "peerDependencies": {
     "@angular/common": "^9.0.7",
     "@angular/core": "^9.0.7",
-    "tslib": "^1.10.0"
+    "tslib": "^1.10.0",
+    "@tinymce/tinymce-angular": "^4.0.0"
   },
   "main": "bundles/bps-components-lib.umd.js",
   "module": "fesm5/bps-components-lib.js",

@@ -52,3 +52,4 @@ export * from './lib/components/bps-tree/bps-tree-node.component';
 export * from './lib/components/bps-tree/bps-tree.component';
 export * from './lib/components/bps-modal/bps-modal-footer.directive';
 export * from './lib/components/bps-modal/bps-modal.component';
+export * from './lib/components/bps-text-editor/bps-text-editor.component';

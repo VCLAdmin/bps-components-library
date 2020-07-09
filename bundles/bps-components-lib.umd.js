@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('ng-zorro-antd'), require('@angular/common'), require('@angular/cdk/overlay'), require('ng-zorro-antd/core'), require('ng-zorro-antd/icon'), require('ng-zorro-antd/empty'), require('@angular/forms'), require('@angular/cdk/observers'), require('@angular/cdk/platform'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/keycodes'), require('ng-zorro-antd/grid'), require('@angular/cdk/layout'), require('@angular/platform-browser/animations'), require('@angular/cdk/a11y'), require('ng-zorro-antd/tooltip'), require('ng-zorro-antd/i18n'), require('ng-zorro-antd/resizable'), require('@angular/cdk/portal'), require('ng-zorro-antd/modal')) :
-    typeof define === 'function' && define.amd ? define('bps-components-lib', ['exports', '@angular/core', 'ng-zorro-antd', '@angular/common', '@angular/cdk/overlay', 'ng-zorro-antd/core', 'ng-zorro-antd/icon', 'ng-zorro-antd/empty', '@angular/forms', '@angular/cdk/observers', '@angular/cdk/platform', 'rxjs', 'rxjs/operators', '@angular/cdk/keycodes', 'ng-zorro-antd/grid', '@angular/cdk/layout', '@angular/platform-browser/animations', '@angular/cdk/a11y', 'ng-zorro-antd/tooltip', 'ng-zorro-antd/i18n', 'ng-zorro-antd/resizable', '@angular/cdk/portal', 'ng-zorro-antd/modal'], factory) :
-    (global = global || self, factory(global['bps-components-lib'] = {}, global.ng.core, global.ngZorroAntd, global.ng.common, global.ng.cdk.overlay, global.core$1, global.icon, global.empty, global.ng.forms, global.ng.cdk.observers, global.ng.cdk.platform, global.rxjs, global.rxjs.operators, global.ng.cdk.keycodes, global.grid, global.ng.cdk.layout, global.ng.platformBrowser.animations, global.ng.cdk.a11y, global.tooltip, global.i18n, global.resizable, global.ng.cdk.portal, global.modal));
-}(this, (function (exports, core, ngZorroAntd, common, overlay, core$1, icon, empty, forms, observers, platform, rxjs, operators, keycodes, grid, layout, animations, a11y, tooltip, i18n, resizable, portal, modal) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('ng-zorro-antd'), require('@angular/common'), require('@angular/cdk/overlay'), require('ng-zorro-antd/core'), require('ng-zorro-antd/icon'), require('ng-zorro-antd/empty'), require('@angular/forms'), require('@angular/cdk/observers'), require('@tinymce/tinymce-angular'), require('@angular/cdk/platform'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/keycodes'), require('ng-zorro-antd/grid'), require('@angular/cdk/layout'), require('@angular/platform-browser/animations'), require('@angular/cdk/a11y'), require('ng-zorro-antd/tooltip'), require('ng-zorro-antd/i18n'), require('ng-zorro-antd/resizable'), require('@angular/cdk/portal'), require('ng-zorro-antd/modal')) :
+    typeof define === 'function' && define.amd ? define('bps-components-lib', ['exports', '@angular/core', 'ng-zorro-antd', '@angular/common', '@angular/cdk/overlay', 'ng-zorro-antd/core', 'ng-zorro-antd/icon', 'ng-zorro-antd/empty', '@angular/forms', '@angular/cdk/observers', '@tinymce/tinymce-angular', '@angular/cdk/platform', 'rxjs', 'rxjs/operators', '@angular/cdk/keycodes', 'ng-zorro-antd/grid', '@angular/cdk/layout', '@angular/platform-browser/animations', '@angular/cdk/a11y', 'ng-zorro-antd/tooltip', 'ng-zorro-antd/i18n', 'ng-zorro-antd/resizable', '@angular/cdk/portal', 'ng-zorro-antd/modal'], factory) :
+    (global = global || self, factory(global['bps-components-lib'] = {}, global.ng.core, global.ngZorroAntd, global.ng.common, global.ng.cdk.overlay, global.core$1, global.icon, global.empty, global.ng.forms, global.ng.cdk.observers, global.tinymceAngular, global.ng.cdk.platform, global.rxjs, global.rxjs.operators, global.ng.cdk.keycodes, global.grid, global.ng.cdk.layout, global.ng.platformBrowser.animations, global.ng.cdk.a11y, global.tooltip, global.i18n, global.resizable, global.ng.cdk.portal, global.modal));
+}(this, (function (exports, core, ngZorroAntd, common, overlay, core$1, icon, empty, forms, observers, tinymceAngular, platform, rxjs, operators, keycodes, grid, layout, animations, a11y, tooltip, i18n, resizable, portal, modal) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -5772,6 +5772,11 @@
                 .subscribe(function (data) {
                 switch (data.eventName) {
                     case 'expand':
+                        if (_this.bpsCustomTree) {
+                            var keys = data.keys;
+                            data.keys = [keys[keys.length - 1]];
+                            _this.nzTreeService.calcExpandedKeys(data.keys, _this.bpsNodes);
+                        }
                         _this.bpsExpandChange.emit(data);
                         break;
                     case 'click':
@@ -7243,6 +7248,104 @@
         return BpsModalComponent;
     }(BpsModalRef));
 
+    var BpsTextEditorComponent = /** @class */ (function () {
+        function BpsTextEditorComponent() {
+            this.showEditor = false;
+            this.oninit = new core.EventEmitter();
+            this.onchange = new core.EventEmitter();
+            this.onblur = new core.EventEmitter();
+            this.onkeyup = new core.EventEmitter();
+            this.height = '250px';
+            this.statusbar = false;
+            this.resize = false;
+            // tslint:disable-next-line: max-line-length
+            this.toolbarmobile = ['bold', 'italic', 'underline', 'strikethrough', 'alignleft', 'aligncenter', 'alignright', 'alignjustify', 'bullist', 'numlist', 'forecolor'];
+            this.toolbar = 'bold italic underline strikethrough  | alignleft aligncenter alignright alignjustify | bullist numlist | forecolor';
+        }
+        BpsTextEditorComponent.prototype.ngOnInit = function () {
+            var _this = this;
+            if (this.tinyMceSettings === undefined) {
+                this.tinyMceSettings = {
+                    mobile: {
+                        theme: 'mobile',
+                        plugins: ['image table textcolor'],
+                        toolbar: this.toolbarmobile
+                    },
+                    menubar: false,
+                    image_title: true,
+                    resize: this.resize,
+                    automatic_uploads: true,
+                    height: this.height,
+                    statusbar: this.statusbar,
+                    file_picker_types: 'image',
+                    images_upload_url: '#',
+                    setup: function (editor) {
+                        editor.on('init', function (obj) {
+                            _this.oninit.emit(obj);
+                        });
+                        editor.on('blur', function (obj) {
+                            _this.onblur.emit(obj);
+                        });
+                        editor.on('keyup', function (obj) {
+                            _this.onkeyup.emit(obj);
+                        });
+                        editor.on('Change', function (obj) {
+                            _this.onchange.emit(obj);
+                        });
+                    },
+                    plugins: ['image table textcolor'],
+                    toolbar: this.toolbar
+                };
+            }
+            setTimeout(function () {
+                _this.showEditor = true;
+            }, 100);
+        };
+        __decorate([
+            core.Output()
+        ], BpsTextEditorComponent.prototype, "oninit", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTextEditorComponent.prototype, "onchange", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTextEditorComponent.prototype, "onblur", void 0);
+        __decorate([
+            core.Output()
+        ], BpsTextEditorComponent.prototype, "onkeyup", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTextEditorComponent.prototype, "disabled", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTextEditorComponent.prototype, "height", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTextEditorComponent.prototype, "statusbar", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTextEditorComponent.prototype, "resize", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTextEditorComponent.prototype, "toolbarmobile", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTextEditorComponent.prototype, "toolbar", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTextEditorComponent.prototype, "tinyMceSettings", void 0);
+        BpsTextEditorComponent = __decorate([
+            core.Component({
+                exportAs: 'bpsTextEditor',
+                selector: 'bps-text-editor',
+                template: "<editor *ngIf=\"showEditor\" [init]=\"tinyMceSettings\" class=\"bps-editor\" [disabled]=\"disabled\"></editor>\n",
+                encapsulation: core.ViewEncapsulation.None,
+                styles: [""]
+            })
+        ], BpsTextEditorComponent);
+        return BpsTextEditorComponent;
+    }());
+
     var ɵ0 = ngZorroAntd.en_US;
     var BpsComponentsLibModule = /** @class */ (function () {
         function BpsComponentsLibModule() {
@@ -7298,7 +7401,8 @@
                     BpsCollapseComponent,
                     BpsCollapsePanelComponent,
                     BpsTableExpandablePanelComponent,
-                    BpsConfigurationSelectorComponent
+                    BpsConfigurationSelectorComponent,
+                    BpsTextEditorComponent
                 ],
                 imports: [
                     core$1.NzPipesModule,
@@ -7319,6 +7423,7 @@
                     ngZorroAntd.NzGridModule,
                     ngZorroAntd.NzAvatarModule,
                     ngZorroAntd.NzTableModule,
+                    tinymceAngular.EditorModule,
                     resizable.NzResizableModule
                 ],
                 exports: [
@@ -7371,7 +7476,8 @@
                     BpsCollapsePanelComponent,
                     BpsTooltipDirective,
                     BpsToolTipComponent,
-                    BpsTableExpandablePanelComponent
+                    BpsTableExpandablePanelComponent,
+                    BpsTextEditorComponent
                 ],
                 providers: [
                     { provide: ngZorroAntd.NZ_I18N, useValue: ɵ0 }
@@ -7443,6 +7549,7 @@
     exports.BpsSwitchComponent = BpsSwitchComponent;
     exports.BpsTableComponent = BpsTableComponent;
     exports.BpsTableExpandablePanelComponent = BpsTableExpandablePanelComponent;
+    exports.BpsTextEditorComponent = BpsTextEditorComponent;
     exports.BpsToolTipComponent = BpsToolTipComponent;
     exports.BpsTooltipDirective = BpsTooltipDirective;
     exports.BpsTreeComponent = BpsTreeComponent;
