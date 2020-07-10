@@ -7251,28 +7251,38 @@
     var BpsTextEditorComponent = /** @class */ (function () {
         function BpsTextEditorComponent() {
             this.showEditor = false;
+            this.lazyLoaded = false;
             this.oninit = new core.EventEmitter();
             this.onchange = new core.EventEmitter();
             this.onblur = new core.EventEmitter();
             this.onkeyup = new core.EventEmitter();
+            this.disabled = false;
             this.height = '250px';
+            this.editorID = 'myEditor';
             this.statusbar = false;
             this.resize = false;
             // tslint:disable-next-line: max-line-length
             this.toolbarmobile = ['bold', 'italic', 'underline', 'strikethrough', 'alignleft', 'aligncenter', 'alignright', 'alignjustify', 'bullist', 'numlist', 'forecolor'];
-            this.toolbar = 'bold italic underline strikethrough  | alignleft aligncenter alignright alignjustify | bullist numlist | forecolor';
+            this.toolbar = 'bold italic underline forecolor | strikethrough backcolor | alignleft aligncenter alignright alignjustify | bullist numlist image';
         }
         BpsTextEditorComponent.prototype.ngOnInit = function () {
+            if (!this.lazyLoaded) {
+                this.initTinyMCE();
+            }
+        };
+        BpsTextEditorComponent.prototype.initTinyMCE = function () {
             var _this = this;
             if (this.tinyMceSettings === undefined) {
                 this.tinyMceSettings = {
                     mobile: {
                         theme: 'mobile',
-                        plugins: ['image table textcolor'],
+                        plugins: ['image table textcolor lists advlist'],
                         toolbar: this.toolbarmobile
                     },
                     menubar: false,
+                    content_css: '/assets/tiny.css',
                     image_title: true,
+                    toolbar_location: 'bottom',
                     resize: this.resize,
                     automatic_uploads: true,
                     height: this.height,
@@ -7281,6 +7291,9 @@
                     images_upload_url: '#',
                     setup: function (editor) {
                         editor.on('init', function (obj) {
+                            if (_this.disabled) {
+                                _this.disableEditor();
+                            }
                             _this.oninit.emit(obj);
                         });
                         editor.on('blur', function (obj) {
@@ -7293,7 +7306,15 @@
                             _this.onchange.emit(obj);
                         });
                     },
-                    plugins: ['image table textcolor'],
+                    color_map: [
+                        "e94c0a", "Orange",
+                        "00a2d1", "Blue",
+                        "7bc053", "Green",
+                        "d80f0f", "Red",
+                        "e9d90a", "Yellow",
+                        "ffffff", "White"
+                    ],
+                    plugins: ['image table textcolor lists advlist'],
                     toolbar: this.toolbar
                 };
             }
@@ -7301,6 +7322,34 @@
                 _this.showEditor = true;
             }, 100);
         };
+        BpsTextEditorComponent.prototype.disableEditor = function () {
+            tinymce.get(this.editorID).mode.set('readonly');
+        };
+        BpsTextEditorComponent.prototype.enableEditor = function () {
+            tinymce.get(this.editorID).mode.set('design');
+        };
+        BpsTextEditorComponent.prototype.ngOnChanges = function (changes) {
+            if (changes.disabled !== null && changes.disabled !== undefined && tinymce.get(this.editorID)) {
+                if (changes.disabled) {
+                    this.disableEditor();
+                }
+                else {
+                    this.enableEditor();
+                }
+            }
+            if (changes.lazyLoaded !== null && changes.lazyLoaded !== undefined) {
+                if (!this.lazyLoaded) {
+                    this.initTinyMCE();
+                }
+                else if (tinymce.get(this.editorID)) {
+                    this.showEditor = false;
+                    tinymce.get(this.editorID).remove();
+                }
+            }
+        };
+        __decorate([
+            core.Input(), ngZorroAntd.InputBoolean()
+        ], BpsTextEditorComponent.prototype, "lazyLoaded", void 0);
         __decorate([
             core.Output()
         ], BpsTextEditorComponent.prototype, "oninit", void 0);
@@ -7314,11 +7363,14 @@
             core.Output()
         ], BpsTextEditorComponent.prototype, "onkeyup", void 0);
         __decorate([
-            core.Input()
+            core.Input(), ngZorroAntd.InputBoolean()
         ], BpsTextEditorComponent.prototype, "disabled", void 0);
         __decorate([
             core.Input()
         ], BpsTextEditorComponent.prototype, "height", void 0);
+        __decorate([
+            core.Input()
+        ], BpsTextEditorComponent.prototype, "editorID", void 0);
         __decorate([
             core.Input()
         ], BpsTextEditorComponent.prototype, "statusbar", void 0);
@@ -7338,9 +7390,9 @@
             core.Component({
                 exportAs: 'bpsTextEditor',
                 selector: 'bps-text-editor',
-                template: "<editor *ngIf=\"showEditor\" [init]=\"tinyMceSettings\" class=\"bps-editor\" [disabled]=\"disabled\"></editor>\n",
+                template: "<editor [class.bps-editor-disabled]=\"disabled\"\n        [id]=\"editorID\"\n        *ngIf=\"showEditor\"\n        [init]=\"tinyMceSettings\"\n        class=\"bps-editor\"\n        [disabled]=\"disabled\"></editor>\n",
                 encapsulation: core.ViewEncapsulation.None,
-                styles: [""]
+                styles: [".tox-tinymce{border:none!important;border-radius:4px!important}.tox .tox-edit-area__iframe{background-color:#313131!important}.mce-content-body{color:#fff}.tox .tox-toolbar__primary{background-color:#313131!important}.tox:not([dir=rtl]) .tox-toolbar__group:not(:last-of-type){border-right:1px solid #fff!important}.tox .tox-tbtn svg{fill:#fff!important;transform:scale(.74)!important}.tox .tox-split-button__chevron svg{fill:#fff!important}.tox .tox-tbtn:hover svg{fill:#00a2d1!important}.tox .tox-split-button:hover{box-shadow:none!important}.tox-tinymce:not(.tox-tinymce-inline) .tox-editor-header:not(:first-child) .tox-toolbar-overlord:first-child .tox-toolbar__primary{border-top:none!important;background:#313131!important;padding-bottom:10px}.tox .tox-tbtn{height:34px!important;width:25px!important;margin:0!important;top:-3px;position:relative}.tox .tox-split-button{height:34px!important;position:relative!important;top:-3px!important;padding:3px 0!important}.tox .tox-split-button--enabled,.tox .tox-split-button:focus,.tox .tox-split-button:hover,.tox .tox-tbtn--enabled,.tox .tox-tbtn--enabled:hover,.tox .tox-tbtn:hover{background:#262626!important}.tox .tox-split-button__chevron{width:16px!important}.tox .tox-tbtn:active{background:#262626!important}.tox .tox-tbtn:focus{background:#313131!important}.tox .tox-toolbar__group{margin:0!important;height:30px!important}.tox-sidebar-wrap{color:#fff}.tox.tox-tinymce-aux .tox-toolbar__overflow{background-color:#363636!important;border:none!important;border-radius:4px!important;padding-top:7px!important;margin-bottom:6px!important}.tox .tox-toolbar__overflow{background:unset!important;height:39px!important}.tox .tox-menu{border:none!important;box-shadow:0 3px 12px 0 rgba(0,0,0,.9)!important;background-color:#262626!important;margin-bottom:10px!important}.tox .tox-collection__item-checkmark svg,.tox .tox-collection__item-icon svg{fill:#fff!important}.tox .tox-collection--toolbar .tox-collection__item--active:not(.tox-collection__item--enabled),.tox .tox-collection--toolbar .tox-collection__item--active:not(.tox-collection__item--enabled) .tox-collection__item-checkmark svg,.tox .tox-collection--toolbar .tox-collection__item--active:not(.tox-collection__item--enabled) .tox-collection__item-icon svg{background-color:#262626!important;fill:#fff!important}.tox .tox-collection--toolbar .tox-collection__item:hover,.tox .tox-collection--toolbar .tox-collection__item:hover .tox-collection__item-checkmark svg,.tox .tox-collection--toolbar .tox-collection__item:hover .tox-collection__item-icon svg{fill:#00a2d1!important;background-color:#313131!important}.tox .tox-collection--toolbar .tox-collection__item--enabled{background-color:#313131!important}.tox .tox-collection--toolbar .tox-collection__item--enabled .tox-collection__item-checkmark svg,.tox .tox-collection--toolbar .tox-collection__item--enabled .tox-collection__item-icon svg{fill:#00a2d1!important;background-color:#313131!important}.tox .tox-button{background-color:#00a2d1!important;border-color:#00a2d1!important}.tox .tox-button:hover:not(:disabled){background-color:#1c6ca1!important;border-color:#1c6ca1!important}.tox .tox-button--naked:hover:not(:disabled){background-color:#262626!important;border-color:#262626!important}.tox .tox-button--naked:not(:disabled){background-color:transparent!important;border-color:transparent!important}.tox .tox-button--icon .tox-icon svg,.tox .tox-button.tox-button--icon .tox-icon svg,.tox .tox-button.tox-button--secondary.tox-button--icon .tox-icon svg{fill:#fff!important}.tox .tox-dialog__header{background-color:#313131!important;border-bottom:none!important;color:#fff!important}.tox .tox-dialog__body{background-color:#313131!important}.tox .tox-dialog__body-nav-item{color:#fff!important}.tox .tox-label,.tox .tox-toolbar-label{color:#fff!important;margin-bottom:4px!important}.tox .tox-textarea,.tox .tox-textfield,.tox .tox-toolbar-textfield{background-color:#262626!important;border-color:#262626!important;border-radius:6px!important;color:#fff!important;font-size:12px!important;min-height:24px!important;padding:2px 4.75px!important}.tox .tox-dialog__title{font-size:16px!important}.tox .tox-dropzone{background:#363636!important;border:2px dashed #262626!important}.tox .tox-dropzone p{color:#999!important}.tox .tox-button--secondary{background-color:#313131!important;border-color:#313131!important;border-radius:4px!important;color:#fff!important}.tox .tox-button--secondary:hover:not(:disabled){background-color:#262626!important;border-color:#262626!important;color:#fff!important}.tox .tox-button--naked:active:not(:disabled){background-color:#262626!important;border-color:#262626!important}.tox .tox-dialog__footer{background-color:#313131!important;border-top:1px solid #363636!important}.tox .tox-dialog__body-nav-item--active{border-bottom:2px solid #207ab7!important;color:#207ab7!important}.tox .tox-tbtn--disabled,.tox .tox-tbtn--disabled:hover,.tox .tox-tbtn:disabled,.tox .tox-tbtn:disabled:hover{background-color:#313131!important}.tox .tox-tbtn--disabled svg,.tox .tox-tbtn--disabled:hover svg,.tox .tox-tbtn:disabled svg,.tox .tox-tbtn:disabled:hover svg{fill:#666!important}.bps-editor-disabled .tox:not([dir=rtl]) .tox-toolbar__group:not(:last-of-type){border-color:#666!important}[title=\"Align center\"],[title=\"Align left\"],[title=\"Align right\"],[title=Justify]{top:-1px!important}"]
             })
         ], BpsTextEditorComponent);
         return BpsTextEditorComponent;
