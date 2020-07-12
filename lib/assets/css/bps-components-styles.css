@@ -77,6 +77,7 @@
 
 .ant-input-disabled:not(.bps-custom-disabled) {
   color: #666666 !important;
+  cursor: url(/assets/bps-icons/sps_inaccessible_icon_grey.svg), auto !important;
 }
 
 .has-error .ant-select-selection {

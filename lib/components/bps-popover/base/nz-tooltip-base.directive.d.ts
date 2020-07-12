@@ -19,6 +19,7 @@ export declare abstract class NzTooltipBaseDirective implements OnChanges, OnIni
     specificTrigger?: NzTooltipTrigger;
     specificPlacement?: string;
     popoverType?: string;
+    tooltipDisabled?: boolean;
     tooltipRef: ComponentRef<NzTooltipBaseComponent>;
     /**
      * @deprecated 9.0.0. This is deprecated and going to be removed in 9.0.0.

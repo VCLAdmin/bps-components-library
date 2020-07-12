@@ -54,6 +54,7 @@ export declare class BpsTableComponent<T = any> implements OnInit, OnDestroy, Af
     queryParamsChange: EventEmitter<any>;
     pageSizeChange: EventEmitter<any>;
     onclickRow: EventEmitter<any>;
+    ondblclickRow: EventEmitter<any>;
     selectionChange: EventEmitter<any>;
     singleSort: boolean;
     sortChange: EventEmitter<any>;

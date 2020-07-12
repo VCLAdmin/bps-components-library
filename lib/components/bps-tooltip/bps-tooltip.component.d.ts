@@ -6,6 +6,7 @@ export declare class BpsToolTipComponent extends NzTooltipBaseComponentLegacy {
     noAnimation?: NzNoAnimationDirective;
     bpsPopoverType: BpsPopoverType;
     bpsTitle: NzTSType | null;
+    bpsTooltipDisabled: boolean;
     nzTitleTemplate: TemplateRef<void>;
     constructor(cdr: ChangeDetectorRef, noAnimation?: NzNoAnimationDirective);
 }

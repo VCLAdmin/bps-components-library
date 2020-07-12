@@ -16,6 +16,7 @@ export declare class BpsTooltipDirective extends NzTooltipBaseDirective {
     specificTrigger: NzTooltipTrigger;
     specificPlacement: string;
     popoverType: BpsPopoverType;
+    tooltipDisabled: boolean;
     componentFactory: ComponentFactory<BpsToolTipComponent>;
     constructor(elementRef: ElementRef, hostView: ViewContainerRef, resolver: ComponentFactoryResolver, renderer: Renderer2, _tooltip?: NzTooltipBaseComponentLegacy, noAnimation?: NzNoAnimationDirective);
 }

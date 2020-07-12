@@ -12,9 +12,13 @@ export declare class BpsListItemComponent implements OnDestroy, AfterViewInit {
     bpsNoFlex: boolean;
     bpsDelete: boolean;
     ondelete: EventEmitter<any>;
+    ondeletehover: EventEmitter<any>;
+    hover: EventEmitter<any>;
     private itemLayout;
     private itemLayout$;
     get isVerticalAndExtra(): boolean;
+    onDeleteHover(event: any): void;
+    onHover(event: any): void;
     onDelete(): void;
     constructor(elementRef: ElementRef, renderer: Renderer2, parentComp: BpsListComponent, cdr: ChangeDetectorRef);
     ngAfterViewInit(): void;

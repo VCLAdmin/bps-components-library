@@ -56,6 +56,7 @@ export declare class BpsTableExpandablePanelComponent<T = any> implements OnInit
     queryParamsChange: EventEmitter<any>;
     pageSizeChange: EventEmitter<any>;
     onclickRow: EventEmitter<any>;
+    ondblclickRow: EventEmitter<any>;
     selectionChange: EventEmitter<any>;
     singleSort: boolean;
     sortChange: EventEmitter<any>;
