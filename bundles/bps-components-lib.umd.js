@@ -4540,10 +4540,12 @@
         };
         BpsTableComponent.prototype.updateCheckboxCache = function () {
             var _this = this;
+            var temp = __spread(this.checkboxCache);
             this.checkboxCache.length = 0;
             this._data.forEach(function (item) {
+                var checkItem = temp.filter(function (e) { return e.data[_this.config.fieldId] === item[_this.config.fieldId]; });
                 _this.checkboxCache.push({
-                    selected: item.selected ? item.selected : false,
+                    selected: checkItem.length ? checkItem[0].selected : false,
                     data: item
                 });
             });

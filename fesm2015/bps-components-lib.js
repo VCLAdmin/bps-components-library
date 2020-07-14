@@ -4060,10 +4060,12 @@ class BpsTableComponent {
         return false;
     }
     updateCheckboxCache() {
+        const temp = [...this.checkboxCache];
         this.checkboxCache.length = 0;
         this._data.forEach(item => {
+            const checkItem = temp.filter(e => e.data[this.config.fieldId] === item[this.config.fieldId]);
             this.checkboxCache.push({
-                selected: item.selected ? item.selected : false,
+                selected: checkItem.length ? checkItem[0].selected : false,
                 data: item
             });
         });
