@@ -14,6 +14,7 @@ export declare class BpsButtonComponent implements AfterContentInit, OnInit, OnD
     private waveConfig;
     private animationType;
     isSelected: boolean;
+    isSelectedChange: EventEmitter<any>;
     showEditionMode: boolean;
     contentElement: ElementRef;
     listOfIconElement: QueryList<ElementRef>;
@@ -43,7 +44,6 @@ export declare class BpsButtonComponent implements AfterContentInit, OnInit, OnD
     endEditMode($event: KeyboardEvent): void;
     clicks: number;
     onClick(event: MouseEvent): void;
-    onDblClick(event: MouseEvent): void;
     constructor(elementRef: ElementRef, cdr: ChangeDetectorRef, renderer: Renderer2, contentObserver: ContentObserver, nzUpdateHostClassService: NzUpdateHostClassService, ngZone: NgZone, nzConfigService: NzConfigService, waveConfig: NzWaveConfig, animationType: string);
     ngAfterContentInit(): void;
     ngOnInit(): void;

@@ -13,7 +13,7 @@
   padding: 2px 10px 4px 10px !important;
 }
 
-.ant-input:not(.bps-input-opened):hover {
+input.ant-input:not(.bps-input-opened):hover {
   border-color: #00a2d1 !important;
 }
 
@@ -130,6 +130,11 @@
 
 .ant-select-selection:hover {
   background-color: #484848 !important;
+  border: 1px solid transparent;
+}
+
+.ant-select-selection {
+  border: 1px solid transparent !important;
 }
 
 .ant-select-selection:focus {
@@ -173,7 +178,7 @@
   border-color: #00a2d1 !important;
 }
 
-.has-error .ant-input:not(.bps-input-opened){
+.has-error input.ant-input:not(.bps-input-opened){
   border-color: #e94c0a !important;
 }
 
@@ -218,4 +223,33 @@
 
 .ant-input.bps-input-opened.ng-valid:not(.ant-input-disabled) {
   color: #ffffff !important;
+}
+
+textarea.ant-input {
+  border-radius: 4px !important;
+  background-color: #313131 !important;
+  border: 1px solid #313131 !important;
+  height: auto !important;
+}
+
+textarea::-webkit-resizer {
+  display: none;
+}
+
+/*custom scrollbar for Chrome and Opera*/
+textarea.bps-cmacs-custom-scrollbar::-webkit-scrollbar-track {
+  background-color: #313131;
+}
+
+textarea.bps-cmacs-custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #262626;
+  border: 2px solid #313131;
+}
+
+textarea.bps-cmacs-custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #262626;
+}
+
+textarea.bps-cmacs-custom-scrollbar::-webkit-scrollbar-corner {
+  background-color: #313131 !important;
 }
