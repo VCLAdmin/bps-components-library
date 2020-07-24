@@ -80,7 +80,8 @@ input.ant-input:not(.bps-input-opened):hover {
   cursor: url(/assets/bps-icons/sps_inaccessible_icon_grey.svg), auto !important;
 }
 
-.has-error .ant-select-selection {
+.has-error .ant-select-selection,
+.ng-pristine.ng-invalid.ng-touched .ant-select-selection {
   border-color: #e94c0a !important;
 }
 
@@ -178,11 +179,13 @@ input.ant-input:not(.bps-input-opened):hover {
   border-color: #00a2d1 !important;
 }
 
-.has-error input.ant-input:not(.bps-input-opened){
+.has-error input.ant-input:not(.bps-input-opened),
+input.ant-input.ng-pristine.ng-invalid.ng-touched {
   border-color: #e94c0a !important;
 }
 
-.has-error .ant-input.bps-input-opened{
+.has-error .ant-input.bps-input-opened,
+.ant-input.bps-input-opened.ng-pristine.ng-invalid.ng-touched {
   border-bottom-color: #e94c0a !important;
 }
 
