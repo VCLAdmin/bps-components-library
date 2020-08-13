@@ -4227,6 +4227,7 @@ var BpsTableComponent = /** @class */ (function () {
         this.searchValueChange = new EventEmitter();
         this.moreBtnClicked = new EventEmitter();
         this.deleteBtnClicked = new EventEmitter();
+        this.expandChange = new EventEmitter();
         this.clicks = 0;
         this._setSearchSubscription();
     }
@@ -4405,6 +4406,7 @@ var BpsTableComponent = /** @class */ (function () {
     BpsTableComponent.prototype.expandRow = function (data, $event) {
         this.mapOfExpandData = {};
         this.mapOfExpandData[data[this.config.fieldId]] = $event;
+        this.expandChange.emit(this.mapOfExpandData);
     };
     BpsTableComponent.ctorParameters = function () { return [
         { type: ChangeDetectorRef },
@@ -4548,6 +4550,9 @@ var BpsTableComponent = /** @class */ (function () {
     __decorate([
         Output()
     ], BpsTableComponent.prototype, "deleteBtnClicked", void 0);
+    __decorate([
+        Output()
+    ], BpsTableComponent.prototype, "expandChange", void 0);
     __decorate([
         Input()
     ], BpsTableComponent.prototype, "moreMenu", void 0);

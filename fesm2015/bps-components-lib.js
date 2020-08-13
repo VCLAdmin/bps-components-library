@@ -3954,6 +3954,7 @@ class BpsTableComponent {
         this.searchValueChange = new EventEmitter();
         this.moreBtnClicked = new EventEmitter();
         this.deleteBtnClicked = new EventEmitter();
+        this.expandChange = new EventEmitter();
         this.clicks = 0;
         this._setSearchSubscription();
     }
@@ -4117,6 +4118,7 @@ class BpsTableComponent {
     expandRow(data, $event) {
         this.mapOfExpandData = {};
         this.mapOfExpandData[data[this.config.fieldId]] = $event;
+        this.expandChange.emit(this.mapOfExpandData);
     }
 };
 BpsTableComponent.ctorParameters = () => [
@@ -4261,6 +4263,9 @@ __decorate([
 __decorate([
     Output()
 ], BpsTableComponent.prototype, "deleteBtnClicked", void 0);
+__decorate([
+    Output()
+], BpsTableComponent.prototype, "expandChange", void 0);
 __decorate([
     Input()
 ], BpsTableComponent.prototype, "moreMenu", void 0);

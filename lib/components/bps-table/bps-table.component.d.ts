@@ -66,8 +66,9 @@ export declare class BpsTableComponent<T = any> implements OnInit, OnDestroy, Af
     tableType: BpsTableType;
     expandable: boolean;
     searchValueChange: EventEmitter<string>;
-    moreBtnClicked: EventEmitter<string>;
-    deleteBtnClicked: EventEmitter<string>;
+    moreBtnClicked: EventEmitter<any>;
+    deleteBtnClicked: EventEmitter<any>;
+    expandChange: EventEmitter<any>;
     moreMenu: TemplateRef<any>;
     deleteMenu: TemplateRef<any>;
     rowExpandTemplate: TemplateRef<any>;
