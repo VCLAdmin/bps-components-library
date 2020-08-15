@@ -13,6 +13,7 @@ export declare class BpsTableComponent<T = any> implements OnInit, OnDestroy, Af
     };
     _data: any[];
     editId: any;
+    editProperty: any;
     isExpanded: boolean;
     searchBoxHovered: boolean;
     private _searchSubject;
@@ -98,6 +99,7 @@ export declare class BpsTableComponent<T = any> implements OnInit, OnDestroy, Af
     clicks: number;
     clickRow(event: MouseEvent, data: any): void;
     startEdit(data: any, event: MouseEvent): void;
+    editRow(data: any, property: any): void;
     selectRow(data: any, selectionOnly?: boolean): void;
     expandRow(data: any, $event: any): void;
 }

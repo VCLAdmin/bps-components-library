@@ -44,6 +44,7 @@ export declare class BpsButtonComponent implements AfterContentInit, OnInit, OnD
     endEditMode($event: KeyboardEvent): void;
     clicks: number;
     onClick(event: MouseEvent): void;
+    startEditionMode($event: Event): void;
     constructor(elementRef: ElementRef, cdr: ChangeDetectorRef, renderer: Renderer2, contentObserver: ContentObserver, nzUpdateHostClassService: NzUpdateHostClassService, ngZone: NgZone, nzConfigService: NzConfigService, waveConfig: NzWaveConfig, animationType: string);
     ngAfterContentInit(): void;
     ngOnInit(): void;
