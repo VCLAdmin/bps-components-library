@@ -6805,6 +6805,73 @@ BpsTextEditorComponent = __decorate([
     })
 ], BpsTextEditorComponent);
 
+let BpsGridComponent = class BpsGridComponent {
+    constructor() {
+        this._columns = [];
+        this._rows = [];
+        this._selection = [1, 2];
+        this._latestSelection = [1, 2];
+        this.disabled = false;
+        this.selectionChange = new EventEmitter();
+    }
+    set columns(value) {
+        if (value >= 1) {
+            this._columns = new Array(value);
+        }
+    }
+    set rows(value) {
+        if (value >= 1) {
+            this._rows = new Array(value);
+        }
+    }
+    set selection(value) {
+        this._selection = value;
+        this._latestSelection = value;
+    }
+    get selection() {
+        return this._selection;
+    }
+    onSelectionChange(row, column) {
+        this.selection = [row, column];
+        this._latestSelection = [row, column];
+        this.selectionChange.emit(this.selection);
+    }
+    isSelected(row, column) {
+        return (row <= this.selection[0] && !column) || (!row && column <= this.selection[1]) || (row <= this.selection[0] && column === this.selection[1]) || (row === this.selection[0] && column <= this.selection[1]);
+    }
+    previewSelection(row, column) {
+        const newSel = [row, column];
+        this._selection = [...newSel];
+    }
+    endPreviewSelection() {
+        this._selection = this._latestSelection;
+    }
+};
+__decorate([
+    Input(), InputBoolean$1()
+], BpsGridComponent.prototype, "disabled", void 0);
+__decorate([
+    Output()
+], BpsGridComponent.prototype, "selectionChange", void 0);
+__decorate([
+    Input()
+], BpsGridComponent.prototype, "columns", null);
+__decorate([
+    Input()
+], BpsGridComponent.prototype, "rows", null);
+__decorate([
+    Input()
+], BpsGridComponent.prototype, "selection", null);
+BpsGridComponent = __decorate([
+    Component({
+        selector: 'bps-grid',
+        template: "<div class=\"bps-grid-selected-value-wrapper\">\n  <span>{{selection[0] + 1}} x {{selection[1] + 1}}</span>\n</div>\n\n<div class=\"bps-grid-wrapper\">\r\n  <ng-container *ngFor=\"let row of _rows; index as i\">\r\n    <div class=\"bps-grid-row\" [class.bps-grid-row-first]=\"i === 0\" [class.bps-grid-row-last]=\"i === _rows.length - 1\">\r\n      <ng-container *ngFor=\"let column of _columns; index as j\">\r\n        <div class=\"bps-grid-square\"\r\n             (mouseenter)=\"previewSelection(i, j)\"\r\n             (mouseleave)=\"endPreviewSelection()\"\r\n             [class.bps-grid-selected-square-top]=\"isSelected(i, j) && !i\"\r\n             [class.bps-grid-selected-square-bottom]=\"isSelected(i, j) && i === selection[0]\"\r\n             [class.bps-grid-selected-square-left]=\"isSelected(i, j) && !j\"\r\n             [class.bps-grid-selected-square-right]=\"isSelected(i, j) && j === selection[1]\"\r\n             [class.bps-grid-last-square-in-row]=\"j === _columns.length - 1\"\r\n             [class.bps-grid-left-top-corner]=\"i === j && !i\"\r\n             [class.bps-grid-left-bottom-corner]=\"i === _rows.length - 1 && !j\"\r\n             [class.bps-grid-right-bottom-corner]=\"i === _rows.length - 1 && j === _columns.length - 1\"\r\n             [class.bps-grid-right-top-corner]=\"!i && j === _columns.length - 1\"\r\n             (click)=\"onSelectionChange(i, j)\">\r\n        </div>\r\n      </ng-container>\r\n    </div>\r\n  </ng-container>\r\n</div>\n",
+        encapsulation: ViewEncapsulation.None,
+        changeDetection: ChangeDetectionStrategy.OnPush,
+        styles: [".bps-grid-square{width:25px;height:25px;transition:.3s}.bps-grid-row .bps-grid-square{display:inline-flex;border:1px solid #707070;border-top:none;border-right:none}.bps-grid-row{height:25px}.bps-grid-row-first .bps-grid-square{border-top:1px solid #707070}.bps-grid-left-top-corner{border-radius:8px 0 0}.bps-grid-left-bottom-corner{border-radius:0 0 0 8px}.bps-grid-right-bottom-corner{border-radius:0 0 8px}.bps-grid-right-top-corner{border-radius:0 8px 0 0}.bps-grid-last-square-in-row{border-right:1px solid #707070!important}.bps-grid-selected-square-top{border-top-color:#00a2d1!important}.bps-grid-selected-square-bottom{border-bottom-color:#00a2d1!important}.bps-grid-selected-square-left{border-left-color:#00a2d1!important}.bps-grid-selected-square-right{border-right:1px solid #00a2d1!important}.bps-grid-selected-value-wrapper{display:inline-block;font-family:UniversForSchueco-530Med;font-size:12px;font-weight:400;font-stretch:normal;font-style:normal;line-height:.75;letter-spacing:normal;text-align:left;color:#fff;width:50px;padding-top:2px;vertical-align:top}.bps-grid-wrapper{display:inline-block}"]
+    })
+], BpsGridComponent);
+
 const ɵ0 = en_US;
 let BpsComponentsLibModule = class BpsComponentsLibModule {
 };
@@ -6860,7 +6927,8 @@ BpsComponentsLibModule = __decorate([
             BpsCollapsePanelComponent,
             BpsTableExpandablePanelComponent,
             BpsConfigurationSelectorComponent,
-            BpsTextEditorComponent
+            BpsTextEditorComponent,
+            BpsGridComponent
         ],
         imports: [
             NzPipesModule,
@@ -6885,6 +6953,7 @@ BpsComponentsLibModule = __decorate([
             NzResizableModule
         ],
         exports: [
+            BpsGridComponent,
             BpsModalComponent,
             BpsModalFooterDirective,
             BpsTreeComponent,
@@ -6965,5 +7034,5 @@ var TemplateType;
  * Generated bundle index. Do not edit.
  */
 
-export { BpsAutosizeDirective, BpsButtonComponent, BpsButtonGroupComponent, BpsCheckboxComponent, BpsCheckboxGroupComponent, BpsCheckboxWrapperComponent, BpsCollapseComponent, BpsCollapsePanelComponent, BpsComponentsLibComponent, BpsComponentsLibModule, BpsComponentsLibService, BpsConfigurationSelectorComponent, BpsDropDownADirective, BpsDropDownDirective, BpsDropdownMenuComponent, BpsFilterGroupOptionPipe, BpsFilterOptionPipe, BpsFormControlComponent, BpsFormDirective, BpsFormExplainComponent, BpsFormExtraComponent, BpsFormItemComponent, BpsFormLabelComponent, BpsFormSplitComponent, BpsFormTextComponent, BpsInputDirective, BpsInputGroupComponent, BpsListComponent, BpsListItemComponent, BpsListItemMetaComponent, BpsModalComponent, BpsModalFooterDirective, BpsOptionComponent, BpsOptionContainerComponent, BpsOptionGroupComponent, BpsOptionLiComponent, BpsPopoverComponent, BpsPopoverDirective, BpsRadioButtonComponent, BpsRadioComponent, BpsRadioGroupComponent, BpsSelectComponent, BpsSelectService, BpsSelectTopControlComponent, BpsSelectUnselectableDirective, BpsSwitchComponent, BpsTableComponent, BpsTableExpandablePanelComponent, BpsTextEditorComponent, BpsToolTipComponent, BpsTooltipDirective, BpsTreeComponent, BpsTreeNodeComponent, CeldType, MODAL_ANIMATE_DURATION, NzTreeServiceFactory, TemplateType, WRAP_CLASS_NAME, defaultFilterOption, dropdownMenuServiceFactory, isAutoSizeType, ɵ0, BpsModalRef as ɵa, NZ_MODAL_CONFIG as ɵc, BpsModalControlService as ɵd, NzTooltipBaseDirective as ɵe };
+export { BpsAutosizeDirective, BpsButtonComponent, BpsButtonGroupComponent, BpsCheckboxComponent, BpsCheckboxGroupComponent, BpsCheckboxWrapperComponent, BpsCollapseComponent, BpsCollapsePanelComponent, BpsComponentsLibComponent, BpsComponentsLibModule, BpsComponentsLibService, BpsConfigurationSelectorComponent, BpsDropDownADirective, BpsDropDownDirective, BpsDropdownMenuComponent, BpsFilterGroupOptionPipe, BpsFilterOptionPipe, BpsFormControlComponent, BpsFormDirective, BpsFormExplainComponent, BpsFormExtraComponent, BpsFormItemComponent, BpsFormLabelComponent, BpsFormSplitComponent, BpsFormTextComponent, BpsGridComponent, BpsInputDirective, BpsInputGroupComponent, BpsListComponent, BpsListItemComponent, BpsListItemMetaComponent, BpsModalComponent, BpsModalFooterDirective, BpsOptionComponent, BpsOptionContainerComponent, BpsOptionGroupComponent, BpsOptionLiComponent, BpsPopoverComponent, BpsPopoverDirective, BpsRadioButtonComponent, BpsRadioComponent, BpsRadioGroupComponent, BpsSelectComponent, BpsSelectService, BpsSelectTopControlComponent, BpsSelectUnselectableDirective, BpsSwitchComponent, BpsTableComponent, BpsTableExpandablePanelComponent, BpsTextEditorComponent, BpsToolTipComponent, BpsTooltipDirective, BpsTreeComponent, BpsTreeNodeComponent, CeldType, MODAL_ANIMATE_DURATION, NzTreeServiceFactory, TemplateType, WRAP_CLASS_NAME, defaultFilterOption, dropdownMenuServiceFactory, isAutoSizeType, ɵ0, BpsModalRef as ɵa, NZ_MODAL_CONFIG as ɵc, BpsModalControlService as ɵd, NzTooltipBaseDirective as ɵe };
 //# sourceMappingURL=bps-components-lib.js.map
