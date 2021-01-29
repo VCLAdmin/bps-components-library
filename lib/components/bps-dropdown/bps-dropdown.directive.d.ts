@@ -39,6 +39,7 @@ export declare class BpsDropDownDirective implements AfterViewInit, OnDestroy, O
     };
     bpsPlacement: NzPlacementType;
     readonly bpsVisibleChange: EventEmitter<boolean>;
+    readonly bpsForcedUpdatedPosition: EventEmitter<boolean>;
     setDisabled(disabled: boolean): void;
     private getOverlayConfig;
     private createOverlay;

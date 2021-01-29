@@ -74,6 +74,7 @@ export declare class BpsTableComponent<T = any> implements OnInit, OnDestroy, Af
     deleteMenu: TemplateRef<any>;
     rowExpandTemplate: TemplateRef<any>;
     inputElement: ElementRef;
+    forceUpdate: boolean;
     handleClick(e: MouseEvent): void;
     sort(sort: {
         key: string;
@@ -102,6 +103,7 @@ export declare class BpsTableComponent<T = any> implements OnInit, OnDestroy, Af
     editRow(data: any, property: any): void;
     selectRow(data: any, selectionOnly?: boolean): void;
     expandRow(data: any, $event: any): void;
+    changeIcon($event: any): void;
 }
 export interface CheckboxSelect {
     data: any;
