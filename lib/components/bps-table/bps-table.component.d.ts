@@ -81,6 +81,7 @@ export declare class BpsTableComponent<T = any> implements OnInit, OnDestroy, Af
         value: string;
     }): void;
     emitOnEditEvent(): void;
+    focusInput($event: Event, input: any): void;
     endEditMode($event: KeyboardEvent, index: number, data?: any): void;
     preventDefault($event: MouseEvent): void;
     emitBpsEvent($event: any, type: string): void;

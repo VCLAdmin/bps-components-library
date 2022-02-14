@@ -88,6 +88,7 @@ export declare class BpsTableExpandablePanelComponent<T = any> implements OnInit
     clicks: number;
     clickRow(event: MouseEvent, data: any): void;
     startEdit(data: any, event: MouseEvent): void;
+    isNull(value: any): boolean;
     selectText($event: any): void;
     selectRow(data: any): void;
 }
