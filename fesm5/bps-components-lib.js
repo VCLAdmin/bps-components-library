@@ -2266,6 +2266,9 @@ var BpsButtonComponent = /** @class */ (function () {
         this.bpsComputedTooltipType = 'variation_11';
         this.bpsComputedTooltipPlacement = 'top';
         this.bpsComputedTooltipTitle = null;
+        this.bpsEditTooltipType = 'variation_11';
+        this.bpsEditTooltipPlacement = 'top';
+        this.bpsEditTooltipTitle = null;
         this.bpsValueChange = new EventEmitter();
         this.bpsShape = null;
         this.el = this.elementRef.nativeElement;
@@ -2479,6 +2482,15 @@ var BpsButtonComponent = /** @class */ (function () {
         Input()
     ], BpsButtonComponent.prototype, "bpsComputedTooltipTitle", void 0);
     __decorate([
+        Input()
+    ], BpsButtonComponent.prototype, "bpsEditTooltipType", void 0);
+    __decorate([
+        Input()
+    ], BpsButtonComponent.prototype, "bpsEditTooltipPlacement", void 0);
+    __decorate([
+        Input()
+    ], BpsButtonComponent.prototype, "bpsEditTooltipTitle", void 0);
+    __decorate([
         Output()
     ], BpsButtonComponent.prototype, "bpsValueChange", void 0);
     __decorate([
@@ -2504,7 +2516,7 @@ var BpsButtonComponent = /** @class */ (function () {
             preserveWhitespaces: false,
             changeDetection: ChangeDetectionStrategy.OnPush,
             encapsulation: ViewEncapsulation.None,
-            template: "<i nz-icon nzType=\"loading\" *ngIf=\"bpsLoading\"></i>\n<span *ngIf=\"bpsType !== 'editable'\" class=\"bps-custom-content\" #contentElement><ng-content></ng-content></span>\n\n<span *ngIf=\"bpsType === 'editable' && !showEditionMode\" class=\"bps-custom-content\" #contentElement>{{bpsValue}}</span>\n<input #inputElement bps-input\n       autofocus\n       (focus)=\"$event.target.select()\"\n       [class.bps-invisible]=\"!showEditionMode\"\n       (click)=\"preventDefault($event)\"\n       (dblclick)=\"preventDefault($event)\"\n       (keyup)=\"endEditMode($event)\"\n       class=\"bps-button-editable-input\"\n       [(ngModel)]=\"bpsValue\"\n/>\n\n<div class=\"bps-editable-btn-edit-icon-wrapper\"\r\n      [class.bps-editable-btn-edit-icon-wrapper-disabled]=\"!bpsEditionEnabled\"\r\n      (click)=\"startEditionMode($event)\"\r\n      *ngIf=\"bpsType === 'editable' && !showEditionMode\">\r\n  <div class=\"bps-editable-btn-edit-icon\"></div>\r\n</div>\n\n<div  class=\"bps-computed-icon\"\n      bps-tooltip\r\n      [bpsTooltipType]=\"bpsComputedTooltipType\"\r\n      [bpsTooltipTitle]=\"bpsComputedTooltipTitle ? bpsComputedTooltipTitle : bpsComputed ? 'Computed' : 'Not Computed'\"\r\n      [bpsTooltipPlacement]=\"bpsComputedTooltipPlacement\"\n      *ngIf=\"bpsType === 'editable'\">\n  <img *ngIf=\"bpsComputed\"     \n       src=\"/assets/bps-icons/sps_green_dot_icon_computed.svg\" />\n  <img *ngIf=\"!bpsComputed\"\n       src=\"/assets/bps-icons/sps_grey_dot_icon_notcomputed.svg\" />\n</div>\n",
+            template: "<i nz-icon nzType=\"loading\" *ngIf=\"bpsLoading\"></i>\n<span *ngIf=\"bpsType !== 'editable'\" class=\"bps-custom-content\" #contentElement><ng-content></ng-content></span>\n\n<span *ngIf=\"bpsType === 'editable' && !showEditionMode\" class=\"bps-custom-content\" #contentElement>{{bpsValue}}</span>\n<input #inputElement bps-input\n       autofocus\n       (focus)=\"$event.target.select()\"\n       [class.bps-invisible]=\"!showEditionMode\"\n       (click)=\"preventDefault($event)\"\n       (dblclick)=\"preventDefault($event)\"\n       (keyup)=\"endEditMode($event)\"\n       class=\"bps-button-editable-input\"\n       [(ngModel)]=\"bpsValue\"\n/>\n\n<div class=\"bps-editable-btn-edit-icon-wrapper\"\r\n      [class.bps-editable-btn-edit-icon-wrapper-disabled]=\"!bpsEditionEnabled\"\r\n      (click)=\"startEditionMode($event)\"\r\n      bps-tooltip\r\n      [bpsTooltipType]=\"bpsEditTooltipType\"\r\n      [bpsTooltipTitle]=\"bpsEditTooltipTitle ? bpsEditTooltipTitle : 'Edit'\"\r\n      [bpsTooltipPlacement]=\"bpsEditTooltipPlacement\"\r\n      *ngIf=\"bpsType === 'editable' && !showEditionMode\">\r\n  <div class=\"bps-editable-btn-edit-icon\"></div>\r\n</div>\n\n<div  class=\"bps-computed-icon\"\n      bps-tooltip\r\n      [bpsTooltipType]=\"bpsComputedTooltipType\"\r\n      [bpsTooltipTitle]=\"bpsComputedTooltipTitle ? bpsComputedTooltipTitle : bpsComputed ? 'Computed' : 'Not Computed'\"\r\n      [bpsTooltipPlacement]=\"bpsComputedTooltipPlacement\"\n      *ngIf=\"bpsType === 'editable'\">\n  <img *ngIf=\"bpsComputed\"     \n       src=\"/assets/bps-icons/sps_green_dot_icon_computed.svg\" />\n  <img *ngIf=\"!bpsComputed\"\n       src=\"/assets/bps-icons/sps_grey_dot_icon_notcomputed.svg\" />\n</div>\n",
             host: {
                 '[class.bps-button-editable-selected]': 'isSelected',
                 '[class.bps-button-editable-onedition]': 'showEditionMode'

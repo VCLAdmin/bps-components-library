@@ -29,6 +29,9 @@ export declare class BpsButtonComponent implements AfterContentInit, OnInit, OnD
     bpsComputedTooltipType: string;
     bpsComputedTooltipPlacement: string;
     bpsComputedTooltipTitle: string | null;
+    bpsEditTooltipType: string;
+    bpsEditTooltipPlacement: string;
+    bpsEditTooltipTitle: string | null;
     bpsValueChange: EventEmitter<any>;
     bpsShape: NzButtonShape;
     bpsSize: NzSizeLDSType;
